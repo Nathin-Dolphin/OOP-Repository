@@ -1,3 +1,3 @@
 # OOP-Repository
 
-Programs for Object-Oriented Programming.
+This repository conatains programs for Object-Oriented Programming.
