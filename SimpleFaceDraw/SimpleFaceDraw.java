@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin
- * @version 0.3
+ * @version 1.0
  * @since Februrary 18, 2020
  */
 
