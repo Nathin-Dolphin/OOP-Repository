@@ -1,9 +1,12 @@
 
 /**
  * @author Nathin
- * @version 1.0
+ * @version 1.1
  * @since Februrary 12, 2020
  */
+
+//have shape auto update after a button press
+//add warning text if text field is missing an input
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -12,16 +15,20 @@ import java.awt.*;
 public class SCC_Panel extends JPanel implements ActionListener {
     private SCC_DrawRect newRect;
     private SCC_DrawOval newOval;
-    public int xPos, yPos, width, height;
-    public JButton rectButton, ovalButton;
-    public JTextField setWidth, setHeight;
+    private JButton rectButton, ovalButton, colorButton, fillButton, emptyButton;
+    private JTextField setWidth, setHeight;
+    private Color newColor;
+    private Boolean fillShape;
 
     SCC_Panel() {
-        rectButton = new JButton("rectangle");
+        newColor = Color.black;
+        fillShape = true;
+
+        rectButton = new JButton("Rectangle");
         rectButton.addActionListener(this);
         add(rectButton);
 
-        ovalButton = new JButton("oval");
+        ovalButton = new JButton("Oval");
         ovalButton.addActionListener(this);
         add(ovalButton);
 
@@ -32,6 +39,18 @@ public class SCC_Panel extends JPanel implements ActionListener {
         add(new JLabel("height:"));
         setHeight = new JTextField(3);
         add(setHeight);
+
+        colorButton = new JButton("Choose Color");
+        colorButton.addActionListener(this);
+        add(colorButton);
+
+        fillButton = new JButton("Solid Shape");
+        fillButton.addActionListener(this);
+        add(fillButton);
+
+        emptyButton = new JButton("Outline Shape");
+        emptyButton.addActionListener(this);
+        add(emptyButton);
     }
 
     public void paint(Graphics g) {
@@ -52,13 +71,23 @@ public class SCC_Panel extends JPanel implements ActionListener {
             width = height = 0;
         }
 
-        if (e.getSource() == rectButton) {
+        if (e.getSource() == colorButton) {
+            newColor = JColorChooser.showDialog(this, "Choose a Color", Color.red);
+
+        } else if (e.getSource() == fillButton) {
+            fillShape = true;
+
+        } else if (e.getSource() == emptyButton) {
+            fillShape = false;
+
+        } else if (e.getSource() == rectButton) {
             newOval = null;
-            newRect = new SCC_DrawRect(10, 50, width, height);
+            newRect = new SCC_DrawRect(fillShape, newColor, 10, 50, width, height);
 
         } else if (e.getSource() == ovalButton) {
             newRect = null;
-            newOval = new SCC_DrawOval(10, 50, width, height);
+            newOval = new SCC_DrawOval(fillShape, newColor, 10, 50, width, height);
+
         }
 
         repaint();
@@ -67,8 +96,8 @@ public class SCC_Panel extends JPanel implements ActionListener {
 
 class SCC_DrawRect extends Rectangle {
 
-    SCC_DrawRect(int xPos, int yPos, int width, int height) {
-        super(xPos, yPos, width, height);
+    SCC_DrawRect(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
+        super(fillShape, newColor, xPos, yPos, width, height);
     }
 
     public void paint(Graphics g) {
@@ -78,8 +107,8 @@ class SCC_DrawRect extends Rectangle {
 
 class SCC_DrawOval extends Oval {
 
-    SCC_DrawOval(int xPos, int yPos, int width, int height) {
-        super(xPos, yPos, width, height);
+    SCC_DrawOval(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
+        super(fillShape, newColor, xPos, yPos, width, height);
     }
 
     public void paint(Graphics g) {
