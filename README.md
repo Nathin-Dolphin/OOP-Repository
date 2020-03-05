@@ -5,8 +5,9 @@ Programs for Object-Oriented Programming.
 Main method java file names (refered to as "MM"):
 	Mosaic
 
-NOTE: '...' is the path from the storage device to the repository.
-NOTE: "MM" referes to the names of the main method java files.
+IMPORTANT NOTES:
+	'...' is the path from the storage device to the repository.
+	"MM" referes to the names of the main method java files.
 
 
 Method 1
