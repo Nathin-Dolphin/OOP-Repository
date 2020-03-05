@@ -1,9 +1,11 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0
+ * @version 1.0.1
  * @since Februrary 27, 2020
  */
+
+package utility;
 
 // private void longGen(long min, long max) {} WIP
 
@@ -16,7 +18,7 @@ public class RandomGen {
    private char[] characters;
    private int r, g, b;
 
-   RandomGen() {
+   public RandomGen() {
       characters = new char[52];
       for (int i = 0; i < 52; i++) {
          characters[i] = (char) ('a' + i);
@@ -42,6 +44,7 @@ public class RandomGen {
    }
 
    public Color complementColor(Color c) {
+      // add code to prevent gray on gray
       r = 255 - c.getRed();
       g = 255 - c.getGreen();
       b = 255 - c.getBlue();

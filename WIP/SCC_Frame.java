@@ -1,6 +1,6 @@
 
 /**
- * @author Nathin
+ * @author Nathin Wascher
  * @version 1.1
  * @since Februrary 12, 2020
  */
@@ -8,11 +8,34 @@
 //have shape auto update after a button press
 //add warning text if text field is missing an input
 
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
+package javacode;
 
-public class SCC_Panel extends JPanel implements ActionListener {
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JColorChooser;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import java.awt.Graphics;
+import java.awt.Color;
+
+public class SCC_Frame extends JFrame {
+
+    SCC_Frame() {
+        setTitle("Simple Shape and Color Mixer");
+        setBounds(200, 200, 1000, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        add(new SCC_Panel());
+        setVisible(true);
+    }
+}
+
+class SCC_Panel extends JPanel implements ActionListener {
     private SCC_DrawRect newRect;
     private SCC_DrawOval newOval;
     private JButton rectButton, ovalButton, colorButton, fillButton, emptyButton;

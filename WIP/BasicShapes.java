@@ -1,14 +1,15 @@
 
 /**
  * @author Nathin
- * @version 1.0
+ * @version 1.0.1
  * @since Februrary 18, 2020
- * 
- * BasicShapes.java is under the MIT license
  */
+
+//package utility
 
 import java.awt.Graphics;
 import java.awt.Color;
+
 import java.util.Random;
 
 public class BasicShapes {
