@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin
- * @version 1.0
+ * @version 1.0.1
  * @since Februrary 18, 2020
  */
 
@@ -20,8 +20,7 @@ public class SimpleFaceDraw {
         frame.setBounds(0, 0, 1550, 900);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        SFD_Panel newFace = new SFD_Panel();
-        frame.add(newFace);
+        frame.add(new SFD_Panel());
         frame.setVisible(true);
     }
 }
