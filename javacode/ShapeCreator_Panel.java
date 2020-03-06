@@ -8,9 +8,6 @@
 //have shape auto update after a button press
 //add warning text if text field is missing an input
 
-package javacode;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,27 +20,15 @@ import java.awt.event.ActionEvent;
 import java.awt.Graphics;
 import java.awt.Color;
 
-public class SCC_Frame extends JFrame {
-
-    SCC_Frame() {
-        setTitle("Simple Shape and Color Mixer");
-        setBounds(200, 200, 1000, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        add(new SCC_Panel());
-        setVisible(true);
-    }
-}
-
-class SCC_Panel extends JPanel implements ActionListener {
-    private SCC_DrawRect newRect;
-    private SCC_DrawOval newOval;
+class ShapeCreator_Panel extends JPanel implements ActionListener {
+    private ShapeCreator_DrawRect newRect;
+    private ShapeCreator_DrawOval newOval;
     private JButton rectButton, ovalButton, colorButton, fillButton, emptyButton;
     private JTextField setWidth, setHeight;
     private Color newColor;
     private Boolean fillShape;
 
-    SCC_Panel() {
+    ShapeCreator_Panel() {
         newColor = Color.black;
         fillShape = true;
 
@@ -105,11 +90,11 @@ class SCC_Panel extends JPanel implements ActionListener {
 
         } else if (e.getSource() == rectButton) {
             newOval = null;
-            newRect = new SCC_DrawRect(fillShape, newColor, 10, 50, width, height);
+            newRect = new ShapeCreator_DrawRect(fillShape, newColor, 10, 50, width, height);
 
         } else if (e.getSource() == ovalButton) {
             newRect = null;
-            newOval = new SCC_DrawOval(fillShape, newColor, 10, 50, width, height);
+            newOval = new ShapeCreator_DrawOval(fillShape, newColor, 10, 50, width, height);
 
         }
 
@@ -117,9 +102,9 @@ class SCC_Panel extends JPanel implements ActionListener {
     }
 }
 
-class SCC_DrawRect extends Rectangle {
+class ShapeCreator_DrawRect extends Rectangle {
 
-    SCC_DrawRect(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
+    ShapeCreator_DrawRect(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
         super(fillShape, newColor, xPos, yPos, width, height);
     }
 
@@ -128,9 +113,9 @@ class SCC_DrawRect extends Rectangle {
     }
 }
 
-class SCC_DrawOval extends Oval {
+class ShapeCreator_DrawOval extends Oval {
 
-    SCC_DrawOval(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
+    ShapeCreator_DrawOval(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
         super(fillShape, newColor, xPos, yPos, width, height);
     }
 
