@@ -5,7 +5,6 @@
  * @since Februrary 12, 2020
  */
 
-//have shape auto update after a button press
 //add warning text if text field is missing an input
 
 import utility.DrawShape;
@@ -26,40 +25,46 @@ class ShapeCreator_Panel extends JPanel implements ActionListener {
     private DrawShape newShape;
     private JButton rectButton, ovalButton, colorButton, fillButton, emptyButton;
     private JTextField setWidth, setHeight;
+    private JLabel widthLabel, heightLabel;
     private Color newColor;
     private Boolean fillShape;
+    private String shape;
 
     ShapeCreator_Panel() {
-        newColor = Color.black;
+        shape = "rect";
+        newColor = Color.white;
         fillShape = true;
 
         rectButton = new JButton("Rectangle");
-        rectButton.addActionListener(this);
-        add(rectButton);
-
         ovalButton = new JButton("Oval");
-        ovalButton.addActionListener(this);
-        add(ovalButton);
-
-        add(new JLabel("width:"));
-        setWidth = new JTextField(3);
-        add(setWidth);
-
-        add(new JLabel("height:"));
-        setHeight = new JTextField(3);
-        add(setHeight);
-
         colorButton = new JButton("Choose Color");
-        colorButton.addActionListener(this);
-        add(colorButton);
-
         fillButton = new JButton("Solid Shape");
-        fillButton.addActionListener(this);
-        add(fillButton);
-
         emptyButton = new JButton("Outline Shape");
+
+        widthLabel = new JLabel("Width:");
+        heightLabel = new JLabel("height:");
+        setWidth = new JTextField(3);
+        setHeight = new JTextField(3);
+
+        rectButton.addActionListener(this);
+        ovalButton.addActionListener(this);
+        colorButton.addActionListener(this);
+        fillButton.addActionListener(this);
         emptyButton.addActionListener(this);
+
+        setWidth.addActionListener(this);
+        setHeight.addActionListener(this);
+
+        add(rectButton);
+        add(ovalButton);
+        add(colorButton);
+        add(fillButton);
         add(emptyButton);
+
+        add(widthLabel);
+        add(setWidth);
+        add(heightLabel);
+        add(setHeight);
     }
 
     public void paint(Graphics g) {
@@ -88,11 +93,12 @@ class ShapeCreator_Panel extends JPanel implements ActionListener {
             fillShape = false;
 
         else if (e.getSource() == rectButton)
-            newShape = new DrawShape("rect", fillShape, newColor, 10, 50, width, height);
+            shape = "rect";
 
         else if (e.getSource() == ovalButton)
-            newShape = new DrawShape("oval", fillShape, newColor, 10, 50, width, height);
+            shape = "oval";
 
+        newShape = new DrawShape(shape, fillShape, newColor, 10, 50, width, height);
         repaint();
     }
 }
