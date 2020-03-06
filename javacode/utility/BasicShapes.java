@@ -1,9 +1,11 @@
 
 /**
  * @author Nathin
- * @version 1.0.2
+ * @version 1.0.3
  * @since Februrary 18, 2020
  */
+
+// currently unusable
 
 package utility;
 

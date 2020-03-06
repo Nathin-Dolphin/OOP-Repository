@@ -1,14 +1,16 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.1.1
  * @since Februrary 18, 2020
  */
+
+// allow classes more control over the features of a face object
+// have colors not blend in with background, face color, etc.
 
 package utility;
 
 import utility.DrawShape;
-import utility.DrawArc;
 
 import java.awt.Graphics;
 
