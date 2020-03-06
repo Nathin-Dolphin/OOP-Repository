@@ -16,63 +16,63 @@ public class DrawShape extends RandomGen {
     public Color newColor;
     public String shape;
 
-    DrawShape() {
+    public DrawShape() {
         xPos = yPos = height = width = 100;
         fillShape = booleanGen();
         newColor = colorGen();
         shape = randomShape();
     }
 
-    DrawShape(String shape, boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
+    public DrawShape(String shape, boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
         this.shape = shape;
         sizeAndPos(xPos, yPos, width, height);
         this.fillShape = fillShape;
         this.newColor = newColor;
     }
 
-    DrawShape(String shape, Color newColor, int xPos, int yPos, int width, int height) {
+    public DrawShape(String shape, Color newColor, int xPos, int yPos, int width, int height) {
         this.shape = shape;
         sizeAndPos(xPos, yPos, width, height);
         this.newColor = newColor;
         fillShape = booleanGen();
     }
 
-    DrawShape(String shape, boolean fillShape, int xPos, int yPos, int width, int height) {
+    public DrawShape(String shape, boolean fillShape, int xPos, int yPos, int width, int height) {
         this.shape = shape;
         sizeAndPos(xPos, yPos, width, height);
         this.fillShape = fillShape;
         newColor = colorGen();
     }
 
-    DrawShape(String shape, int xPos, int yPos, int width, int height) {
+    public DrawShape(String shape, int xPos, int yPos, int width, int height) {
         this.shape = shape;
         sizeAndPos(xPos, yPos, width, height);
         fillShape = booleanGen();
         newColor = colorGen();
     }
 
-    DrawShape(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
+    public DrawShape(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
         sizeAndPos(xPos, yPos, width, height);
         this.fillShape = fillShape;
         this.newColor = newColor;
         shape = randomShape();
     }
 
-    DrawShape(Color newColor, int xPos, int yPos, int width, int height) {
+    public DrawShape(Color newColor, int xPos, int yPos, int width, int height) {
         sizeAndPos(xPos, yPos, width, height);
         this.newColor = newColor;
         shape = randomShape();
         fillShape = booleanGen();
     }
 
-    DrawShape(boolean fillShape, int xPos, int yPos, int width, int height) {
+    public DrawShape(boolean fillShape, int xPos, int yPos, int width, int height) {
         sizeAndPos(xPos, yPos, width, height);
         this.fillShape = fillShape;
         shape = randomShape();
         newColor = colorGen();
     }
 
-    DrawShape(int xPos, int yPos, int width, int height) {
+    public DrawShape(int xPos, int yPos, int width, int height) {
         sizeAndPos(xPos, yPos, width, height);
         shape = randomShape();
         fillShape = booleanGen();
