@@ -1,11 +1,11 @@
 
 /**
  * @author Nathin
- * @version 1.0.1
+ * @version 1.0.2
  * @since Februrary 18, 2020
  */
 
-//package utility
+package utility;
 
 import java.awt.Graphics;
 import java.awt.Color;

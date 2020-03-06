@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0
+ * @version 1.1
  * @since March 6, 2020
  */
 
@@ -37,7 +37,7 @@ public class DrawArc extends RandomGen {
     public DrawArc(Color newColor, int xPos, int yPos, int width, int height, int startAngle, int arcAngle) {
         sizeAndPos(xPos, yPos, width, height, startAngle, arcAngle);
         newColor = colorGen();
-        this.newColor = newColor;x
+        this.newColor = newColor;
     }
 
     // String, boolean, int, int, int, int

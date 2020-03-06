@@ -1,21 +1,25 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0.1
+ * @version 1.1
  * @since Februrary 18, 2020
  */
 
-import java.awt.Graphics;
-import java.awt.Color;
+package utility;
 
-class FaceDraw_DrawFace extends Oval {
-    private Oval leftEye, rightEye;
-    private Arc mouth;
-    private int tempXPos, tempYPos, tempHeight, tempWidth;
+import utility.DrawShape;
+import utility.DrawArc;
+
+import java.awt.Graphics;
+
+public class DrawFace extends DrawShape {
+    private DrawShape leftEye, rightEye;
+    private DrawArc mouth;
+    private int tempXPos, tempYPos, tempHeight, tempWidth, startAngle, arcAngle;
     private boolean wideMouth, isSmile;
 
-    FaceDraw_DrawFace(int xPos, int yPos, int width, int height) {
-        super(xPos, yPos, width, height);
+    public DrawFace(int xPos, int yPos, int width, int height) {
+        super("oval", xPos, yPos, width, height);
         facialFeatures(xPos, yPos, width, height);
     }
 
@@ -23,20 +27,19 @@ class FaceDraw_DrawFace extends Oval {
         tempWidth = width / 5;
         tempHeight = height / 5;
         tempYPos = height / 6 + yPos;
-        Color newColor = randomColor();
 
         tempXPos = (int) (width / 2 + (double) (width / 10) + xPos);
-        rightEye = new Oval(true, newColor, tempXPos, tempYPos, tempWidth, tempHeight);
+        rightEye = new DrawShape("oval", true, tempXPos, tempYPos, tempWidth, tempHeight);
 
         tempXPos = (int) (width / 2 - (double) (width / 10) + xPos - tempWidth);
-        leftEye = new Oval(true, newColor, tempXPos, tempYPos, tempWidth, tempHeight);
+        leftEye = new DrawShape("oval", true, tempXPos, tempYPos, tempWidth, tempHeight);
 
         drawMouth();
     }
 
     private void drawMouth() {
-        isSmile = randomBoolean();
-        wideMouth = randomBoolean();
+        isSmile = booleanGen();
+        wideMouth = booleanGen();
 
         if (isSmile) {
             tempYPos = yPos - height / 10;
@@ -65,7 +68,7 @@ class FaceDraw_DrawFace extends Oval {
         tempWidth = 2 * width / 3;
         tempHeight = height;
         tempXPos = xPos + width / 6;
-        mouth = new Arc(wideMouth, randomColor(), tempXPos, tempYPos, tempWidth, tempHeight, startAngle, arcAngle);
+        mouth = new DrawArc(wideMouth, tempXPos, tempYPos, tempWidth, tempHeight, startAngle, arcAngle);
     }
 
     public void paint(Graphics g) {

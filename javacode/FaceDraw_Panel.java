@@ -5,6 +5,8 @@
  * @since Februrary 18, 2020
  */
 
+import utility.DrawFace;
+
 import javax.swing.JPanel;
 
 import java.awt.Graphics;
@@ -14,15 +16,15 @@ import java.util.Random;
 public class FaceDraw_Panel extends JPanel {
     private Random gen = new Random();
     public int xPos, yPos, width, height, rand;
-    private FaceDraw_DrawFace[] faceList;
+    private DrawFace[] faceList;
 
     FaceDraw_Panel() {
         rand = gen.nextInt(10) + 1;
-        faceList = new FaceDraw_DrawFace[rand];
+        faceList = new DrawFace[rand];
 
         for (int i = 0; i < faceList.length; i++) {
             newDimensions();
-            faceList[i] = new FaceDraw_DrawFace(xPos, yPos, width, height);
+            faceList[i] = new DrawFace(xPos, yPos, width, height);
         }
     }
 

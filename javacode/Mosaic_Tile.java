@@ -1,9 +1,12 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.2
  * @since February 26, 2020
  */
+
+import utility.DrawFace;
+import utility.RandomGen;
 
 import javax.swing.JPanel;
 
@@ -14,9 +17,8 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
 
-import utility.RandomGen;
-
 class Mosaic_Tile extends JPanel implements MouseListener {
+    private DrawFace face;
     private RandomGen random;
     private int width, height, pos, shapeInt, complexity, angle, extraPos;
     private Color color1, color2;
@@ -40,6 +42,8 @@ class Mosaic_Tile extends JPanel implements MouseListener {
             angle = 180;
         else
             angle = -180;
+
+        face = null;
     }
 
     public void paint(Graphics g) {
@@ -54,7 +58,10 @@ class Mosaic_Tile extends JPanel implements MouseListener {
         else
             extraPos = 0;
 
-        if (shapeInt == 1) {
+        if (face != null)
+            face.paint(g);
+
+        else if (shapeInt == 1) {
             g.fillArc(pos, pos, width, height, 0, angle);
             g.setColor(color2);
             g.fillArc(pos, pos, width, height, 0, -angle);
@@ -69,13 +76,15 @@ class Mosaic_Tile extends JPanel implements MouseListener {
         else if (shapeInt == 4)
             g.fillOval(pos, pos, width, height);
 
-        g.setColor(random.complementColor(color1));
-        g.setFont(new Font("Verdana", Font.PLAIN, 40));
-        g.drawString(letter, width / 3, 3 * height / 4);
+        if (face == null) {
+            g.setColor(random.complementColor(color1));
+            g.setFont(new Font("Verdana", Font.PLAIN, 40));
+            g.drawString(letter, width / 3, 3 * height / 4);
+        }
     }
 
     public void mouseClicked(MouseEvent e) {
-        randomize();
+        face = new DrawFace(pos, pos, width, height);
         repaint();
     }
 
