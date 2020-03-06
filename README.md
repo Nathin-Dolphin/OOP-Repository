@@ -3,12 +3,15 @@
 Programs for Object-Oriented Programming.
 
 Main method java file names (refered to as "MM"):
+
 	FaceDraw
 	Mosaic
 	ShapeCreator
 
-NOTE: '...' is the path from the storage device to the repository.
-NOTE: "MM" referes to the names of the main method java files.
+NOTES: 
+
+	'...' is the path from the storage device to the repository.
+	"MM" referes to the names of the main method java files.
 
 
 # Method 1:
