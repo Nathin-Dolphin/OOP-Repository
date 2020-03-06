@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.0.1
  * @since March 3, 2020
  */
 
@@ -16,13 +16,18 @@ public class DrawShape extends RandomGen {
     public Color newColor;
     public String shape;
 
+    // default constructor
     public DrawShape() {
-        xPos = yPos = height = width = 100;
+        xPos = intGen(0, 100);
+        yPos = intGen(0, 100);
+        height = intGen(10, 200);
+        width = intGen(10, 200);
         fillShape = booleanGen();
         newColor = colorGen();
         shape = randomShape();
     }
 
+    // String, boolean, Color, int, int, int, int
     public DrawShape(String shape, boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
         this.shape = shape;
         sizeAndPos(xPos, yPos, width, height);
@@ -30,6 +35,7 @@ public class DrawShape extends RandomGen {
         this.newColor = newColor;
     }
 
+    // String, Color, int, int, int, int
     public DrawShape(String shape, Color newColor, int xPos, int yPos, int width, int height) {
         this.shape = shape;
         sizeAndPos(xPos, yPos, width, height);
@@ -37,6 +43,7 @@ public class DrawShape extends RandomGen {
         fillShape = booleanGen();
     }
 
+    // String, boolean, int, int, int, int
     public DrawShape(String shape, boolean fillShape, int xPos, int yPos, int width, int height) {
         this.shape = shape;
         sizeAndPos(xPos, yPos, width, height);
@@ -44,6 +51,7 @@ public class DrawShape extends RandomGen {
         newColor = colorGen();
     }
 
+    // String, int, int, int, int
     public DrawShape(String shape, int xPos, int yPos, int width, int height) {
         this.shape = shape;
         sizeAndPos(xPos, yPos, width, height);
@@ -51,6 +59,7 @@ public class DrawShape extends RandomGen {
         newColor = colorGen();
     }
 
+    // boolean, Color, int, int, int, int
     public DrawShape(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
         sizeAndPos(xPos, yPos, width, height);
         this.fillShape = fillShape;
@@ -58,6 +67,7 @@ public class DrawShape extends RandomGen {
         shape = randomShape();
     }
 
+    // Color, int, int, int, int
     public DrawShape(Color newColor, int xPos, int yPos, int width, int height) {
         sizeAndPos(xPos, yPos, width, height);
         this.newColor = newColor;
@@ -65,6 +75,7 @@ public class DrawShape extends RandomGen {
         fillShape = booleanGen();
     }
 
+    // boolean, int, int, int, int
     public DrawShape(boolean fillShape, int xPos, int yPos, int width, int height) {
         sizeAndPos(xPos, yPos, width, height);
         this.fillShape = fillShape;
@@ -72,6 +83,7 @@ public class DrawShape extends RandomGen {
         newColor = colorGen();
     }
 
+    // int, int, int, int
     public DrawShape(int xPos, int yPos, int width, int height) {
         sizeAndPos(xPos, yPos, width, height);
         shape = randomShape();
@@ -86,8 +98,8 @@ public class DrawShape extends RandomGen {
         this.height = height;
     }
 
-    public String randomShape() {
-        int rand = intGen(0, 2);
+    private String randomShape() {
+        int rand = intGen(0, 1);
         if (rand == 0)
             return shape = "oval";
         else
@@ -97,7 +109,7 @@ public class DrawShape extends RandomGen {
     public void paint(Graphics g) {
         g.setColor(newColor);
 
-        if (fillShape) {
+        if (fillShape)
             switch (shape) {
                 case "oval":
                     g.fillOval(xPos, yPos, width, height);
@@ -106,7 +118,7 @@ public class DrawShape extends RandomGen {
                     g.fillRect(xPos, yPos, width, height);
                     break;
             }
-        } else {
+        else
             switch (shape) {
                 case "oval":
                     g.drawOval(xPos, yPos, width, height);
@@ -115,6 +127,5 @@ public class DrawShape extends RandomGen {
                     g.drawRect(xPos, yPos, width, height);
                     break;
             }
-        }
     }
 }
