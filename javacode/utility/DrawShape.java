@@ -1,29 +1,20 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0
+ * @version 1.1
  * @since March 3, 2020
  */
+
+package utility;
 
 import java.awt.Graphics;
 import java.awt.Color;
 
-class Shapes extends RandomGen {
+public class DrawShape extends RandomGen {
     public int xPos, yPos, height, width;
     public boolean fillShape;
     public Color newColor;
     public String shape;
-
-    public String randomShape() {
-        int rand = intGen(0, 2);
-        if (rand == 0)
-            return shape = "oval";
-        else
-            return shape = "rect";
-    }
-}
-
-public class DrawShape extends Shapes {
 
     DrawShape() {
         xPos = yPos = height = width = 100;
@@ -93,6 +84,14 @@ public class DrawShape extends Shapes {
         this.yPos = yPos;
         this.width = width;
         this.height = height;
+    }
+
+    public String randomShape() {
+        int rand = intGen(0, 2);
+        if (rand == 0)
+            return shape = "oval";
+        else
+            return shape = "rect";
     }
 
     public void paint(Graphics g) {
