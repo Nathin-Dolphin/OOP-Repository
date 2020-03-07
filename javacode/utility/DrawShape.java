@@ -1,8 +1,10 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0.1
+ * @version 1.0.2
  * @since March 3, 2020
+ * 
+ * String shape = "oval" or "rect"
  */
 
 package utility;
@@ -104,6 +106,10 @@ public class DrawShape extends RandomGen {
             return shape = "oval";
         else
             return shape = "rect";
+    }
+
+    public Color getColor() {
+        return newColor;
     }
 
     public void paint(Graphics g) {

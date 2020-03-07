@@ -1,11 +1,15 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0.2
+ * @version 1.1
  * @since Februrary 27, 2020
  */
 
 // public void longGen(long min, long max) {} [planned feature]
+// [!] use 'intGen' instead of 'gen.nextInt()' in all 'colorGen' methods [!]
+// [!] 'analagousColor' attempts to create a color with invalid values
+// [?] change 'monoColor' to 'lighterColor' and create another method called
+// 'darkerColor' [?]
 
 package utility;
 
@@ -56,11 +60,31 @@ public class RandomGen {
       return new Color(r, g, b);
    }
 
-   // generates a color that is similar to the specified color 'c'
+   // generates a color that is slightly lighter than the specified color 'c'
    public Color monoColor(Color c) {
       r = 3 * c.getRed() / 5;
       g = 3 * c.getGreen() / 5;
       b = 3 * c.getBlue() / 5;
+      return new Color(r, g, b);
+   }
+
+   // generates a color similar to color 'c'
+   public Color analogousColor(Color c, int range) {
+      if (booleanGen())
+         r = intGen(c.getRed() - range, c.getRed() - range / 2) % 255;
+      else
+         r = intGen(c.getRed() + range / 2, c.getRed() + range) % 255;
+
+      if (booleanGen())
+         g = intGen(c.getGreen() - range, c.getGreen() - range / 2) % 255;
+      else
+         g = intGen(c.getGreen() + range / 2, c.getGreen() + range) % 255;
+
+      if (booleanGen())
+         b = intGen(c.getBlue() - range, c.getBlue() - range / 2) % 255;
+      else
+         b = intGen(c.getBlue() + range / 2, c.getBlue() + range) % 255;
+
       return new Color(r, g, b);
    }
 

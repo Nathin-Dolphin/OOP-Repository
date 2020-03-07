@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2
+ * @version 1.2.1
  * @since February 26, 2020
  */
 
@@ -84,7 +84,7 @@ class Mosaic_Tile extends JPanel implements MouseListener {
     }
 
     public void mouseClicked(MouseEvent e) {
-        face = new DrawFace(pos, pos, width, height);
+        face = new DrawFace(true, true, false, pos, pos, width, height);
         repaint();
     }
 
