@@ -1,13 +1,14 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.1.1
  * @since Februrary 27, 2020
  */
 
 // public void longGen(long min, long max) {} [planned feature]
 // [!] use 'intGen' instead of 'gen.nextInt()' in all 'colorGen' methods [!]
 // [!] 'analagousColor' attempts to create a color with invalid values
+// [!] 'complementColor' returns a gray if Color 'c' is gray [!]
 // [?] change 'monoColor' to 'lighterColor' and create another method called
 // 'darkerColor' [?]
 
@@ -53,10 +54,15 @@ public class RandomGen {
 
    // generates the opposite color of 'c'
    public Color complementColor(Color c) {
-      // add code to prevent gray on gray
       r = 255 - c.getRed();
       g = 255 - c.getGreen();
       b = 255 - c.getBlue();
+
+      if (r > 80 & r < 180)
+         if (g > 80 & g < 180)
+            if (g > 80 & g < 180)
+               r = g = b = 0;
+
       return new Color(r, g, b);
    }
 
@@ -84,6 +90,13 @@ public class RandomGen {
          b = intGen(c.getBlue() - range, c.getBlue() - range / 2) % 255;
       else
          b = intGen(c.getBlue() + range / 2, c.getBlue() + range) % 255;
+
+      while (r < 0)
+         r++;
+      while (g < 0)
+         g++;
+      while (b < 0)
+         b++;
 
       return new Color(r, g, b);
    }

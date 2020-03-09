@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2.1
+ * @version 1.2.2
  * @since February 26, 2020
  */
 
@@ -81,6 +81,8 @@ class Mosaic_Tile extends JPanel implements MouseListener {
             g.setFont(new Font("Verdana", Font.PLAIN, 40));
             g.drawString(letter, width / 3, 3 * height / 4);
         }
+        
+        repaint();
     }
 
     public void mouseClicked(MouseEvent e) {

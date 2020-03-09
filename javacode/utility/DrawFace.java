@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.1.2
+ * @version 1.2
  * @since Februrary 18, 2020
  */
 
