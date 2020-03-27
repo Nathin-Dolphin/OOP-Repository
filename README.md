@@ -6,6 +6,7 @@ Main method java file names (refered to as "MM"):
 
 	FaceDraw
 	Mosaic
+	SwissArmyKnife
 	ShapeCreator
 
 NOTES: 
