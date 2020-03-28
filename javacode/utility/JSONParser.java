@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0
+ * @version 1.1
  * @since March 27, 2020
  */
 
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class JSONParser {
     private ArrayList<String> parsedList, urls, tempArrayList;
     private String[] parsedLine;
-    private String currentLine;
+    private String currentLine, s;
 
     JSONParser() {
     }
@@ -24,14 +24,17 @@ public class JSONParser {
             return urlContents;
 
         parsedList = new ArrayList<String>();
-        for (int a = 1; a < urlContents.size() - 1; a++) {
+        for (int a = 0; a < urlContents.size(); a++) {
             currentLine = urlContents.get(a);
             parsedLine = currentLine.split("\"");
 
             for (int b = 0; b < parsedLine.length; b++) {
-                while (parsedLine[b].equals(":") || parsedLine[b].equals(",") || parsedLine[b].equals(", "))
+                s = parsedLine[b];
+                if (s.equals(":") || s.equals(": ") || s.equals(", ") || s.equals(","))
                     b++;
-                parsedList.add(parsedLine[b]);
+
+                if (b < parsedLine.length)
+                    parsedList.add(parsedLine[b]);
             }
         }
         return parsedList;
@@ -42,7 +45,7 @@ public class JSONParser {
         tempArrayList = parseJSON(urlContents);
         for (String s : tempArrayList) {
             try {
-                URL url = new URL(s);
+                new URL(s);
                 urls.add(s);
             } catch (MalformedURLException e) {
             }

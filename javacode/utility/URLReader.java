@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0
+ * @version 1.1
  * @since March 26, 2020
  */
 
@@ -20,13 +20,16 @@ public class URLReader extends JSONParser {
     private BufferedReader br;
     private URL openURL;
     private String baseURL, tempString;
+    private boolean baseURLRead;
     private ArrayList<String> urlContents, urlList;
 
     public URLReader() {
+        baseURLRead = false;
         urlContents = urlList = new ArrayList<String>();
     }
 
     public URLReader(String url) {
+        baseURLRead = false;
         baseURL = url;
         urlContents = urlList = new ArrayList<String>();
     }
@@ -53,20 +56,18 @@ public class URLReader extends JSONParser {
     }
 
     public void readURL(String url, boolean printContents) {
+        System.out.println("\nREADING URL:  " + url);
         if (isValidURL(url)) {
             try {
                 br = new BufferedReader(new InputStreamReader(openURL.openStream()));
-                // lines are being printed twice
-                // lines are being printed twice
-                // just like this
-                // just like this
                 while ((tempString = br.readLine()) != null) {
                     urlContents.add(tempString);
-                    System.out.println(tempString);
                     if (printContents)
                         System.out.println(tempString);
                 }
                 br.close();
+                if (baseURL == url)
+                    baseURLRead = true;
 
             } catch (IOException e) {
                 System.out.println("ERROR: I/O EXCEPTION");
@@ -76,12 +77,14 @@ public class URLReader extends JSONParser {
     }
 
     public void readURLIndex(String url, boolean printContents) {
-        readURL(url, false);
-        urlList = getURLList();
+        if (!baseURLRead)
+            readURL(url, printContents);
+        urlList = getURLList(urlContents);
+        urlContents = new ArrayList<String>();
+
         try {
-            for (String s : urlList) {
+            for (String s : urlList)
                 readURL(s, printContents);
-            }
         } catch (Exception e) {
             System.out.println("Warning: No Valid URL Links");
         }
