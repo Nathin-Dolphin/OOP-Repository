@@ -1,9 +1,11 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2
+ * @version 1.3
  * @since March 25, 2020
  */
+
+import java.util.ArrayList;
 
 import utility.CommandLineHelp;
 import utility.URLReader;
@@ -12,6 +14,7 @@ public class SwissArmyKnife {
     private static URLReader urlReader;
     private static long startTime, endTime;
     private static boolean validURL;
+    private static ArrayList<String> urlList;
 
     private static String autoRequestedURL = "https://thunderbird-index.azurewebsites.net/w0a6zk195d.json";
 
@@ -84,6 +87,11 @@ public class SwissArmyKnife {
             urlReader.readURLIndex(true);
             endTime = System.nanoTime();
             System.out.println("\nElapsed Time: " + (endTime - startTime) / 1000 + " microseconds");
+
+            urlList = urlReader.getURLList();
+            System.out.println("Number of URLs:  " + urlList.size());
+            System.out.println("Average Elapsed Time Per URL: " + (endTime - startTime) / 1000 / urlList.size()
+                    + " microseconds");
 
         } else
             System.out.println("\nERROR: INVALID URL");

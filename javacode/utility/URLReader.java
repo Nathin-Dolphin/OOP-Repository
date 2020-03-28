@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.2
  * @since March 26, 2020
  */
 
@@ -43,7 +43,10 @@ public class URLReader extends JSONParser {
     }
 
     public ArrayList<String> getURLList() {
-        return getURLList(urlContents);
+        if (urlList == null)
+            return getURLList(urlContents);
+        else
+            return urlList;
     }
 
     public boolean isValidURL(String url) {
