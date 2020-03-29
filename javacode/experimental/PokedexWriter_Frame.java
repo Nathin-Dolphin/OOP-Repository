@@ -1,9 +1,8 @@
 
 /**
  * @author Nathin Wascher
- * @version 0.1
+ * @version 0.2 CAUTION: EXPERIMENTAL VERSION
  * @since March 28, 2020
- * CAUTION: EXPERIMENTAL VERSION
  */
 
 import javax.swing.JFrame;
@@ -11,36 +10,33 @@ import javax.swing.JOptionPane;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
+import java.awt.BorderLayout;
 
 public class PokedexWriter_Frame extends JFrame {
-    private JFrame windowExit;
+    private int output;
 
     PokedexWriter_Frame(String region) {
         setTitle("PokedexWriter (!!!WIP!!!)");
-        setBounds(200, 200, 1000, 600);
+        setBounds(500, 200, 1000, 600);
+        setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                createWindowExit();
+                windowExit();
             }
         });
 
-        // add(new PokedexPanel_Panel(region));
+        add(new PokedexWriter_Panels(region, this));
         setVisible(true);
     }
 
-    private void createWindowExit() {
-        windowExit = new JFrame("Do you really want to exit.");
-        windowExit.setBounds(600, 200, 400, 200);
-        windowExit.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        windowExit.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent d) {
-                // windowExit.dispose();
-                System.exit(0);
-            }
-        });
-        windowExit.setVisible(true);
+    private void windowExit() {
+        output = JOptionPane.showConfirmDialog(this, "Do you really want to exit?", "WARNING",
+                JOptionPane.YES_NO_OPTION);
+        if (output == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        } else if (output == JOptionPane.NO_OPTION) {
+        }
     }
 }
