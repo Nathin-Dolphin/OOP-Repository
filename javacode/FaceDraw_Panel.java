@@ -1,25 +1,24 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0.1
+ * @version 1.0.2
  * @since Februrary 18, 2020
  */
 
-import utility.DrawFace;
+import utility.graphics.DrawFace;
+import utility.RandomGen;
 
 import javax.swing.JPanel;
 
 import java.awt.Graphics;
 
-import java.util.Random;
-
 public class FaceDraw_Panel extends JPanel {
-    private Random gen = new Random();
+    private RandomGen gen;
     public int xPos, yPos, width, height, rand;
     private DrawFace[] faceList;
 
     FaceDraw_Panel() {
-        rand = gen.nextInt(10) + 1;
+        rand = gen.intGen(3, 10);
         faceList = new DrawFace[rand];
 
         for (int i = 0; i < faceList.length; i++) {
@@ -29,15 +28,15 @@ public class FaceDraw_Panel extends JPanel {
     }
 
     private void newDimensions() {
-        width = gen.nextInt(350) + 51;
-        height = gen.nextInt(350) + 51;
+        width = gen.intGen(50, 400);
+        height = gen.intGen(50, 400);
 
         do {
-            xPos = gen.nextInt(1501);
+            xPos = gen.intGen(0, 1500);
         } while ((1500 - xPos) < (width - 51));
 
         do {
-            yPos = gen.nextInt(851);
+            yPos = gen.intGen(0, 850);
         } while ((800 - yPos) < (height - 51));
     }
 

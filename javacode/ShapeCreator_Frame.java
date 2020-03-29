@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.1.1
  * @since Februrary 12, 2020
  */
 
@@ -13,7 +13,7 @@ public class ShapeCreator_Frame extends JFrame {
         setBounds(200, 200, 1000, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        add(new ShapeCreator_Panel());
+        add(new ShapeCreator_Panel(this));
         setVisible(true);
     }
 }

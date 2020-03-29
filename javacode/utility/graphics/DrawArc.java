@@ -1,11 +1,13 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.1.1
  * @since March 6, 2020
  */
 
-package utility;
+package utility.graphics;
+
+import utility.RandomGen;
 
 import java.awt.Graphics;
 import java.awt.Color;
@@ -21,85 +23,70 @@ public class DrawArc extends RandomGen {
         yPos = intGen(0, 100);
         height = intGen(10, 200);
         width = intGen(10, 200);
-        fillShape = booleanGen();
+        fillShape = boolGen();
         newColor = colorGen();
+        randomArc();
     }
 
     // String, boolean, Color, int, int, int, int, int, int
     public DrawArc(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height, int startAngle,
             int arcAngle) {
-        sizeAndPos(xPos, yPos, width, height, startAngle, arcAngle);
-        this.fillShape = fillShape;
-        this.newColor = newColor;
+        setAngles(startAngle, arcAngle);
+        drawArc(fillShape, newColor, xPos, yPos, width, height);
     }
 
     // String, Color, int, int, int, int
     public DrawArc(Color newColor, int xPos, int yPos, int width, int height, int startAngle, int arcAngle) {
-        sizeAndPos(xPos, yPos, width, height, startAngle, arcAngle);
-        newColor = colorGen();
-        this.newColor = newColor;
+        setAngles(startAngle, arcAngle);
+        drawArc(boolGen(), newColor, xPos, yPos, width, height);
     }
 
     // String, boolean, int, int, int, int
     public DrawArc(boolean fillShape, int xPos, int yPos, int width, int height, int startAngle, int arcAngle) {
-        sizeAndPos(xPos, yPos, width, height, startAngle, arcAngle);
-        newColor = colorGen();
-        this.fillShape = fillShape;
+        setAngles(startAngle, arcAngle);
+        drawArc(fillShape, colorGen(), xPos, yPos, width, height);
     }
 
     // String, int, int, int, int
     public DrawArc(int xPos, int yPos, int width, int height, int startAngle, int arcAngle) {
-        sizeAndPos(xPos, yPos, width, height, startAngle, arcAngle);
-        fillShape = booleanGen();
-        newColor = colorGen();
+        setAngles(startAngle, arcAngle);
+        drawArc(boolGen(), colorGen(), xPos, yPos, width, height);
     }
 
     // boolean, Color, int, int, int, int
     public DrawArc(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
-        sizeAndPos(xPos, yPos, width, height);
-        this.fillShape = fillShape;
-        this.newColor = newColor;
         randomArc();
+        drawArc(fillShape, newColor, xPos, yPos, width, height);
     }
 
     // Color, int, int, int, int
     public DrawArc(Color newColor, int xPos, int yPos, int width, int height) {
-        sizeAndPos(xPos, yPos, width, height);
-        fillShape = booleanGen();
-        this.newColor = newColor;
         randomArc();
+        drawArc(boolGen(), newColor, xPos, yPos, width, height);
     }
 
     // boolean, int, int, int, int
     public DrawArc(boolean fillShape, int xPos, int yPos, int width, int height) {
-        sizeAndPos(xPos, yPos, width, height);
-        newColor = colorGen();
-        this.fillShape = fillShape;
         randomArc();
+        drawArc(fillShape, colorGen(), xPos, yPos, width, height);
     }
 
     // int, int, int, int
     public DrawArc(int xPos, int yPos, int width, int height) {
-        sizeAndPos(xPos, yPos, width, height);
-        fillShape = booleanGen();
-        newColor = colorGen();
         randomArc();
+        drawArc(boolGen(), colorGen(), xPos, yPos, width, height);
     }
 
-    private void sizeAndPos(int xPos, int yPos, int width, int height, int startAngle, int arcAngle) {
+    private void drawArc(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
         this.xPos = xPos;
         this.yPos = yPos;
         this.width = width;
         this.height = height;
+    }
+
+    private void setAngles(int startAngle, int arcAngle) {
         this.startAngle = startAngle;
         this.arcAngle = arcAngle;
-    }
-
-    private void sizeAndPos(int xPos, int yPos, int width, int height) {
-        this.xPos = xPos;
-        this.yPos = yPos;
-        this.width = width;
-        this.height = height;
     }
 
     private void randomArc() {

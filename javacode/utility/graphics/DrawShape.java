@@ -1,13 +1,15 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0.2
+ * @version 1.0.3
  * @since March 3, 2020
  * 
  * String shape = "oval" or "rect"
  */
 
-package utility;
+package utility.graphics;
+
+import utility.RandomGen;
 
 import java.awt.Graphics;
 import java.awt.Color;
@@ -24,76 +26,55 @@ public class DrawShape extends RandomGen {
         yPos = intGen(0, 100);
         height = intGen(10, 200);
         width = intGen(10, 200);
-        fillShape = booleanGen();
+        fillShape = boolGen();
         newColor = colorGen();
         shape = randomShape();
     }
 
     // String, boolean, Color, int, int, int, int
     public DrawShape(String shape, boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
-        this.shape = shape;
-        sizeAndPos(xPos, yPos, width, height);
-        this.fillShape = fillShape;
-        this.newColor = newColor;
+        drawShape(shape, fillShape, newColor, xPos, yPos, width, height);
     }
 
     // String, Color, int, int, int, int
     public DrawShape(String shape, Color newColor, int xPos, int yPos, int width, int height) {
-        this.shape = shape;
-        sizeAndPos(xPos, yPos, width, height);
-        this.newColor = newColor;
-        fillShape = booleanGen();
+        drawShape(shape, boolGen(), newColor, xPos, yPos, width, height);
     }
 
     // String, boolean, int, int, int, int
     public DrawShape(String shape, boolean fillShape, int xPos, int yPos, int width, int height) {
-        this.shape = shape;
-        sizeAndPos(xPos, yPos, width, height);
-        this.fillShape = fillShape;
-        newColor = colorGen();
+        drawShape(shape, fillShape, colorGen(), xPos, yPos, width, height);
     }
 
     // String, int, int, int, int
     public DrawShape(String shape, int xPos, int yPos, int width, int height) {
-        this.shape = shape;
-        sizeAndPos(xPos, yPos, width, height);
-        fillShape = booleanGen();
-        newColor = colorGen();
+        drawShape(shape, boolGen(), colorGen(), xPos, yPos, width, height);
     }
 
     // boolean, Color, int, int, int, int
     public DrawShape(boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
-        sizeAndPos(xPos, yPos, width, height);
-        this.fillShape = fillShape;
-        this.newColor = newColor;
-        shape = randomShape();
+        drawShape(randomShape(), fillShape, newColor, xPos, yPos, width, height);
     }
 
     // Color, int, int, int, int
     public DrawShape(Color newColor, int xPos, int yPos, int width, int height) {
-        sizeAndPos(xPos, yPos, width, height);
-        this.newColor = newColor;
-        shape = randomShape();
-        fillShape = booleanGen();
+        drawShape(randomShape(), boolGen(), newColor, xPos, yPos, width, height);
     }
 
     // boolean, int, int, int, int
     public DrawShape(boolean fillShape, int xPos, int yPos, int width, int height) {
-        sizeAndPos(xPos, yPos, width, height);
-        this.fillShape = fillShape;
-        shape = randomShape();
-        newColor = colorGen();
+        drawShape(randomShape(), fillShape, colorGen(), xPos, yPos, width, height);
     }
 
     // int, int, int, int
     public DrawShape(int xPos, int yPos, int width, int height) {
-        sizeAndPos(xPos, yPos, width, height);
-        shape = randomShape();
-        fillShape = booleanGen();
-        newColor = colorGen();
+        drawShape(randomShape(), boolGen(), colorGen(), xPos, yPos, width, height);
     }
 
-    private void sizeAndPos(int xPos, int yPos, int width, int height) {
+    private void drawShape(String shape, boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
+        this.shape = shape;
+        this.fillShape = fillShape;
+        this.newColor = newColor;
         this.xPos = xPos;
         this.yPos = yPos;
         this.width = width;
@@ -101,8 +82,7 @@ public class DrawShape extends RandomGen {
     }
 
     private String randomShape() {
-        int rand = intGen(0, 1);
-        if (rand == 0)
+        if (boolGen())
             return shape = "oval";
         else
             return shape = "rect";

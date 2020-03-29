@@ -5,10 +5,11 @@
  * @since March 27, 2020
  */
 
-package utility;
+package utility.json;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import java.util.ArrayList;
 
 public class JSONParser {
@@ -16,7 +17,7 @@ public class JSONParser {
     private String[] parsedLine;
     private String currentLine, s;
 
-    JSONParser() {
+    public JSONParser() {
     }
 
     public ArrayList<String> parseJSON(ArrayList<String> urlContents) {

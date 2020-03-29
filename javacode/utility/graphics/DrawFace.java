@@ -1,16 +1,16 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2
+ * @version 1.2.1
  * @since Februrary 18, 2020
  */
 
 // allow classes more control over the features of a face object
 // have colors not blend in with background, face color, etc.
 
-package utility;
+package utility.graphics;
 
-import utility.DrawShape;
+import utility.graphics.DrawShape;
 
 import java.awt.Graphics;
 import java.awt.Color;
@@ -24,22 +24,30 @@ public class DrawFace extends DrawShape {
 
     public DrawFace(int xPos, int yPos, int width, int height) {
         super("oval", xPos, yPos, width, height);
-        eyeColor = analogousColor(getColor(), 50);
-        isSmile = booleanGen();
-        wideMouth = booleanGen();
-        facialFeatures(xPos, yPos, width, height);
+        drawFace(boolGen(), boolGen());
     }
 
     public DrawFace(boolean isSolid, int xPos, int yPos, int width, int height) {
         super("oval", isSolid, xPos, yPos, width, height);
-        eyeColor = analogousColor(getColor(), 50);
-        isSmile = booleanGen();
-        wideMouth = booleanGen();
-        facialFeatures(xPos, yPos, width, height);
+        drawFace(boolGen(), boolGen());
     }
 
     public DrawFace(boolean isSolid, boolean isSmile, boolean wideMouth, int xPos, int yPos, int width, int height) {
         super("oval", isSolid, xPos, yPos, width, height);
+        drawFace(isSmile, wideMouth);
+    }
+
+    // WORK IN PROGRESS
+    public void setSmile(boolean isSmile) {
+        this.isSmile = isSmile;
+    }
+
+    // WORK IN PROGRESS
+    public void setWideMouth(boolean wideMouth) {
+        this.wideMouth = wideMouth;
+    }
+
+    private void drawFace(boolean isSmile, boolean isWideMouth) {
         eyeColor = analogousColor(getColor(), 50);
         this.isSmile = isSmile;
         this.wideMouth = wideMouth;

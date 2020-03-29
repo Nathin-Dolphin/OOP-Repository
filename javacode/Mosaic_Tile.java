@@ -1,11 +1,11 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2.2
+ * @version 1.2.3
  * @since February 26, 2020
  */
 
-import utility.DrawFace;
+import utility.graphics.DrawFace;
 import utility.RandomGen;
 
 import javax.swing.JPanel;
@@ -19,24 +19,24 @@ import java.awt.Font;
 
 class Mosaic_Tile extends JPanel implements MouseListener {
     private DrawFace face;
-    private RandomGen random;
+    private RandomGen gen;
     private int width, height, pos, shapeInt, complexity, angle, extraPos;
     private Color color1, color2;
     private String letter;
 
     Mosaic_Tile() {
         super();
-        random = new RandomGen();
+        gen = new RandomGen();
         addMouseListener(this);
         randomize();
     }
 
     public void randomize() {
-        color1 = random.colorGen(20, 220, 20, 220, 20, 220);
-        color2 = random.monoColor(color1);
-        shapeInt = random.intGen(1, 4);
-        complexity = random.intGen(1, 2);
-        letter = String.valueOf(random.letterGen());
+        color1 = gen.colorGen(20, 220, 20, 220, 20, 220);
+        color2 = gen.lighterColor(color1);
+        shapeInt = gen.intGen(1, 4);
+        complexity = gen.intGen(1, 2);
+        letter = String.valueOf(gen.letterGen());
 
         if (complexity == 1)
             angle = 180;
@@ -49,15 +49,16 @@ class Mosaic_Tile extends JPanel implements MouseListener {
     public void paint(Graphics g) {
         super.paint(g);
         g.setColor(color1);
-
         height = getHeight() - 5;
         width = getWidth() - 5;
         pos = 3;
+
         if (complexity == 1)
             extraPos = width / 2;
         else
             extraPos = 0;
 
+        // determines what shape(s) to output
         if (face != null)
             face.paint(g);
 
@@ -77,11 +78,12 @@ class Mosaic_Tile extends JPanel implements MouseListener {
             g.fillOval(pos, pos, width, height);
 
         if (face == null) {
-            g.setColor(random.complementColor(color1));
+            g.setColor(gen.complementColor(color1));
             g.setFont(new Font("Verdana", Font.PLAIN, 40));
+            // letters don't get centered correctly
             g.drawString(letter, width / 3, 3 * height / 4);
         }
-        
+
         repaint();
     }
 

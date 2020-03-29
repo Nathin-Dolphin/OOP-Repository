@@ -1,11 +1,13 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2
+ * @version 1.2.1
  * @since March 26, 2020
  */
 
 package utility;
+
+import utility.json.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -93,6 +95,8 @@ public class URLReader extends JSONParser {
         }
     }
 
+    // methods beyond this point are overloaded and call themselves with filled
+    // parameters
     public boolean isValidURL() {
         return isValidURL(baseURL);
     }

@@ -1,14 +1,15 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2
+ * @version 1.3
  * @since Februrary 12, 2020
  */
 
-//add warning text if text field is missing an input
+// allow user to create an arc
 
-import utility.DrawShape;
+import utility.graphics.DrawShape;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -22,17 +23,20 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 class ShapeCreator_Panel extends JPanel implements ActionListener {
-    private DrawShape newShape;
+    private JFrame frame;
     private JButton rectButton, ovalButton, colorButton, fillButton, emptyButton;
     private JTextField setWidth, setHeight;
-    private JLabel widthLabel, heightLabel;
+    private JLabel widthLabel, heightLabel, warningLabel;
+    private DrawShape newShape;
+
     private Color newColor;
     private Boolean fillShape;
     private String shape;
 
-    ShapeCreator_Panel() {
+    ShapeCreator_Panel(JFrame frame) {
+        this.frame = frame;
         shape = "rect";
-        newColor = Color.white;
+        newColor = Color.black;
         fillShape = true;
 
         rectButton = new JButton("Rectangle");
@@ -41,6 +45,7 @@ class ShapeCreator_Panel extends JPanel implements ActionListener {
         fillButton = new JButton("Solid Shape");
         emptyButton = new JButton("Outline Shape");
 
+        warningLabel = new JLabel("Error: text fields cannot be empty!");
         widthLabel = new JLabel("Width:");
         heightLabel = new JLabel("height:");
         setWidth = new JTextField(3);
@@ -77,14 +82,17 @@ class ShapeCreator_Panel extends JPanel implements ActionListener {
         int width, height;
 
         try {
+            remove(warningLabel);
             width = Integer.parseInt(setWidth.getText());
             height = Integer.parseInt(setHeight.getText());
         } catch (NumberFormatException z) {
             width = height = 0;
+            add(warningLabel);
         }
+        frame.setVisible(true);
 
         if (e.getSource() == colorButton)
-            newColor = JColorChooser.showDialog(this, "Choose a Color", Color.red);
+            newColor = JColorChooser.showDialog(this, "Choose a Color", Color.black);
 
         else if (e.getSource() == fillButton)
             fillShape = true;

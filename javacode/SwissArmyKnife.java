@@ -1,9 +1,11 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.3
+ * @version 1.3.1
  * @since March 25, 2020
  */
+
+// [?] put some methods into another class [?]
 
 import java.util.ArrayList;
 
@@ -46,8 +48,9 @@ public class SwissArmyKnife {
                 urlIndexRequest();
             }
 
+            // WORK IN PROGRESS
         } else if (args[0].equalsIgnoreCase("-AutoRequest")) {
-            System.out.println("Executing Command -AutoRequest...");
+            System.out.println("Executing Command -AutoRequest...(WIP)...");
             urlRequest(autoRequestedURL, false);
             if (validURL) {
                 int stringNum = 1;
@@ -90,8 +93,8 @@ public class SwissArmyKnife {
 
             urlList = urlReader.getURLList();
             System.out.println("Number of URLs:  " + urlList.size());
-            System.out.println("Average Elapsed Time Per URL: " + (endTime - startTime) / 1000 / urlList.size()
-                    + " microseconds");
+            System.out.println(
+                    "Average Elapsed Time Per URL: " + (endTime - startTime) / 1000 / urlList.size() + " microseconds");
 
         } else
             System.out.println("\nERROR: INVALID URL");
