@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.2
  * @since March 27, 2020
  */
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class JSONParser {
     private ArrayList<String> parsedList, urls, tempArrayList;
     private String[] parsedLine;
-    private String currentLine, s;
+    private String string, singleChar;
 
     public JSONParser() {
     }
@@ -25,29 +25,68 @@ public class JSONParser {
             return urlContents;
 
         parsedList = new ArrayList<String>();
-        for (int a = 0; a < urlContents.size(); a++) {
-            currentLine = urlContents.get(a);
-            parsedLine = currentLine.split("\"");
+        for (int h = 0; h < urlContents.size(); h++) {
+            parsedLine = urlContents.get(h).split("\"");
 
-            for (int b = 0; b < parsedLine.length; b++) {
-                s = parsedLine[b];
-                if (s.equals(":") || s.equals(": ") || s.equals(", ") || s.equals(","))
-                    b++;
+            for (int i = 0; i < parsedLine.length; i++) {
+                string = parsedLine[i];
+                string = string.replaceAll("\t", "");
 
-                if (b < parsedLine.length)
-                    parsedList.add(parsedLine[b]);
+                if ((i - 2) % 4 == 0 & string.startsWith(":")) {
+                    if (string.endsWith("[{")) {
+                        string = "[{";
+                    } else if (string.endsWith("{")) {
+                        string = "{";
+                    } else {
+                        string = "";
+                    }
+                } else if (string.equals(",") || string.equals(", ")) {
+                    string = "";
+                } else if (i % 2 == 0) {
+                    string = string.replaceAll(" ", "");
+                }
+
+                if (string.startsWith("}")) {
+                    if (string.equals("},")) {
+                        string = "}";
+
+                    } else if (string.equals("},{")) {
+                        string = "}";
+                        parsedList.add(string);
+                        string = "{";
+
+                    } else if (string.equals("}]")) {
+                        string = "}";
+                        parsedList.add(string);
+                        string = "]";
+                    }
+                } else if (string.endsWith("{")) {
+                    if (string.equals(",{")) {
+                        string = "{";
+
+                    } else if (string.equals("[{")) {
+                        string = "[";
+                        parsedList.add(string);
+                        string = "{";
+                    }
+                }
+
+                if (!string.equals("")) {
+                    parsedList.add(string);
+                }
             }
         }
         return parsedList;
+
     }
 
     public ArrayList<String> getURLList(ArrayList<String> urlContents) {
         urls = new ArrayList<String>();
         tempArrayList = parseJSON(urlContents);
-        for (String s : tempArrayList) {
+        for (String tempString : tempArrayList) {
             try {
-                new URL(s);
-                urls.add(s);
+                new URL(tempString);
+                urls.add(tempString);
             } catch (MalformedURLException e) {
             }
         }
