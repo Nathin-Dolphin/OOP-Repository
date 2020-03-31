@@ -155,3 +155,9 @@ kanto  #0151 Mew            Psychic
     "type": "",
     "evolution": ""
 }
+evolution
+    0 = the only evolution
+    1 = first evolution
+    2 = second evolution
+    3 = third evolution
+    4 = second and third evolution

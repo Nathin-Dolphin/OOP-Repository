@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.3
+ * @version 1.4
  * @since March 27, 2020
  */
 
@@ -77,7 +77,7 @@ public class JSONParser {
                     string = "]";
                 }
 
-                // combines an array bracket with an object bracket if possible.
+                // combines brackets if possible.
                 if (parsedList.size() != 0) {
                     if (parsedList.get(parsedList.size() - 1).equals("[") & string.equals("{")) {
                         parsedList.remove(parsedList.size() - 1);
@@ -86,6 +86,11 @@ public class JSONParser {
                     } else if (parsedList.get(parsedList.size() - 1).equals("}") & string.equals("]")) {
                         parsedList.remove(parsedList.size() - 1);
                         string = "}]";
+
+                    } else if (parsedList.get(parsedList.size() - 1).equals("}") & string.equals("{")) {
+                        parsedList.remove(parsedList.size() - 1);
+                        string = "}{";
+
                     }
                 }
 

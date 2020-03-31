@@ -1,9 +1,11 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0
+ * @version 1.0.1
  * @since March 28, 2020
  */
+
+// [!]getString() does not give all objects in an array or object[!]
 
 package utility.json;
 
@@ -60,9 +62,8 @@ public class JSONReader extends JSONParser {
                     nextString = jsonContents.get(k);
                     tempArray.add(nextString);
                 } else if (nextString.equals("[") || nextString.equals("{")) {
-
+                    // WORK IN PROGRESS
                 } else if (nextString.equals("]") || nextString.equals("}")) {
-
                 }
             }
             stringList = new String[tempArray.size()];

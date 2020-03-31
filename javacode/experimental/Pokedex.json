@@ -12,41 +12,49 @@
     },
     "region": [
         {
-            "kanto": "151",
-            "evolutions": "",
-            "line": "51"
+            "kanto": "1-151",
+            "line": "60",
+            "evolutions": ""
         },
         {
-            "johto": "251",
-            "line": ""
+            "johto": "152-251",
+            "line": "",
+            "evolutions": ""
         },
         {
-            "hoenn": "386",
-            "line": ""
+            "hoenn": "252-386",
+            "line": "",
+            "evolutions": ""
         },
         {
             "sinnoh": "387-493",
-            "line": ""
+            "line": "",
+            "evolutions": ""
         },
         {
             "unova": "494-649",
-            "line": ""
+            "line": "",
+            "evolutions": ""
         },
         {
             "kalos": "650-721",
-            "line": ""
+            "line": "",
+            "evolutions": ""
         },
         {
             "alola": "722-809",
-            "line": ""
+            "line": "",
+            "evolutions": ""
         },
         {
             "galar": "810-890",
-            "line": ""
+            "line": "",
+            "evolutions": ""
         },
         {
             "alternateForm": "",
-            "line": ""
+            "line": "",
+            "evolutions": ""
         }
     ],
     "kanto": [
@@ -121,37 +129,139 @@
             "name": "Butterfree",
             "type": "Bug-Flying",
             "evolution": "3-3"
+        },
+        {
+            "number": "13",
+            "name": "Weedle",
+            "type": "Bug-Poison",
+            "evolution": "4-1"
+        },
+        {
+            "number": "14",
+            "name": "Kakuna",
+            "type": "Bug-Poison",
+            "evolution": "4-2"
+        },
+        {
+            "number": "15",
+            "name": "Beedrill",
+            "type": "Bug-Poison",
+            "evolution": "4-3"
+        },
+        {
+            "number": "16",
+            "name": "Pidgey",
+            "type": "Normal-Flying",
+            "evolution": "5-1"
+        },
+        {
+            "number": "17",
+            "name": "Pidgeotto",
+            "type": "Normal-Flying",
+            "evolution": "5-2"
+        },
+        {
+            "number": "18",
+            "name": "Pidgeot",
+            "type": "Normal-Flying",
+            "evolution": "5-3"
+        },
+        {
+            "number": "19",
+            "name": "Rattata",
+            "type": "Normal",
+            "evolution": "6-1"
+        },
+        {
+            "number": "20",
+            "name": "Raticate",
+            "type": "Normal",
+            "evolution": "6-4"
+        },
+        {
+            "number": "21",
+            "name": "Spearow",
+            "type": "Normal-Flying",
+            "evolution": "7-1"
+        },
+        {
+            "number": "22",
+            "name": "Fearow",
+            "type": "Normal-Flying",
+            "evolution": "7-4"
+        },
+        {
+            "number": "23",
+            "name": "Ekans",
+            "type": "Poison",
+            "evolution": "8-1"
+        },
+        {
+            "number": "24",
+            "name": "Arbok",
+            "type": "Poison",
+            "evolution": "8-4"
+        },
+        {
+            "number": "25",
+            "name": "Pikachu",
+            "type": "Electric",
+            "evolution": "9-2"
+        },
+        {
+            "number": "26",
+            "name": "Raichu",
+            "type": "Electric",
+            "evolution": "9-3"
+        },
+        {
+            "number": "27",
+            "name": "Sandshrew",
+            "type": "Ground",
+            "evolution": "10-1"
+        },
+        {
+            "number": "28",
+            "name": "Sandslash",
+            "type": "Ground",
+            "evolution": "10-4"
+        },
+        {
+            "number": "29",
+            "name": "Nidoran-(f)",
+            "type": "Poison",
+            "evolution": "11-1"
+        },
+        {
+            "number": "30",
+            "name": "Nidorina",
+            "type": "Poison",
+            "evolution": "11-2"
+        },
+        {
+            "number": "31",
+            "name": "Nidoqueen",
+            "type": "Poison-Ground",
+            "evolution": "11-3"
+        },
+        {
+            "number": "29",
+            "name": "Nidoran-(m)",
+            "type": "Poison",
+            "evolution": "12-1"
+        },
+        {
+            "number": "30",
+            "name": "Nidorino",
+            "type": "Poison",
+            "evolution": "12-2"
+        },
+        {
+            "number": "31",
+            "name": "Nidoking",
+            "type": "Poison-Ground",
+            "evolution": "12-3"
         }
-  #0013 "Weedle"         "Bug",
-        "Poison"
-  #0014 "Kakuna"         "Bug",
-        "Poison"
-  #0015 "Beedrill"       "Bug",
-        "Poison"
-  #0016 "Pidgey"         "Normal",
-        "Flying"
-  #0017 "Pidgeotto"      "Normal",
-        "Flying"
-  #0018 "Pidgeot"        "Normal",
-        "Flying"
-  #0019 "Rattata"        "Normal"
-  #0020 "Raticate"       "Normal"
-  #0021 "Spearow"        "Normal",
-        "Flying"
-  #0022 "Fearow"         "Normal",
-        "Flying"
-  #0023 "Ekans"          Poison
-  #0024 "Arbok"          Poison
-  #0025 "Pikachu"        Electric
-  #0026 Raichu         Electric
-  #0027 Sandshrew      Ground
-  #0028 Sandslash      Ground
-  #0029 Nidoran(f)     Poison
-  #0030 Nidorina       Poison
-  #0031 Nidoqueen      Poison, Ground
-  #0032 Nidoran(m)     Poison
-  #0033 Nidorino       Poison
-  #0034 Nidoking       Poison, Ground
   #0035 Clefairy       Fairy
   #0036 Clefable       Fairy
   #0037 Vulpix         Fire
@@ -271,10 +381,4 @@
   #0151 Mew            Psychic
     }
 ]
-},
-{
-"number": "",
-"name": "",
-"type": "",
-"evolution": ""
 }
