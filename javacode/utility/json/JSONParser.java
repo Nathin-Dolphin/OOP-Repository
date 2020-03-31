@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2
+ * @version 1.3
  * @since March 27, 2020
  */
 
@@ -15,28 +15,39 @@ import java.util.ArrayList;
 public class JSONParser {
     private ArrayList<String> parsedList, urls, tempArrayList;
     private String[] parsedLine;
-    private String string, singleChar;
+    private String string;
 
     public JSONParser() {
     }
 
-    public ArrayList<String> parseJSON(ArrayList<String> urlContents) {
-        if (urlContents.size() <= 2)
-            return urlContents;
+    public JSONParser(ArrayList<String> jsonContents) {
+        parseJSON(jsonContents);
+    }
+
+    public ArrayList<String> parseJSON(ArrayList<String> jsonContents) {
+        if (jsonContents.size() <= 2)
+            return jsonContents;
 
         parsedList = new ArrayList<String>();
-        for (int h = 0; h < urlContents.size(); h++) {
-            parsedLine = urlContents.get(h).split("\"");
+        for (int h = 0; h < jsonContents.size(); h++) {
+            parsedLine = jsonContents.get(h).split("\"");
 
             for (int i = 0; i < parsedLine.length; i++) {
                 string = parsedLine[i];
                 string = string.replaceAll("\t", "");
 
+                // Removes the colons between the names and their values.
+                // Also removes some commas not considered a name or value.
                 if ((i - 2) % 4 == 0 & string.startsWith(":")) {
                     if (string.endsWith("[{")) {
                         string = "[{";
+
                     } else if (string.endsWith("{")) {
                         string = "{";
+
+                    } else if (string.endsWith("[")) {
+                        string = "[";
+
                     } else {
                         string = "";
                     }
@@ -46,6 +57,7 @@ public class JSONParser {
                     string = string.replaceAll(" ", "");
                 }
 
+                // Fixes inconsistencies with (object and array) brackets.
                 if (string.startsWith("}")) {
                     if (string.equals("},")) {
                         string = "}";
@@ -55,19 +67,25 @@ public class JSONParser {
                         parsedList.add(string);
                         string = "{";
 
-                    } else if (string.equals("}]")) {
-                        string = "}";
-                        parsedList.add(string);
-                        string = "]";
+                    } else if (string.equals("}],")) {
+                        string = "}]";
                     }
-                } else if (string.endsWith("{")) {
-                    if (string.equals(",{")) {
-                        string = "{";
+                } else if (string.equals(",{")) {
+                    string = "{";
 
-                    } else if (string.equals("[{")) {
-                        string = "[";
-                        parsedList.add(string);
-                        string = "{";
+                } else if (string.startsWith("],")) {
+                    string = "]";
+                }
+
+                // combines an array bracket with an object bracket if possible.
+                if (parsedList.size() != 0) {
+                    if (parsedList.get(parsedList.size() - 1).equals("[") & string.equals("{")) {
+                        parsedList.remove(parsedList.size() - 1);
+                        string = "[{";
+
+                    } else if (parsedList.get(parsedList.size() - 1).equals("}") & string.equals("]")) {
+                        parsedList.remove(parsedList.size() - 1);
+                        string = "}]";
                     }
                 }
 
@@ -80,9 +98,9 @@ public class JSONParser {
 
     }
 
-    public ArrayList<String> getURLList(ArrayList<String> urlContents) {
+    public ArrayList<String> getURLList(ArrayList<String> jsonContents) {
         urls = new ArrayList<String>();
-        tempArrayList = parseJSON(urlContents);
+        tempArrayList = parseJSON(jsonContents);
         for (String tempString : tempArrayList) {
             try {
                 new URL(tempString);

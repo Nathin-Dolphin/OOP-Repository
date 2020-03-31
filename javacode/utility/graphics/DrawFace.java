@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2.1
+ * @version 1.2.2
  * @since Februrary 18, 2020
  */
 
@@ -47,7 +47,7 @@ public class DrawFace extends DrawShape {
         this.wideMouth = wideMouth;
     }
 
-    private void drawFace(boolean isSmile, boolean isWideMouth) {
+    private void drawFace(boolean isSmile, boolean wideMouth) {
         eyeColor = analogousColor(getColor(), 50);
         this.isSmile = isSmile;
         this.wideMouth = wideMouth;
