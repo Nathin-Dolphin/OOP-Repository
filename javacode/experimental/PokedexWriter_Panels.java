@@ -1,16 +1,20 @@
 
 /**
  * @author Nathin Wascher
- * @version 0.1 CAUTION: EXPERIMENTAL VERSION
+ * @version 0.2 CAUTION: EXPERIMENTAL VERSION
  * @since March 28, 2020
  */
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
 import javax.swing.JOptionPane;
+import javax.swing.JDialog;
+import javax.swing.ImageIcon;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,60 +23,126 @@ import java.awt.event.WindowAdapter;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Color;
+import java.awt.Scrollbar;
 
 import java.util.ArrayList;
 
-public class PokedexWriter_Panels extends JPanel {
-    private JFrame spareFrame;
-    private JButton previousEntry, enterButton;
-    private JTextField textField1, textField2;
-    private JLabel label1, label2, warningLabel;
+public class PokedexWriter_Panels {
+    private JFrame frame;
+    private JPanel textPanel, controlPanel;
 
+    private JButton previousEntry, enterButton;
+    private JLabel label1, label2, warningLabel, textLabel;
+    private JTextField nameTF, type1TF, type2TF;
+
+    private GridBagConstraints gbc;
+
+    private Scrollbar scrollbar;
+
+    private String tempStr;
     private int min, max, evolutionSetNum, evolutionPos;
 
+    private ArrayList<JLabel> textList;
+    private ArrayList<String> pokemonList;
+
     public PokedexWriter_Panels(String region, JFrame frame) {
-        enterButton = new JButton("Enter");
-        rangeInputWindow();
+        setUp(frame);
     }
 
-    private void rangeInputWindow() {
-        spareFrame = new JFrame("Input the region's min and max values.");
-        spareFrame.setBounds(600, 300, 400, 200);
-        spareFrame.setLayout(new GridLayout(2, 2));
-        spareFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    public void resizeScrollbar() {
 
-        label1 = new JLabel("Region's LOWEST pokemon number:");
-        label2 = new JLabel("Region's HIGHEST pokemon number:");
-        textField1 = new JTextField(3);
-        textField2 = new JTextField(3);
+    }
 
-        // grid layout needs to be reworked
-        // warnings need to be updated and remove previous instances
-        enterButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent a) {
+    private void dialog() {
+        JDialog d = new JDialog(frame, "test");
+    }
+
+    private void setUp(JFrame frame) {
+        this.frame = frame;
+        gbc = new GridBagConstraints();
+
+        setUpTextPanel();
+        setUpControlPanel();
+
+        // min = getMinMax("LOWEST");
+        // max = getMinMax("HIGHEST");
+        System.out.println("min: " + min + "\tmax: " + max);
+    }
+
+    private void setUpTextPanel() {
+        textPanel = new JPanel();
+        textPanel.setBackground(Color.green);
+
+        // scrollbar = new Scrollbar();
+        // scrollbar.setBounds(50, 50, 50, 500);
+        // textPanel.add(scrollbar);
+        // textPanel.setVisible(true);
+
+        frame.add(textPanel, BorderLayout.WEST);
+    }
+
+    private void setUpControlPanel() {
+        controlPanel = new JPanel(new GridBagLayout());
+        controlPanel.setBackground(Color.orange);
+
+        enterButton = new JButton("Enter(WIP)");
+        previousEntry = new JButton("previousEntry(WIP)");
+
+        warningLabel = new JLabel("");
+        warningLabel.setForeground(Color.red);
+
+        label1 = new JLabel("label1(WIP)");
+        label2 = new JLabel("label2(WIP)");
+
+        nameTF = new JTextField(5);
+        type1TF = new JTextField(5);
+        type2TF = new JTextField(5);
+
+        setLayout(0, 0);
+        controlPanel.add(label1);
+        setLayout(1, 0);
+        controlPanel.add(nameTF, gbc);
+
+        setLayout(0, 1);
+        controlPanel.add(label2);
+        setLayout(1, 1);
+        controlPanel.add(type1TF, gbc);
+
+        setLayout(0, 3);
+        controlPanel.add(enterButton, gbc);
+        setLayout(1, 3);
+        controlPanel.add(previousEntry, gbc);
+
+        frame.add(controlPanel, BorderLayout.EAST);
+    }
+
+    private void setLayout(int x, int y) {
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = x;
+        gbc.gridy = y;
+    }
+
+    private int getMinMax(String string) {
+        int value = 0;
+        while (value == 0) {
+            try {
+                tempStr = (JOptionPane.showInputDialog(frame, "Enter the region's " + string + " pokemon number."));
                 try {
-                    min = Integer.parseInt(textField1.getText());
-                    max = Integer.parseInt(textField2.getText());
-
-                    if (min >= max) {
-                        warningLabel = new JLabel("Error: min value cannot be greater than max value!");
-                        spareFrame.add(warningLabel, BorderLayout.NORTH);
-                    } else
-                        spareFrame.dispose();
-
-                } catch (Exception e) {
-                    warningLabel = new JLabel("Error: Both text fields must be filled!");
-                    spareFrame.add(warningLabel, BorderLayout.NORTH);
+                    if (tempStr.equals("")) {
+                        System.out.println("ERROR: NO INPUT GIVEN");
+                    } else {
+                        value = Integer.parseInt(tempStr);
+                    }
+                } catch (NullPointerException n) {
+                    System.out.println("ERROR: NO INPUT GIVEN");
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("ERROR: CANNOT CONVERT STRING TO INTEGER");
             }
-        });
-
-        spareFrame.add(label1);
-        spareFrame.add(textField1);
-        spareFrame.add(label2);
-        spareFrame.add(textField2);
-        spareFrame.add(enterButton, BorderLayout.SOUTH);
-
-        spareFrame.setVisible(true);
+        }
+        return value;
     }
 }

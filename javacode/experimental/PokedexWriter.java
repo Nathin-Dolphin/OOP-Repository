@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 0.1.1 CAUTION: EXPERIMENTAL VERSION
+ * @version 0.1.2 CAUTION: EXPERIMENTAL VERSION
  * @since March 28, 2020
  */
 
@@ -10,7 +10,7 @@ import utility.CommandLineHelp;
 public class PokedexWriter {
 
     public static void main(String[] args) {
-        System.out.println("Excecuting Program (NewJSON)...");
+        System.out.println("Excecuting Program (PokedexWriter)...");
         System.out.println("\n!!!CAUTION IS ADVISED: MAY OVERWRITE IF [FILE NAME].JSON ALREADY EXISTS!!!");
 
         if (args.length == 0) {
@@ -34,6 +34,6 @@ public class PokedexWriter {
         } else
             System.out.println("\nERROR: INVALID COMMAND");
 
-        System.out.println("\n...Terminating Program (NewJSON)");
+        System.out.println("\n...Terminating Program (PokedexWriter)");
     }
 }
