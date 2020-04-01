@@ -1,11 +1,13 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0.1
+ * @version 1.1
  * @since March 28, 2020
  */
 
-// [!]getString() does not give all objects in an array or object[!]
+// [!] get() can still output this '}{' into the array [!]
+// [!] readJSON(String) does not actually return a String[] [!]
+// objectArrayCheck() can do with some cleaning up
 
 package utility.json;
 
@@ -21,7 +23,7 @@ public class JSONReader extends JSONParser {
     private ArrayList<String> jsonContents, tempArray;
     private String[] stringList;
     private String nextLine, nextString;
-    private int tempInt;
+    private int tempInt, k;
 
     public JSONReader() {
     }
@@ -30,46 +32,58 @@ public class JSONReader extends JSONParser {
         readJSON(fileName);
     }
 
-    public void readJSON(String fileName) {
+    public String[] readJSON(String fileName) {
         try {
             fileScan = new Scanner(new File(fileName + ".json"));
             jsonContents = new ArrayList<String>();
+
             while (fileScan.hasNextLine()) {
                 nextLine = fileScan.nextLine();
                 jsonContents.add(nextLine);
             }
             jsonContents = parseJSON(jsonContents);
             tempInt = 0;
+
             for (String s : jsonContents) {
-                System.out.println("String " + tempInt + ":  " + s);
+                // {debug}
+                System.out.println("String " + tempInt + ": " + s);
                 tempInt++;
             }
         } catch (FileNotFoundException e) {
             System.out.println("ERROR: FILE NOT FOUND");
         }
+
+        // WORK IN PROGRESS
+        stringList = new String[1];
+        return stringList;
     }
 
-    public String[] getString(String objectName) {
+    public String[] get(String objectName) {
         if (jsonContents.contains(objectName)) {
             tempArray = new ArrayList<String>();
-            System.out.println(0 + "\t" + jsonContents.get(0));
-            for (int k = 1; k < jsonContents.size(); k++) {
+
+            for (k = 1; k < jsonContents.size(); k++) {
                 nextString = jsonContents.get(k);
-                System.out.println(k + "\t" + nextString);
 
                 if (nextString.equals(objectName)) {
-                    k++;
-                    nextString = jsonContents.get(k);
-                    tempArray.add(nextString);
-                } else if (nextString.equals("[") || nextString.equals("{")) {
-                    // WORK IN PROGRESS
-                } else if (nextString.equals("]") || nextString.equals("}")) {
+                    nextString = jsonContents.get(++k);
+
+                    // checks if the value is an object or array
+                    if (!objectArrayCheck()) {
+                        tempArray.add(nextString);
+                    }
+
+                    if (nextString.equals("]") || nextString.equals("}")) {
+                    }
                 }
             }
             stringList = new String[tempArray.size()];
+
             for (int j = 0; j < tempArray.size(); j++) {
                 stringList[j] = tempArray.get(j);
+                // {debug} System.out.println(tempArray.get(j));
             }
+
             if (stringList == null) {
                 System.out.println("ERROR: FILE DOES NOT CONTAIN OBJECT");
             }
@@ -78,5 +92,50 @@ public class JSONReader extends JSONParser {
         }
         System.out.println();
         return stringList;
+    }
+
+    private boolean objectArrayCheck() {
+        if (nextString.equals("[")) {
+            nextString = jsonContents.get(++k);
+            while (!nextString.equals("]")) {
+                // {debug} System.out.println(nextString + " " + k);
+                tempArray.add(nextString);
+                nextString = jsonContents.get(++k);
+                objectArrayCheck();
+
+            }
+            return true;
+        } else if (nextString.equals("{")) {
+            nextString = jsonContents.get(++k);
+            while (!nextString.equals("}")) {
+                // {debug} System.out.println(nextString + " " + k);
+                tempArray.add(nextString);
+                nextString = jsonContents.get(++k);
+                objectArrayCheck();
+
+            }
+            return true;
+        } else if (nextString.equals("[{")) {
+            nextString = jsonContents.get(++k);
+            while (!nextString.equals("}]")) {
+                // {debug} System.out.println(nextString + " " + k);
+                tempArray.add(nextString);
+                nextString = jsonContents.get(++k);
+                objectArrayCheck();
+
+            }
+            return true;
+        } else if (nextString.equals("}]")) {
+            nextString = jsonContents.get(++k);
+            while (!nextString.equals("}]")) {
+                // {debug} System.out.println(nextString + " " + k);
+                tempArray.add(nextString);
+                nextString = jsonContents.get(++k);
+                objectArrayCheck();
+
+            }
+            return true;
+        }
+        return false;
     }
 }
