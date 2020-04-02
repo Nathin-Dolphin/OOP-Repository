@@ -1,11 +1,11 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.1.1
  * @since March 28, 2020
  */
 
-// [!] get() can still output this '}{' into the array [!]
+// [!] get() can still output '}{' into the array [!]
 // [!] readJSON(String) does not actually return a String[] [!]
 // objectArrayCheck() can do with some cleaning up
 
@@ -42,13 +42,10 @@ public class JSONReader extends JSONParser {
                 jsonContents.add(nextLine);
             }
             jsonContents = parseJSON(jsonContents);
-            tempInt = 0;
-
-            for (String s : jsonContents) {
-                // {debug}
-                System.out.println("String " + tempInt + ": " + s);
-                tempInt++;
-            }
+            /*
+             * {debug} tempInt = 0; for (String s : jsonContents) {
+             * System.out.println("String " + tempInt + ": " + s); tempInt++; }
+             */
         } catch (FileNotFoundException e) {
             System.out.println("ERROR: FILE NOT FOUND");
         }
@@ -125,9 +122,11 @@ public class JSONReader extends JSONParser {
 
             }
             return true;
-        } else if (nextString.equals("}]")) {
+
+            // WORK IN PROGRESS
+        } else if (nextString.equals("[]")) {
             nextString = jsonContents.get(++k);
-            while (!nextString.equals("}]")) {
+            while (!nextString.equals("}{")) {
                 // {debug} System.out.println(nextString + " " + k);
                 tempArray.add(nextString);
                 nextString = jsonContents.get(++k);

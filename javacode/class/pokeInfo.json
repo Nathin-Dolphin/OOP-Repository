@@ -21,5 +21,215 @@
         "alola": "722-809",
         "galar": "810-890",
         "alternateForm": "null"
-    }
+    },
+    "fullPokedex": [
+        {
+            "kanto": [
+                {
+                    "number": "1",
+                    "name": "Bulbasaur",
+                    "type": "Grass-Poison",
+                    "evolution": "0-1"
+                },
+                {
+                    "number": "2",
+                    "name": "Ivysaur",
+                    "type": "Grass-Poison",
+                    "evolution": "0-2"
+                },
+                {
+                    "number": "3",
+                    "name": "Venusaur",
+                    "type": "Grass-Poison",
+                    "evolution": "0-3"
+                },
+                {
+                    "number": "4",
+                    "name": "Charmander",
+                    "type": "Fire.",
+                    "evolution": "1-1"
+                },
+                {
+                    "number": "5",
+                    "name": "Charmeleon",
+                    "type": "Fire.",
+                    "evolution": "1-2"
+                },
+                {
+                    "number": "6",
+                    "name": "Charizard",
+                    "type": "Fire-Flying",
+                    "evolution": "1-3"
+                },
+                {
+                    "number": "7",
+                    "name": "Squirtle",
+                    "type": "Water.",
+                    "evolution": "2-1"
+                },
+                {
+                    "number": "8",
+                    "name": "Wartortle",
+                    "type": "Water.",
+                    "evolution": "2-2"
+                },
+                {
+                    "number": "9",
+                    "name": "Blastoise",
+                    "type": "Water.",
+                    "evolution": "2-3"
+                },
+                {
+                    "number": "10",
+                    "name": "Caterpie",
+                    "type": "Bug.",
+                    "evolution": "3-1"
+                },
+                {
+                    "number": "11",
+                    "name": "Metapod",
+                    "type": "Bug.",
+                    "evolution": "3-2"
+                },
+                {
+                    "number": "12",
+                    "name": "Butterfree",
+                    "type": "Bug-Flying",
+                    "evolution": "3-3"
+                },
+                {
+                    "number": "13",
+                    "name": "Weedle",
+                    "type": "Bug-Poison",
+                    "evolution": "4-1"
+                },
+                {
+                    "number": "14",
+                    "name": "Kakuna",
+                    "type": "Bug-Poison",
+                    "evolution": "4-2"
+                },
+                {
+                    "number": "15",
+                    "name": "Beedrill",
+                    "type": "Bug-Poison",
+                    "evolution": "4-3"
+                },
+                {
+                    "number": "16",
+                    "name": "Pidgey",
+                    "type": "Normal-Flying",
+                    "evolution": "5-1"
+                },
+                {
+                    "number": "17",
+                    "name": "Pidgeotto",
+                    "type": "Normal-Flying",
+                    "evolution": "5-2"
+                },
+                {
+                    "number": "18",
+                    "name": "Pidgeot",
+                    "type": "Normal-Flying",
+                    "evolution": "5-3"
+                },
+                {
+                    "number": "19",
+                    "name": "Rattata",
+                    "type": "Normal",
+                    "evolution": "6-1"
+                },
+                {
+                    "number": "20",
+                    "name": "Raticate",
+                    "type": "Normal",
+                    "evolution": "6-4"
+                },
+                {
+                    "number": "21",
+                    "name": "Spearow",
+                    "type": "Normal-Flying",
+                    "evolution": "7-1"
+                },
+                {
+                    "number": "22",
+                    "name": "Fearow",
+                    "type": "Normal-Flying",
+                    "evolution": "7-4"
+                },
+                {
+                    "number": "23",
+                    "name": "Ekans",
+                    "type": "Poison",
+                    "evolution": "8-1"
+                },
+                {
+                    "number": "24",
+                    "name": "Arbok",
+                    "type": "Poison",
+                    "evolution": "8-4"
+                },
+                {
+                    "number": "25",
+                    "name": "Pikachu",
+                    "type": "Electric",
+                    "evolution": "9-2"
+                },
+                {
+                    "number": "26",
+                    "name": "Raichu",
+                    "type": "Electric",
+                    "evolution": "9-3"
+                },
+                {
+                    "number": "27",
+                    "name": "Sandshrew",
+                    "type": "Ground",
+                    "evolution": "10-1"
+                },
+                {
+                    "number": "28",
+                    "name": "Sandslash",
+                    "type": "Ground",
+                    "evolution": "10-4"
+                },
+                {
+                    "number": "29",
+                    "name": "Nidoran-(f)",
+                    "type": "Poison",
+                    "evolution": "11-1"
+                },
+                {
+                    "number": "30",
+                    "name": "Nidorina",
+                    "type": "Poison",
+                    "evolution": "11-2"
+                },
+                {
+                    "number": "31",
+                    "name": "Nidoqueen",
+                    "type": "Poison-Ground",
+                    "evolution": "11-3"
+                },
+                {
+                    "number": "29",
+                    "name": "Nidoran-(m)",
+                    "type": "Poison",
+                    "evolution": "12-1"
+                },
+                {
+                    "number": "30",
+                    "name": "Nidorino",
+                    "type": "Poison",
+                    "evolution": "12-2"
+                },
+                {
+                    "number": "31",
+                    "name": "Nidoking",
+                    "type": "Poison-Ground",
+                    "evolution": "12-3"
+                }
+            ]
+        }
+    ]
 }

@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 0.1 CAUTION: EXPERIMENTAL VERSION
+ * @version 0.1.1 CAUTION: EXPERIMENTAL VERSION
  * @since March 31, 2020
  */
 
@@ -13,7 +13,7 @@ import java.awt.event.WindowAdapter;
 public class PokedexSearchEngine_Frame extends JFrame {
     public PokedexSearchEngine_Frame() {
         setTitle("Guess that Pokemon!");
-        setBounds(200, 200, 1000, 600);
+        setBounds(600, 200, 800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         addWindowListener(new WindowAdapter() {
