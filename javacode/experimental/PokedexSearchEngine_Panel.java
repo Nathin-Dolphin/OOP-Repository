@@ -1,9 +1,11 @@
 
 /**
  * @author Nathin Wascher
- * @version 0.2 CAUTION: EXPERIMENTAL VERSION
+ * @version 0.3 CAUTION: EXPERIMENTAL VERSION
  * @since March 31, 2020
  */
+
+// [?] Unexpected 'crashing' when searching; Pressing 'Enter' in the terminal fixes it [?]
 
 import utility.json.JSONReader;
 
@@ -19,129 +21,114 @@ import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 
+import java.awt.GridLayout;
 import java.awt.List;
 
 import java.util.ArrayList;
 
 public class PokedexSearchEngine_Panel extends JPanel implements ActionListener {
+    private PSE_SearchPokemon pokeSearch;
     private JSONReader jsonReader;
-    private List typeList, regionList;
+    private List typeCheckList, regionCheckList;
 
+    private JPanel searchBarPanel, checkBoxPanel;
     private JTextField searchTF;
     private JCheckBox firstCB, secondCB, lastCB;
-    private JLabel warningLabel;
+    private JLabel searchBarLabel;
     private JButton enterB;
 
-    private ArrayList<String> inputList;
-    private String[] types, regions, pokedex;
-    private String input, tempString;
-    private boolean allRegions, evo1, evo2, evo3, nameSearch;
+    private ArrayList<ArrayList<String>> wipRegions;
+    private ArrayList<String> inputList, typeList, regionList, pokedex, tempArrayList;
+    private String[] tempArray;
+
+    private String input;
+    private boolean evo1, evo2, evo3;
 
     public PokedexSearchEngine_Panel() {
         evo1 = evo2 = evo3 = true;
+        setUpPanels();
         readPokeInfo();
 
-        searchTF = new JTextField(10);
-        warningLabel = new JLabel("");
         enterB = new JButton("enter");
+
+        searchTF.addActionListener(this);
+        enterB.addActionListener(this);
+
+        add(searchBarPanel);
+        add(typeCheckList);
+        add(regionCheckList);
+        add(checkBoxPanel);
+        add(enterB);
+    }
+
+    private void setUpPanels() {
+        checkBoxPanel = new JPanel(new GridLayout(3, 1));
 
         firstCB = new JCheckBox("first evolution", true);
         secondCB = new JCheckBox("second evolution", true);
         lastCB = new JCheckBox("last evolution", true);
 
-        searchTF.addActionListener(this);
-        enterB.addActionListener(this);
         firstCB.addItemListener(new PSE_ItemListener());
         secondCB.addItemListener(new PSE_ItemListener());
         lastCB.addItemListener(new PSE_ItemListener());
 
-        add(searchTF);
-        add(typeList);
-        add(regionList);
-        add(firstCB);
-        add(secondCB);
-        add(lastCB);
-        add(enterB);
+        checkBoxPanel.add(firstCB);
+        checkBoxPanel.add(secondCB);
+        checkBoxPanel.add(lastCB);
+
+        searchBarPanel = new JPanel(new GridLayout(2, 1));
+        searchBarLabel = new JLabel("Pokemon Search!");
+        searchTF = new JTextField(10);
+        searchBarPanel.add(searchBarLabel);
+        searchBarPanel.add(searchTF);
     }
 
     private void readPokeInfo() {
         jsonReader = new JSONReader();
         jsonReader.readJSON("pokeInfo");
 
-        types = jsonReader.get("type");
-        typeList = new List(5, true);
-        for (int i = 0; i < types.length; i++) {
-            typeList.add(types[i]);
+        typeList = jsonReader.get("types");
+        typeCheckList = new List(5, true);
+        for (int i = 0; i < typeList.size(); i++) {
+            typeCheckList.add(typeList.get(i));
         }
 
-        regions = jsonReader.get("region");
-        regionList = new List(5, true);
-        for (int i = 0; i < regions.length; i = i + 2) {
-            regionList.add(regions[i]);
+        regionList = jsonReader.get("regions");
+        regionCheckList = new List(5, true);
+        for (int i = 0; i < regionList.size(); i = i + 2) {
+            regionCheckList.add(regionList.get(i));
         }
 
         pokedex = jsonReader.get("fullPokedex");
-        /*
-         * {debug} for (String s : pokedex) { System.out.println(s); }
-         */
-    }
-
-    // [?] unexpected 'crashing' when searching 'a' [?]
-    private void searchPokemon() {
-        for (int g = 0; g < pokedex.length; g++) {
-            tempString = pokedex[g];
-
-            if (tempString.equals("name") & nameSearch) {
-                tempString = pokedex[++g];
-                int iL = input.length(); // (i)nput (L)ength
-                int tSL = tempString.length(); // (t)emp(S)tring (L)ength
-
-                for (int v = iL - 1; v < tSL; v++) {
-
-                    // StringIndexOutOfBoundsException: begin 8, end 10, length 9; searched 'ch'
-                    if (tempString.substring(v, v + iL).equals(input)) {
-                        System.out.println(tempString);
-                        v = tSL;
-                    }
-
-                }
-            }
-        }
+        
+        pokeSearch = new PSE_SearchPokemon(regionList, pokedex);
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == searchTF || e.getSource() == enterB) {
-            inputList = new ArrayList<String>();
-            allRegions = nameSearch = false;
-            input = searchTF.getText();
-            System.out.println("\naction performed:  ");
+        if (e.getSource() != searchTF & e.getSource() != enterB)
+            System.out.println("WHAT CAUSED AN ACTION PERFORMED!!!");
 
-            if (!input.equals("")) {
-                nameSearch = true;
-                inputList.add(input);
-                System.out.println("  inputList:  " + input);
-            }
-            for (String type : typeList.getSelectedItems()) {
-                inputList.add(type);
-                System.out.println("  inputList:  " + type);
-            }
-            for (String region : regionList.getSelectedItems()) {
-                if (region.equals("all")) {
-                    System.out.println("  inputList:  " + region);
+        inputList = new ArrayList<String>();
+        pokeSearch.resetBools();
+        input = searchTF.getText();
+        System.out.println("\naction performed:  " + input);
 
-                    for (String s : regions) {
-                        if (!s.equals("all")) {
-                            inputList.add(s);
-                        }
-                    }
-                    allRegions = true;
+        for (String type : typeCheckList.getSelectedItems()) {
+            inputList.add(type);
+            System.out.println("inputList:  " + type);
+            pokeSearch.setTypeBool();
+        }
+        for (String region : regionCheckList.getSelectedItems()) {
+            inputList.add(region);
+            System.out.println("inputList:  " + region);
+            pokeSearch.setRegionBool();
+        }
+        try {
+            Integer.parseInt(input);
+            pokeSearch.searchNumber(input);
 
-                } else if (!allRegions) {
-                    inputList.add(region);
-                    System.out.println("  inputList:  " + region);
-                }
-            }
-            searchPokemon();
+        } catch (NumberFormatException n) {
+            pokeSearch.searchPokemon(inputList, input);
         }
     }
 

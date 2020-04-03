@@ -1,9 +1,11 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.4
+ * @version 1.4.1
  * @since March 27, 2020
  */
+
+// [!] parseJSON(AR<S>) does account for values without quotation marks (ex. "number": 12,) [!]
 
 package utility.json;
 
@@ -37,7 +39,7 @@ public class JSONParser {
                 string = string.replaceAll("\t", "");
 
                 // Removes the colons between the names and their values.
-                // Also removes some commas not considered a name or value.
+                // Also removes some commas not considered part of a name or value.
                 if ((i - 2) % 4 == 0 & string.startsWith(":")) {
                     if (string.endsWith("[{")) {
                         string = "[{";
@@ -77,8 +79,10 @@ public class JSONParser {
                     string = "]";
                 }
 
+                boolean debug = true;
                 // combines brackets if possible.
-                if (parsedList.size() != 0) {
+                // [?] Necessary? [?]
+                if (parsedList.size() != 0 & debug) {
                     if (parsedList.get(parsedList.size() - 1).equals("[") & string.equals("{")) {
                         parsedList.remove(parsedList.size() - 1);
                         string = "[{";
@@ -100,7 +104,6 @@ public class JSONParser {
             }
         }
         return parsedList;
-
     }
 
     public ArrayList<String> getURLList(ArrayList<String> jsonContents) {

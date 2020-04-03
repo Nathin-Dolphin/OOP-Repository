@@ -1,12 +1,11 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.1.1
+ * @version 1.2
  * @since March 28, 2020
  */
 
 // [!] get() can still output '}{' into the array [!]
-// [!] readJSON(String) does not actually return a String[] [!]
 // objectArrayCheck() can do with some cleaning up
 
 package utility.json;
@@ -32,7 +31,7 @@ public class JSONReader extends JSONParser {
         readJSON(fileName);
     }
 
-    public String[] readJSON(String fileName) {
+    public ArrayList<String> readJSON(String fileName) {
         try {
             fileScan = new Scanner(new File(fileName + ".json"));
             jsonContents = new ArrayList<String>();
@@ -49,13 +48,10 @@ public class JSONReader extends JSONParser {
         } catch (FileNotFoundException e) {
             System.out.println("ERROR: FILE NOT FOUND");
         }
-
-        // WORK IN PROGRESS
-        stringList = new String[1];
-        return stringList;
+        return jsonContents;
     }
 
-    public String[] get(String objectName) {
+    public ArrayList<String> get(String objectName) {
         if (jsonContents.contains(objectName)) {
             tempArray = new ArrayList<String>();
 
@@ -71,24 +67,19 @@ public class JSONReader extends JSONParser {
                     }
 
                     if (nextString.equals("]") || nextString.equals("}")) {
+                        // [?]
                     }
                 }
             }
-            stringList = new String[tempArray.size()];
 
-            for (int j = 0; j < tempArray.size(); j++) {
-                stringList[j] = tempArray.get(j);
-                // {debug} System.out.println(tempArray.get(j));
-            }
-
-            if (stringList == null) {
+            if (tempArray == null) {
                 System.out.println("ERROR: FILE DOES NOT CONTAIN OBJECT");
             }
         } else {
             System.out.println("ERROR: FILE DOES NOT CONTAIN OBJECT");
         }
         System.out.println();
-        return stringList;
+        return tempArray;
     }
 
     private boolean objectArrayCheck() {
