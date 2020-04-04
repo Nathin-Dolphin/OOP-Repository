@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.4.1
+ * @version 1.4.2
  * @since March 27, 2020
  */
 
@@ -37,66 +37,7 @@ public class JSONParser {
             for (int i = 0; i < parsedLine.length; i++) {
                 string = parsedLine[i];
                 string = string.replaceAll("\t", "");
-
-                // Removes the colons between the names and their values.
-                // Also removes some commas not considered part of a name or value.
-                if ((i - 2) % 4 == 0 & string.startsWith(":")) {
-                    if (string.endsWith("[{")) {
-                        string = "[{";
-
-                    } else if (string.endsWith("{")) {
-                        string = "{";
-
-                    } else if (string.endsWith("[")) {
-                        string = "[";
-
-                    } else {
-                        string = "";
-                    }
-                } else if (string.equals(",") || string.equals(", ")) {
-                    string = "";
-                } else if (i % 2 == 0) {
-                    string = string.replaceAll(" ", "");
-                }
-
-                // Fixes inconsistencies with (object and array) brackets.
-                if (string.startsWith("}")) {
-                    if (string.equals("},")) {
-                        string = "}";
-
-                    } else if (string.equals("},{")) {
-                        string = "}";
-                        parsedList.add(string);
-                        string = "{";
-
-                    } else if (string.equals("}],")) {
-                        string = "}]";
-                    }
-                } else if (string.equals(",{")) {
-                    string = "{";
-
-                } else if (string.startsWith("],")) {
-                    string = "]";
-                }
-
-                boolean debug = true;
-                // combines brackets if possible.
-                // [?] Necessary? [?]
-                if (parsedList.size() != 0 & debug) {
-                    if (parsedList.get(parsedList.size() - 1).equals("[") & string.equals("{")) {
-                        parsedList.remove(parsedList.size() - 1);
-                        string = "[{";
-
-                    } else if (parsedList.get(parsedList.size() - 1).equals("}") & string.equals("]")) {
-                        parsedList.remove(parsedList.size() - 1);
-                        string = "}]";
-
-                    } else if (parsedList.get(parsedList.size() - 1).equals("}") & string.equals("{")) {
-                        parsedList.remove(parsedList.size() - 1);
-                        string = "}{";
-
-                    }
-                }
+                sortJSONComponents(i);
 
                 if (!string.equals("")) {
                     parsedList.add(string);
@@ -106,6 +47,64 @@ public class JSONParser {
         return parsedList;
     }
 
+    private void sortJSONComponents(int i) {
+        // Removes the colons between the names and their values.
+        // Also removes some commas not considered part of a name or value.
+        if ((i - 2) % 4 == 0 & string.startsWith(":")) {
+            if (string.endsWith("[{")) {
+                string = "[{";
+
+            } else if (string.endsWith("{")) {
+                string = "{";
+
+            } else if (string.endsWith("[")) {
+                string = "[";
+
+            } else {
+                string = "";
+            }
+        } else if (string.equals(",") || string.equals(", ")) {
+            string = "";
+        } else if (i % 2 == 0) {
+            string = string.replaceAll(" ", "");
+        }
+
+        // Fixes inconsistencies with (object and array) brackets.
+        if (string.startsWith("}")) {
+            if (string.equals("},")) {
+                string = "}";
+
+            } else if (string.equals("},{")) {
+                string = "}{";
+
+            } else if (string.equals("}],")) {
+                string = "}]";
+            }
+        } else if (string.equals(",{")) {
+            string = "{";
+
+        } else if (string.startsWith("],")) {
+            string = "]";
+        }
+
+        // combines brackets if possible.
+        if (parsedList.size() != 0) {
+            if (parsedList.get(parsedList.size() - 1).equals("[") & string.equals("{")) {
+                parsedList.remove(parsedList.size() - 1);
+                string = "[{";
+
+            } else if (parsedList.get(parsedList.size() - 1).equals("}") & string.equals("]")) {
+                parsedList.remove(parsedList.size() - 1);
+                string = "}]";
+
+            } else if (parsedList.get(parsedList.size() - 1).equals("}") & string.equals("{")) {
+                parsedList.remove(parsedList.size() - 1);
+                string = "}{";
+            }
+        }
+    }
+
+    // [?] Move to another class [?]
     public ArrayList<String> getURLList(ArrayList<String> jsonContents) {
         urls = new ArrayList<String>();
         tempArrayList = parseJSON(jsonContents);

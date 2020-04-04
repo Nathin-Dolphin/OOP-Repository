@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 0.3 CAUTION: EXPERIMENTAL VERSION
+ * @version 1.0
  * @since March 31, 2020
  */
 
@@ -17,9 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 
 import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 
 import java.awt.GridLayout;
 import java.awt.List;
@@ -37,21 +35,16 @@ public class PokedexSearchEngine_Panel extends JPanel implements ActionListener 
     private JLabel searchBarLabel;
     private JButton enterB;
 
-    private ArrayList<ArrayList<String>> wipRegions;
-    private ArrayList<String> inputList, typeList, regionList, pokedex, tempArrayList;
-    private String[] tempArray;
+    private ArrayList<String> inputList, typeList, regionList, pokedex;
 
     private String input;
-    private boolean evo1, evo2, evo3;
 
     public PokedexSearchEngine_Panel() {
-        evo1 = evo2 = evo3 = true;
+        pokeSearch = new PSE_SearchPokemon();
         setUpPanels();
         readPokeInfo();
 
         enterB = new JButton("enter");
-
-        searchTF.addActionListener(this);
         enterB.addActionListener(this);
 
         add(searchBarPanel);
@@ -68,9 +61,11 @@ public class PokedexSearchEngine_Panel extends JPanel implements ActionListener 
         secondCB = new JCheckBox("second evolution", true);
         lastCB = new JCheckBox("last evolution", true);
 
-        firstCB.addItemListener(new PSE_ItemListener());
-        secondCB.addItemListener(new PSE_ItemListener());
-        lastCB.addItemListener(new PSE_ItemListener());
+        firstCB.addItemListener(pokeSearch);
+        secondCB.addItemListener(pokeSearch);
+        lastCB.addItemListener(pokeSearch);
+
+        pokeSearch.setJCheckBoxes(firstCB, secondCB, lastCB);
 
         checkBoxPanel.add(firstCB);
         checkBoxPanel.add(secondCB);
@@ -79,6 +74,7 @@ public class PokedexSearchEngine_Panel extends JPanel implements ActionListener 
         searchBarPanel = new JPanel(new GridLayout(2, 1));
         searchBarLabel = new JLabel("Pokemon Search!");
         searchTF = new JTextField(10);
+        searchTF.addActionListener(this);
         searchBarPanel.add(searchBarLabel);
         searchBarPanel.add(searchTF);
     }
@@ -86,6 +82,7 @@ public class PokedexSearchEngine_Panel extends JPanel implements ActionListener 
     private void readPokeInfo() {
         jsonReader = new JSONReader();
         jsonReader.readJSON("pokeInfo");
+        typeList = regionList = new ArrayList<String>();
 
         typeList = jsonReader.get("types");
         typeCheckList = new List(5, true);
@@ -100,8 +97,7 @@ public class PokedexSearchEngine_Panel extends JPanel implements ActionListener 
         }
 
         pokedex = jsonReader.get("fullPokedex");
-        
-        pokeSearch = new PSE_SearchPokemon(regionList, pokedex);
+        pokeSearch.setArrayLists(regionList, pokedex);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -125,36 +121,10 @@ public class PokedexSearchEngine_Panel extends JPanel implements ActionListener 
         }
         try {
             Integer.parseInt(input);
-            pokeSearch.searchNumber(input);
+            pokeSearch.searchByNumber(input);
 
         } catch (NumberFormatException n) {
-            pokeSearch.searchPokemon(inputList, input);
-        }
-    }
-
-    class PSE_ItemListener implements ItemListener {
-        public void itemStateChanged(ItemEvent e) {
-            if (e.getSource() == firstCB) {
-                if (evo1) {
-                    evo1 = false;
-                } else {
-                    evo1 = true;
-                }
-            }
-            if (e.getSource() == secondCB) {
-                if (evo2) {
-                    evo2 = false;
-                } else {
-                    evo2 = true;
-                }
-            }
-            if (e.getSource() == lastCB) {
-                if (evo3) {
-                    evo3 = false;
-                } else {
-                    evo3 = true;
-                }
-            }
+            pokeSearch.findPokemon(inputList, input);
         }
     }
 }
