@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0.3
+ * @version 1.0.4
  * @since March 3, 2020
  * 
  * String shape = "oval" or "rect"
@@ -14,7 +14,9 @@ import utility.RandomGen;
 import java.awt.Graphics;
 import java.awt.Color;
 
-public class DrawShape extends RandomGen {
+public class DrawShape {
+    public RandomGen gen = new RandomGen();
+    
     public int xPos, yPos, height, width;
     public boolean fillShape;
     public Color newColor;
@@ -22,12 +24,12 @@ public class DrawShape extends RandomGen {
 
     // default constructor
     public DrawShape() {
-        xPos = intGen(0, 100);
-        yPos = intGen(0, 100);
-        height = intGen(10, 200);
-        width = intGen(10, 200);
-        fillShape = boolGen();
-        newColor = colorGen();
+        xPos = gen.intGen(0, 100);
+        yPos = gen.intGen(0, 100);
+        height = gen.intGen(10, 200);
+        width = gen.intGen(10, 200);
+        fillShape = gen.boolGen();
+        newColor = gen.colorGen();
         shape = randomShape();
     }
 
@@ -38,17 +40,17 @@ public class DrawShape extends RandomGen {
 
     // String, Color, int, int, int, int
     public DrawShape(String shape, Color newColor, int xPos, int yPos, int width, int height) {
-        drawShape(shape, boolGen(), newColor, xPos, yPos, width, height);
+        drawShape(shape, gen.boolGen(), newColor, xPos, yPos, width, height);
     }
 
     // String, boolean, int, int, int, int
     public DrawShape(String shape, boolean fillShape, int xPos, int yPos, int width, int height) {
-        drawShape(shape, fillShape, colorGen(), xPos, yPos, width, height);
+        drawShape(shape, fillShape, gen.colorGen(), xPos, yPos, width, height);
     }
 
     // String, int, int, int, int
     public DrawShape(String shape, int xPos, int yPos, int width, int height) {
-        drawShape(shape, boolGen(), colorGen(), xPos, yPos, width, height);
+        drawShape(shape, gen.boolGen(), gen.colorGen(), xPos, yPos, width, height);
     }
 
     // boolean, Color, int, int, int, int
@@ -58,17 +60,17 @@ public class DrawShape extends RandomGen {
 
     // Color, int, int, int, int
     public DrawShape(Color newColor, int xPos, int yPos, int width, int height) {
-        drawShape(randomShape(), boolGen(), newColor, xPos, yPos, width, height);
+        drawShape(randomShape(), gen.boolGen(), newColor, xPos, yPos, width, height);
     }
 
     // boolean, int, int, int, int
     public DrawShape(boolean fillShape, int xPos, int yPos, int width, int height) {
-        drawShape(randomShape(), fillShape, colorGen(), xPos, yPos, width, height);
+        drawShape(randomShape(), fillShape, gen.colorGen(), xPos, yPos, width, height);
     }
 
     // int, int, int, int
     public DrawShape(int xPos, int yPos, int width, int height) {
-        drawShape(randomShape(), boolGen(), colorGen(), xPos, yPos, width, height);
+        drawShape(randomShape(), gen.boolGen(), gen.colorGen(), xPos, yPos, width, height);
     }
 
     private void drawShape(String shape, boolean fillShape, Color newColor, int xPos, int yPos, int width, int height) {
@@ -82,7 +84,7 @@ public class DrawShape extends RandomGen {
     }
 
     private String randomShape() {
-        if (boolGen())
+        if (gen.boolGen())
             return shape = "oval";
         else
             return shape = "rect";

@@ -1,9 +1,12 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0.2
+ * @version 1.0.3
  * @since Februrary 18, 2020
  */
+
+// [!] Faces do resize to window correctly [!]
+// [!] Faces can spawn partly offscreen [!]F
 
 import utility.graphics.DrawFace;
 import utility.RandomGen;
@@ -18,6 +21,7 @@ public class FaceDraw_Panel extends JPanel {
     private DrawFace[] faceList;
 
     FaceDraw_Panel() {
+        gen = new RandomGen();
         rand = gen.intGen(3, 10);
         faceList = new DrawFace[rand];
 

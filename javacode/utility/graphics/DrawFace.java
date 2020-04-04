@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2.2
+ * @version 1.2.3
  * @since Februrary 18, 2020
  */
 
@@ -24,12 +24,12 @@ public class DrawFace extends DrawShape {
 
     public DrawFace(int xPos, int yPos, int width, int height) {
         super("oval", xPos, yPos, width, height);
-        drawFace(boolGen(), boolGen());
+        drawFace(gen.boolGen(), gen.boolGen());
     }
 
     public DrawFace(boolean isSolid, int xPos, int yPos, int width, int height) {
         super("oval", isSolid, xPos, yPos, width, height);
-        drawFace(boolGen(), boolGen());
+        drawFace(gen.boolGen(), gen.boolGen());
     }
 
     public DrawFace(boolean isSolid, boolean isSmile, boolean wideMouth, int xPos, int yPos, int width, int height) {
@@ -48,7 +48,7 @@ public class DrawFace extends DrawShape {
     }
 
     private void drawFace(boolean isSmile, boolean wideMouth) {
-        eyeColor = analogousColor(getColor(), 50);
+        eyeColor = gen.analogousColor(getColor(), 50);
         this.isSmile = isSmile;
         this.wideMouth = wideMouth;
         facialFeatures(xPos, yPos, width, height);
@@ -77,7 +77,7 @@ public class DrawFace extends DrawShape {
                 arcAngle = -180;
 
             } else {
-                startAngle = gen.nextInt(61) - 60;
+                startAngle = gen.intGen(-60, 0);
                 arcAngle = -180 - (2 * startAngle);
             }
         } else {
@@ -88,7 +88,7 @@ public class DrawFace extends DrawShape {
 
             } else {
                 tempYPos = yPos + height / 2;
-                startAngle = gen.nextInt(41) + 20;
+                startAngle = gen.intGen(20, 60);
                 arcAngle = 180 - (2 * startAngle);
             }
         }
@@ -96,8 +96,8 @@ public class DrawFace extends DrawShape {
         tempWidth = 2 * width / 3;
         tempHeight = height;
         tempXPos = xPos + width / 6;
-        mouth = new DrawArc(wideMouth, complementColor(eyeColor), tempXPos, tempYPos, tempWidth, tempHeight, startAngle,
-                arcAngle);
+        mouth = new DrawArc(wideMouth, gen.complementColor(eyeColor), tempXPos, tempYPos, tempWidth, tempHeight,
+                startAngle, arcAngle);
     }
 
     public void paint(Graphics g) {

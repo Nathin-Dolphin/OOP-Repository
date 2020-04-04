@@ -1,15 +1,16 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.3
+ * @version 1.3.1
  * @since Februrary 12, 2020
  */
 
 // allow user to create an arc
+// [!] Warning label does not always show up [!]
+// [!] Rearange buttons and text fields with panels [!]
 
 import utility.graphics.DrawShape;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,7 +24,6 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 class ShapeCreator_Panel extends JPanel implements ActionListener {
-    private JFrame frame;
     private JButton rectButton, ovalButton, colorButton, fillButton, emptyButton;
     private JTextField setWidth, setHeight;
     private JLabel widthLabel, heightLabel, warningLabel;
@@ -33,8 +33,7 @@ class ShapeCreator_Panel extends JPanel implements ActionListener {
     private Boolean fillShape;
     private String shape;
 
-    ShapeCreator_Panel(JFrame frame) {
-        this.frame = frame;
+    ShapeCreator_Panel() {
         shape = "rect";
         newColor = Color.black;
         fillShape = true;
@@ -88,8 +87,8 @@ class ShapeCreator_Panel extends JPanel implements ActionListener {
         } catch (NumberFormatException z) {
             width = height = 0;
             add(warningLabel);
+            setVisible(true);
         }
-        frame.setVisible(true);
 
         if (e.getSource() == colorButton)
             newColor = JColorChooser.showDialog(this, "Choose a Color", Color.black);

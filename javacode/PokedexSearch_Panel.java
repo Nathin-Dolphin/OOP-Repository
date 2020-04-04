@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0
+ * @version 1.0.1
  * @since March 31, 2020
  */
 
@@ -24,8 +24,8 @@ import java.awt.List;
 
 import java.util.ArrayList;
 
-public class PokedexSearchEngine_Panel extends JPanel implements ActionListener {
-    private PSE_SearchPokemon pokeSearch;
+public class PokedexSearch_Panel extends JPanel implements ActionListener {
+    private PS_SearchPokemon pokeSearch;
     private JSONReader jsonReader;
     private List typeCheckList, regionCheckList;
 
@@ -39,8 +39,8 @@ public class PokedexSearchEngine_Panel extends JPanel implements ActionListener 
 
     private String input;
 
-    public PokedexSearchEngine_Panel() {
-        pokeSearch = new PSE_SearchPokemon();
+    public PokedexSearch_Panel() {
+        pokeSearch = new PS_SearchPokemon();
         setUpPanels();
         readPokeInfo();
 

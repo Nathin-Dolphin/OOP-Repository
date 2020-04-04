@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0
+ * @version 1.0.1
  * @since April 2, 2020
  */
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import javax.swing.JCheckBox;
 
-public class PSE_SearchPokemon implements ItemListener {
+public class PS_SearchPokemon implements ItemListener {
     private JCheckBox firstCB, secondCB, lastCB;
 
     private ArrayList<String> inputList, pokedex, regionList, tempArrayList, narrowedList;
@@ -21,7 +21,7 @@ public class PSE_SearchPokemon implements ItemListener {
     private String tempString;
     private boolean allRegions, allTypes, evo1, evo2, evo3;
 
-    public PSE_SearchPokemon() {
+    public PS_SearchPokemon() {
     }
 
     public void setArrayLists(ArrayList<String> regionList, ArrayList<String> pokedex) {
@@ -92,7 +92,6 @@ public class PSE_SearchPokemon implements ItemListener {
             }
         } else {
             narrowedList = pokedex;
-            System.out.println("ggg");
         }
 
         searchByType();

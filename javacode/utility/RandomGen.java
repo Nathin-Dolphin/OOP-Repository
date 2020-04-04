@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2
+ * @version 1.2.1
  * @since Februrary 27, 2020
  */
 
@@ -16,7 +16,8 @@ import java.awt.Color;
 import java.util.Random;
 
 public class RandomGen {
-   public Random gen = new Random();
+   public Random generator = new Random();
+
    private char[] characters;
    private char letter;
    private int r, g, b;
@@ -141,6 +142,6 @@ public class RandomGen {
 
    // calculates an int value between min and max, including min and max
    public int intGen(int min, int max) {
-      return gen.nextInt(max - min + 1) + min;
+      return generator.nextInt(max - min + 1) + min;
    }
 }
