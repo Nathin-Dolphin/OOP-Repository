@@ -1,148 +1,86 @@
 
 /**
  * @author Nathin Wascher
- * @version 0.2 CAUTION: EXPERIMENTAL VERSION
+ * @version 0.3 CAUTION: EXPERIMENTAL VERSION
  * @since March 28, 2020
  */
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
 import javax.swing.JOptionPane;
-import javax.swing.JDialog;
-import javax.swing.ImageIcon;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.ActionEvent;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import java.awt.Color;
-import java.awt.Scrollbar;
 
 import java.util.ArrayList;
 
-public class PokedexWriter_Panels {
-    private JFrame frame;
+public class PokedexWriter_Panels extends JPanel implements ActionListener {
     private JPanel textPanel, controlPanel;
+    private JPanel regionPanel, enterPanel, pokemonInfoPanel;
 
-    private JButton previousEntry, enterButton;
-    private JLabel label1, label2, warningLabel, textLabel;
-    private JTextField nameTF, type1TF, type2TF;
-
-    private GridBagConstraints gbc;
-
-    private Scrollbar scrollbar;
-
-    private String tempStr;
-    private int min, max, evolutionSetNum, evolutionPos;
+    private JButton backspaceJB, enterJB;
+    private JLabel regionHighJL, regionLowJL;
+    private JTextField regionHighJTF, regionLowJTF, nameTF, type1TF, type2TF;
 
     private ArrayList<JLabel> textList;
     private ArrayList<String> pokemonList;
 
-    public PokedexWriter_Panels(String region, JFrame frame) {
-        setUp(frame);
-    }
+    private String tempStr;
+    private int min, max, evolutionSetNum, evolutionPos;
 
-    public void resizeScrollbar() {
-
-    }
-
-    private void dialog() {
-        JDialog d = new JDialog(frame, "test");
-    }
-
-    private void setUp(JFrame frame) {
-        this.frame = frame;
-        gbc = new GridBagConstraints();
-
+    public PokedexWriter_Panels(String fileName) {
         setUpTextPanel();
         setUpControlPanel();
-
-        // min = getMinMax("LOWEST");
-        // max = getMinMax("HIGHEST");
-        System.out.println("min: " + min + "\tmax: " + max);
+        add(textPanel);
+        add(controlPanel);
     }
 
     private void setUpTextPanel() {
         textPanel = new JPanel();
-        textPanel.setBackground(Color.green);
-
-        // scrollbar = new Scrollbar();
-        // scrollbar.setBounds(50, 50, 50, 500);
-        // textPanel.add(scrollbar);
-        // textPanel.setVisible(true);
-
-        frame.add(textPanel, BorderLayout.WEST);
     }
 
     private void setUpControlPanel() {
-        controlPanel = new JPanel(new GridBagLayout());
-        controlPanel.setBackground(Color.orange);
+        controlPanel = new JPanel(new GridLayout(3, 2));
 
-        enterButton = new JButton("Enter(WIP)");
-        previousEntry = new JButton("previousEntry(WIP)");
+        regionPanel = new JPanel(new GridLayout(2,2));
+        regionHighJL = new JLabel("region's highest number");
+        regionLowJL = new JLabel("region's lowest number");
+        regionHighJTF = new JTextField(5);
+        regionLowJTF = new JTextField(5);
+        regionPanel.add(regionLowJL);
+        regionPanel.add(regionLowJTF);
+        regionPanel.add(regionHighJL);
+        regionPanel.add(regionHighJTF);
 
-        warningLabel = new JLabel("");
-        warningLabel.setForeground(Color.red);
+        pokemonInfoPanel = new JPanel(new GridLayout(2,2));
 
-        label1 = new JLabel("label1(WIP)");
-        label2 = new JLabel("label2(WIP)");
+        enterPanel = new JPanel(new GridLayout(1, 2));
+        enterJB = new JButton("Next Pokemon");
+        backspaceJB = new JButton("Previous Entry");
+        enterJB.addActionListener(this);
+        backspaceJB.addActionListener(this);
+        enterPanel.add(enterJB);
+        enterPanel.add(backspaceJB);
 
-        nameTF = new JTextField(5);
-        type1TF = new JTextField(5);
-        type2TF = new JTextField(5);
-
-        setLayout(0, 0);
-        controlPanel.add(label1);
-        setLayout(1, 0);
-        controlPanel.add(nameTF, gbc);
-
-        setLayout(0, 1);
-        controlPanel.add(label2);
-        setLayout(1, 1);
-        controlPanel.add(type1TF, gbc);
-
-        setLayout(0, 3);
-        controlPanel.add(enterButton, gbc);
-        setLayout(1, 3);
-        controlPanel.add(previousEntry, gbc);
-
-        frame.add(controlPanel, BorderLayout.EAST);
+        controlPanel.add(regionPanel);
+        controlPanel.add(enterPanel);
     }
 
-    private void setLayout(int x, int y) {
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = x;
-        gbc.gridy = y;
-    }
-
-    private int getMinMax(String string) {
-        int value = 0;
-        while (value == 0) {
-            try {
-                tempStr = (JOptionPane.showInputDialog(frame, "Enter the region's " + string + " pokemon number."));
-                try {
-                    if (tempStr.equals("")) {
-                        System.out.println("ERROR: NO INPUT GIVEN");
-                    } else {
-                        value = Integer.parseInt(tempStr);
-                    }
-                } catch (NullPointerException n) {
-                    System.out.println("ERROR: NO INPUT GIVEN");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("ERROR: CANNOT CONVERT STRING TO INTEGER");
-            }
+    private void warning() {
+        int output = JOptionPane.showConfirmDialog(this, "WIP Do you really want to exit?\nAll progress will be lost!",
+                "WARNING WIP", JOptionPane.YES_NO_OPTION);
+        if (output == JOptionPane.YES_OPTION) {
+        } else if (output == JOptionPane.NO_OPTION) {
         }
-        return value;
+    }
+
+    public void actionPerformed(ActionEvent e) {
     }
 }

@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 0.2.1 CAUTION: EXPERIMENTAL VERSION
+ * @version 0.2.2 CAUTION: EXPERIMENTAL VERSION
  * @since March 28, 2020
  */
 
@@ -20,8 +20,7 @@ public class PokedexWriter_Frame extends JFrame {
 
     PokedexWriter_Frame(String fileName) {
         setTitle("PokedexWriter (!!!WIP!!!)");
-        setBounds(500, 200, 1000, 600);
-        setLayout(new GridLayout(1, 3));
+        setBounds(550, 250, 1000, 600);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         addWindowListener(new WindowAdapter() {
@@ -31,7 +30,7 @@ public class PokedexWriter_Frame extends JFrame {
         });
 
         setVisible(true);
-        new PokedexWriter_Panels(fileName, this);
+        add(new PokedexWriter_Panels(fileName));
         setVisible(true);
     }
 

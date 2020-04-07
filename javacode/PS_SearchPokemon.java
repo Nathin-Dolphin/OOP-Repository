@@ -1,9 +1,11 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0.1
+ * @version 1.1
  * @since April 2, 2020
  */
+
+import utility.json.JSONReader;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -13,21 +15,20 @@ import java.util.ArrayList;
 import javax.swing.JCheckBox;
 
 public class PS_SearchPokemon implements ItemListener {
+    private JSONReader jsonReader;
     private JCheckBox firstCB, secondCB, lastCB;
 
-    private ArrayList<String> inputList, pokedex, regionList, tempArrayList, narrowedList;
+    private ArrayList<String> pokedex, tempArrayList;
     private String[] tempArray;
 
     private String tempString;
-    private boolean allRegions, allTypes, evo1, evo2, evo3;
+    private boolean evo1, evo2, evo3;
 
     public PS_SearchPokemon() {
     }
 
-    public void setArrayLists(ArrayList<String> regionList, ArrayList<String> pokedex) {
-        this.regionList = regionList;
-        this.pokedex = pokedex;
-
+    public void setJSONReader(JSONReader jsonReader) {
+        this.jsonReader = jsonReader;
     }
 
     public void setJCheckBoxes(JCheckBox firstCB, JCheckBox secondCB, JCheckBox lastCB) {
@@ -37,95 +38,79 @@ public class PS_SearchPokemon implements ItemListener {
         evo1 = evo2 = evo3 = true;
     }
 
-    public void resetBools() {
-        allRegions = allTypes = true;
-    }
+    public void findPokemon(ArrayList<String> regionInputList, ArrayList<String> typeInputList, String input) {
+        pokedex = new ArrayList<String>();
+        jsonReader.readJSON("pokeInfo");
 
-    public void setTypeBool() {
-        allTypes = false;
-    }
-
-    public void setRegionBool() {
-        allRegions = false;
-    }
-
-    private boolean findRegions() {
-        if (!allRegions) {
-            for (int g = 0; g < narrowedList.size(); g++) {
-                // WORK IN PROGRESS
+        if (regionInputList.size() != 0) {
+            for (String s : regionInputList) {
+                pokedex.addAll(jsonReader.get(s));
             }
-            return true;
-
         } else {
-            return false;
-        }
-    }
-
-    public void findPokemon(ArrayList<String> inputList, String input) {
-        this.inputList = inputList;
-        if (!findRegions()) {
-            narrowedList = pokedex;
+            pokedex = jsonReader.get("fullPokedex");
         }
 
         if (!input.equals("")) {
-            tempArrayList = narrowedList;
-            narrowedList = new ArrayList<String>();
+            searchByName(input);
+        }
 
-            for (int g = 0; g < tempArrayList.size(); g++) {
-                tempString = tempArrayList.get(g);
+        if (typeInputList.size() != 0) {
+            searchByType(typeInputList);
+        }
 
-                if (tempString.equals("name")) {
-                    tempString = tempArrayList.get(++g);
-                    int iL = input.length(); // (i)nput (L)ength
-                    int tSL = tempString.length(); // (t)emp(S)tring (L)ength
+        for (int f = 0; f < pokedex.size(); f++) {
+            tempString = pokedex.get(f);
 
-                    for (int v = 0; v + iL <= tSL; v++) {
-                        if (tempString.substring(v, v + iL).equalsIgnoreCase(input)) {
-                            v = tSL;
+            if (tempString.equals("name")) {
+                // WORK IN PROGRESS
+                System.out.println(pokedex.get(++f));
+            }
+        }
+    }
 
-                            for (int h = 0; h < 8; h++) {
-                                narrowedList.add(tempArrayList.get(g + h - 1));
-                            }
+    private void searchByName(String input) {
+        tempArrayList = pokedex;
+        pokedex = new ArrayList<String>();
+
+        for (int g = 0; g < tempArrayList.size(); g++) {
+            tempString = tempArrayList.get(g);
+
+            if (tempString.equals("name")) {
+                tempString = tempArrayList.get(++g);
+                int iL = input.length(); // (i)nput (L)ength
+                int tSL = tempString.length(); // (t)emp(S)tring (L)ength
+
+                for (int v = 0; v + iL <= tSL; v++) {
+                    if (tempString.substring(v, v + iL).equalsIgnoreCase(input)) {
+                        v = tSL;
+
+                        for (int h = 0; h < 8; h++) {
+                            pokedex.add(tempArrayList.get(g + h - 1));
                         }
                     }
                 }
             }
-        } else {
-            narrowedList = pokedex;
-        }
-
-        searchByType();
-
-        for (int f = 0; f < narrowedList.size(); f++) {
-            tempString = narrowedList.get(f);
-
-            if (tempString.equals("name")) {
-                // WORK IN PROGRESS
-                System.out.println(narrowedList.get(++f));
-            }
         }
     }
 
-    private void searchByType() {
-        if (!allTypes) {
-            tempArrayList = narrowedList;
-            narrowedList = new ArrayList<String>();
+    private void searchByType(ArrayList<String> typeInputList) {
+        tempArrayList = pokedex;
+        pokedex = new ArrayList<String>();
 
-            for (int g = 0; g < tempArrayList.size(); g++) {
-                tempString = tempArrayList.get(g);
+        for (int g = 0; g < tempArrayList.size(); g++) {
+            tempString = tempArrayList.get(g);
 
-                if (tempString.equals("type")) {
-                    tempArray = tempArrayList.get(++g).split("-");
+            if (tempString.equals("type")) {
+                tempArray = tempArrayList.get(++g).split("-");
 
-                    for (int n = 0; n < tempArray.length; n++) {
-                        for (int s = 0; s < inputList.size(); s++) {
-                            if (tempArray[n].equalsIgnoreCase(inputList.get(s))) {
+                for (int n = 0; n < tempArray.length; n++) {
+                    for (int s = 0; s < typeInputList.size(); s++) {
+                        if (tempArray[n].equalsIgnoreCase(typeInputList.get(s))) {
 
-                                for (int h = 0; h < 8; h++) {
-                                    narrowedList.add(tempArrayList.get(g + h - 5));
-                                    n = 3;
-                                    s = inputList.size();
-                                }
+                            for (int h = 0; h < 8; h++) {
+                                pokedex.add(tempArrayList.get(g + h - 5));
+                                n = 3;
+                                s = typeInputList.size();
                             }
                         }
                     }

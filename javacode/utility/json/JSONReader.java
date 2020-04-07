@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.3
+ * @version 1.3.1
  * @since March 28, 2020
  */
 
@@ -66,7 +66,6 @@ public class JSONReader extends JSONParser {
                     // Checks if the value is an object or array
                     if (!startArrayCheck()) {
                         tempArray.add(nextString);
-                        System.out.println(nextString);
                     }
                 }
             }

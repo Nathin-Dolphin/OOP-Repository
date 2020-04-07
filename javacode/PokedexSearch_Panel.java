@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0.1
+ * @version 1.0.2
  * @since March 31, 2020
  */
 
@@ -9,7 +9,6 @@
 
 import utility.json.JSONReader;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
@@ -35,54 +34,53 @@ public class PokedexSearch_Panel extends JPanel implements ActionListener {
     private JLabel searchBarLabel;
     private JButton enterB;
 
-    private ArrayList<String> inputList, typeList, regionList, pokedex;
+    private ArrayList<String> typeInputList, regionInputList, typeList, regionList;
 
     private String input;
 
     public PokedexSearch_Panel() {
         pokeSearch = new PS_SearchPokemon();
-        setUpPanels();
         readPokeInfo();
+        setUpPanels();
+    }
 
+    private void setUpPanels() {
+        checkBoxPanel = new JPanel(new GridLayout(3, 1));
+        searchBarPanel = new JPanel(new GridLayout(2, 1));
+
+        firstCB = new JCheckBox("first evolution", true);
+        secondCB = new JCheckBox("second evolution", true);
+        lastCB = new JCheckBox("last evolution", true);
+        searchBarLabel = new JLabel("Pokemon Search!");
+        searchTF = new JTextField(10);
         enterB = new JButton("enter");
+
+        firstCB.addItemListener(pokeSearch);
+        secondCB.addItemListener(pokeSearch);
+        lastCB.addItemListener(pokeSearch);
+        searchTF.addActionListener(this);
         enterB.addActionListener(this);
+
+        checkBoxPanel.add(firstCB);
+        checkBoxPanel.add(secondCB);
+        checkBoxPanel.add(lastCB);
+
+        searchBarPanel.add(searchBarLabel);
+        searchBarPanel.add(searchTF);
 
         add(searchBarPanel);
         add(typeCheckList);
         add(regionCheckList);
         add(checkBoxPanel);
         add(enterB);
-    }
-
-    private void setUpPanels() {
-        checkBoxPanel = new JPanel(new GridLayout(3, 1));
-
-        firstCB = new JCheckBox("first evolution", true);
-        secondCB = new JCheckBox("second evolution", true);
-        lastCB = new JCheckBox("last evolution", true);
-
-        firstCB.addItemListener(pokeSearch);
-        secondCB.addItemListener(pokeSearch);
-        lastCB.addItemListener(pokeSearch);
 
         pokeSearch.setJCheckBoxes(firstCB, secondCB, lastCB);
-
-        checkBoxPanel.add(firstCB);
-        checkBoxPanel.add(secondCB);
-        checkBoxPanel.add(lastCB);
-
-        searchBarPanel = new JPanel(new GridLayout(2, 1));
-        searchBarLabel = new JLabel("Pokemon Search!");
-        searchTF = new JTextField(10);
-        searchTF.addActionListener(this);
-        searchBarPanel.add(searchBarLabel);
-        searchBarPanel.add(searchTF);
     }
 
     private void readPokeInfo() {
         jsonReader = new JSONReader();
         jsonReader.readJSON("pokeInfo");
-        typeList = regionList = new ArrayList<String>();
+        pokeSearch.setJSONReader(jsonReader);
 
         typeList = jsonReader.get("types");
         typeCheckList = new List(5, true);
@@ -95,36 +93,42 @@ public class PokedexSearch_Panel extends JPanel implements ActionListener {
         for (int i = 0; i < regionList.size(); i = i + 2) {
             regionCheckList.add(regionList.get(i));
         }
-
-        pokedex = jsonReader.get("fullPokedex");
-        pokeSearch.setArrayLists(regionList, pokedex);
     }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() != searchTF & e.getSource() != enterB)
             System.out.println("WHAT CAUSED AN ACTION PERFORMED!!!");
 
-        inputList = new ArrayList<String>();
-        pokeSearch.resetBools();
+        regionInputList = new ArrayList<String>();
+        typeInputList = new ArrayList<String>();
         input = searchTF.getText();
         System.out.println("\naction performed:  " + input);
 
-        for (String type : typeCheckList.getSelectedItems()) {
-            inputList.add(type);
-            System.out.println("inputList:  " + type);
-            pokeSearch.setTypeBool();
-        }
-        for (String region : regionCheckList.getSelectedItems()) {
-            inputList.add(region);
-            System.out.println("inputList:  " + region);
-            pokeSearch.setRegionBool();
-        }
         try {
             Integer.parseInt(input);
             pokeSearch.searchByNumber(input);
 
         } catch (NumberFormatException n) {
-            pokeSearch.findPokemon(inputList, input);
+            for (String r : regionCheckList.getSelectedItems()) {
+                regionInputList.add(r);
+                System.out.println("regionInputList:  " + r);
+            }
+            // This if statement is never called
+            if (regionList.equals(regionInputList)) {
+                regionInputList = new ArrayList<String>();
+                System.out.println("inputList:  all regions");
+            }
+
+            for (String t : typeCheckList.getSelectedItems()) {
+                typeInputList.add(t);
+                System.out.println("typeInputList:  " + t);
+            }
+            if (typeList.equals(typeInputList)) {
+                typeInputList = new ArrayList<String>();
+                System.out.println("inputList:  all types");
+            }
+
+            pokeSearch.findPokemon(regionInputList, typeInputList, input);
         }
     }
 }
