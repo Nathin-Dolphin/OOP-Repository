@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 0.1.1 CAUTION: EXPERIMENTAL VERSION
+ * @version 0.1.2 CAUTION: EXPERIMENTAL VERSION
  * @since March 28, 2020
  */
 
@@ -24,14 +24,17 @@ public class JSONWriter {
 
     public JSONWriter(String fileName) {
         this.fileName = fileName;
-        pw = newFile(fileName);
+        if (!fileName.endsWith(".json")) {
+            fileName = fileName + ".json";
+        }
+        pw = newFile();
     }
 
     public void closeFile() {
         pw.close();
     }
 
-    private PrintWriter newFile(String fileName) {
+    private PrintWriter newFile() {
         try {
             fw = new FileWriter(fileName);
             bw = new BufferedWriter(fw);

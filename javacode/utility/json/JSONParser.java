@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.4.2
+ * @version 1.4.3
  * @since March 27, 2020
  */
 
@@ -39,6 +39,7 @@ public class JSONParser {
                 string = string.replaceAll("\t", "");
                 sortJSONComponents(i);
 
+                // [!] Potential problem [!]
                 if (!string.equals("")) {
                     parsedList.add(string);
                 }
