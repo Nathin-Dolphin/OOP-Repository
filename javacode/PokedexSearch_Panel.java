@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.0.2
+ * @version 1.0.3
  * @since March 31, 2020
  */
 
@@ -78,8 +78,7 @@ public class PokedexSearch_Panel extends JPanel implements ActionListener {
     }
 
     private void readPokeInfo() {
-        jsonReader = new JSONReader();
-        jsonReader.readJSON("pokeInfo");
+        jsonReader = new JSONReader("pokeInfo");
         pokeSearch.setJSONReader(jsonReader);
 
         typeList = jsonReader.get("types");

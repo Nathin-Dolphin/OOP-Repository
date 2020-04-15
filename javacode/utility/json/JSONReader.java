@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.3.1
+ * @version 1.3.2
  * @since March 28, 2020
  */
 
@@ -17,44 +17,58 @@ import java.util.ArrayList;
 
 public class JSONReader extends JSONParser {
     private Scanner fileScan;
-
     private ArrayList<String> jsonContents, tempArray;
     private String nextLine, nextString;
     private int intPos;
+    private boolean oneJSON;
 
+    //
     public JSONReader() {
+        oneJSON = false;
     }
 
+    // Creating a new JSONReader object with this constructor bases all other
+    // methods on 'fileName'
     public JSONReader(String fileName) {
         readJSON(fileName);
+        oneJSON = true;
     }
 
     public ArrayList<String> readJSON(String fileName) {
-        try {
-            fileScan = new Scanner(new File(fileName + ".json"));
-            jsonContents = new ArrayList<String>();
+        if (!oneJSON) {
+            try {
+                if (fileName.endsWith(".json"))
+                    fileScan = new Scanner(new File(fileName));
+                else
+                    fileScan = new Scanner(new File(fileName + ".json"));
+                jsonContents = new ArrayList<String>();
 
-            while (fileScan.hasNextLine()) {
-                nextLine = fileScan.nextLine();
-                jsonContents.add(nextLine);
+                while (fileScan.hasNextLine()) {
+                    nextLine = fileScan.nextLine();
+                    jsonContents.add(nextLine);
+                }
+                jsonContents = parseJSON(jsonContents);
+
+            } catch (FileNotFoundException e) {
+                System.out.println("\nERROR: FILE NOT FOUND");
             }
-            jsonContents = parseJSON(jsonContents);
+            return jsonContents;
 
-        } catch (FileNotFoundException e) {
-            System.out.println("ERROR: FILE NOT FOUND");
-        }
-        return jsonContents;
+        } else
+            return null;
     }
 
     // Outputs an array that INCLUDES brackets
     public ArrayList<String> getRaw(String objectName) {
-        // WORK IN PROGRESS
-        return null;
+        return jsonContents;
     }
 
     // [?] What happens if get() detects a value that is equal to objectName [?]
     public ArrayList<String> get(String objectName) {
-        if (jsonContents.contains(objectName)) {
+        if (jsonContents == null || !oneJSON) {
+            System.out.println("\nERROR: NO JSON FILE TO READ FROM");
+
+        } else if (jsonContents.contains(objectName)) {
             tempArray = new ArrayList<String>();
 
             for (intPos = 1; intPos < jsonContents.size() - 1; intPos++) {
@@ -71,10 +85,10 @@ public class JSONReader extends JSONParser {
             }
             // [?] If objectName was detected as a value instead of a name [?]
             if (tempArray == null) {
-                System.out.println("ERROR: FILE DOES NOT CONTAIN OBJECT");
+                System.out.println("\nERROR: FILE DOES NOT CONTAIN OBJECT");
             }
         } else {
-            System.out.println("ERROR: FILE DOES NOT CONTAIN OBJECT");
+            System.out.println("\nERROR: FILE DOES NOT CONTAIN OBJECT");
         }
         return tempArray;
     }

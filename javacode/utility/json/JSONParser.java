@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.4.3
+ * @version 1.5
  * @since March 27, 2020
  */
 
@@ -9,21 +9,14 @@
 
 package utility.json;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import java.util.ArrayList;
 
 public class JSONParser {
-    private ArrayList<String> parsedList, urls, tempArrayList;
+    private ArrayList<String> parsedList;
     private String[] parsedLine;
     private String string;
 
     public JSONParser() {
-    }
-
-    public JSONParser(ArrayList<String> jsonContents) {
-        parseJSON(jsonContents);
     }
 
     public ArrayList<String> parseJSON(ArrayList<String> jsonContents) {
@@ -103,19 +96,5 @@ public class JSONParser {
                 string = "}{";
             }
         }
-    }
-
-    // [?] Move to another class [?]
-    public ArrayList<String> getURLList(ArrayList<String> jsonContents) {
-        urls = new ArrayList<String>();
-        tempArrayList = parseJSON(jsonContents);
-        for (String tempString : tempArrayList) {
-            try {
-                new URL(tempString);
-                urls.add(tempString);
-            } catch (MalformedURLException e) {
-            }
-        }
-        return urls;
     }
 }

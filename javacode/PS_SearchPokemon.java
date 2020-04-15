@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.1.1
  * @since April 2, 2020
  */
 
@@ -40,6 +40,8 @@ public class PS_SearchPokemon implements ItemListener {
 
     public void findPokemon(ArrayList<String> regionInputList, ArrayList<String> typeInputList, String input) {
         pokedex = new ArrayList<String>();
+        
+        // [?] NECESSARY [?]
         jsonReader.readJSON("pokeInfo");
 
         if (regionInputList.size() != 0) {

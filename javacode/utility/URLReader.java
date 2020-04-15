@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2.1
+ * @version 1.3
  * @since March 26, 2020
  */
 
@@ -21,34 +21,15 @@ import java.util.ArrayList;
 public class URLReader extends JSONParser {
     private BufferedReader br;
     private URL openURL;
-    private String baseURL, tempString;
-    private boolean baseURLRead;
-    private ArrayList<String> urlContents, urlList;
+    private String tempString;
+    private ArrayList<String> urlContents, urlIndexContents, urlList;
 
     public URLReader() {
-        baseURLRead = false;
-        urlContents = urlList = new ArrayList<String>();
     }
 
-    public URLReader(String url) {
-        baseURLRead = false;
-        baseURL = url;
-        urlContents = urlList = new ArrayList<String>();
-    }
-
-    public ArrayList<String> getRawURLContents() {
-        return urlContents;
-    }
-
-    public ArrayList<String> getParsedURLContents() {
+    public ArrayList<String> getParsedURLContents(String url) {
+        urlContents = readURL(url);
         return parseJSON(urlContents);
-    }
-
-    public ArrayList<String> getURLList() {
-        if (urlList == null)
-            return getURLList(urlContents);
-        else
-            return urlList;
     }
 
     public boolean isValidURL(String url) {
@@ -60,8 +41,10 @@ public class URLReader extends JSONParser {
         }
     }
 
-    public void readURL(String url, boolean printContents) {
+    public ArrayList<String> readURL(String url, boolean printContents) {
         System.out.println("\nREADING URL:  " + url);
+        urlContents = new ArrayList<String>();
+
         if (isValidURL(url)) {
             try {
                 br = new BufferedReader(new InputStreamReader(openURL.openStream()));
@@ -71,49 +54,49 @@ public class URLReader extends JSONParser {
                         System.out.println(tempString);
                 }
                 br.close();
-                if (baseURL == url)
-                    baseURLRead = true;
 
             } catch (IOException e) {
-                System.out.println("ERROR: I/O EXCEPTION");
+                System.out.println("\nERROR: I/O EXCEPTION");
             }
         } else
-            System.out.println("ERROR: INVALID URL");
+            System.out.println("\nERROR: INVALID URL");
+        return urlContents;
     }
 
-    public void readURLIndex(String url, boolean printContents) {
-        if (!baseURLRead)
-            readURL(url, printContents);
-        urlList = getURLList(urlContents);
-        urlContents = new ArrayList<String>();
+    public ArrayList<String> readURLIndex(String url, boolean printContents) {
+        readURL(url, printContents);
+        getURLList();
+        urlIndexContents = new ArrayList<String>();
 
         try {
             for (String s : urlList)
-                readURL(s, printContents);
+                urlIndexContents.addAll(readURL(s, printContents));
         } catch (Exception e) {
             System.out.println("Warning: No Valid URL Links");
         }
+        return urlIndexContents;
     }
 
-    // methods beyond this point are overloaded and call themselves with filled
-    // parameters
-    public boolean isValidURL() {
-        return isValidURL(baseURL);
+    public ArrayList<String> getURLList() {
+        urlList = new ArrayList<String>();
+        urlContents = parseJSON(urlContents);
+        
+        for (String tempString : urlContents) {
+            try {
+                new URL(tempString);
+                urlList.add(tempString);
+            } catch (MalformedURLException e) {
+            }
+        }
+        return urlList;
     }
 
-    public void readURLIndex() {
-        readURLIndex(baseURL, false);
+    // Overloaded Methods
+    public ArrayList<String> readURLIndex(String url) {
+        return readURLIndex(url, false);
     }
 
-    public void readURLIndex(boolean printContents) {
-        readURLIndex(baseURL, printContents);
-    }
-
-    public void readURL() {
-        readURL(baseURL, false);
-    }
-
-    public void readURL(boolean printContents) {
-        readURL(baseURL, printContents);
+    public ArrayList<String> readURL(String url) {
+        return readURL(url, false);
     }
 }
