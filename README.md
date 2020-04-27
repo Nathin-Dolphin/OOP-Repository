@@ -40,6 +40,7 @@ At the specified locations in the terminal, enter these commands in order,
 		(Implemented) - Implement a list for type and region
 		(Implemented) - Print the results to the terminal (for now)
 		(In Progress) - Create PokedexWriter to assist in producing the necessary json files
+		() - Add more pokemon to the json files
 
 	## Version 2.0 Features:
 		Print more information about each pokemon
@@ -47,6 +48,7 @@ At the specified locations in the terminal, enter these commands in order,
 		Use threading while reading the many json files
 		Implement option to search by evolution
 		Implement method to automatically find and download the needed json files via URLs
+		Finish adding pokemon to the json files
 
 	## Version 3.0 Features:
 		Implement option to search by weaknessess
