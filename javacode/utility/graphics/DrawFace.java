@@ -1,7 +1,7 @@
 
 /**
  * @author Nathin Wascher
- * @version 1.2.3
+ * @version 1.2.4
  * @since Februrary 18, 2020
  */
 
@@ -18,6 +18,7 @@ import java.awt.Color;
 public class DrawFace extends DrawShape {
     private DrawShape leftEye, rightEye;
     private DrawArc mouth;
+
     private int tempXPos, tempYPos, tempHeight, tempWidth, startAngle, arcAngle;
     private boolean wideMouth, isSmile;
     private Color eyeColor;
@@ -37,14 +38,8 @@ public class DrawFace extends DrawShape {
         drawFace(isSmile, wideMouth);
     }
 
-    // WORK IN PROGRESS
-    public void setSmile(boolean isSmile) {
-        this.isSmile = isSmile;
-    }
-
-    // WORK IN PROGRESS
-    public void setWideMouth(boolean wideMouth) {
-        this.wideMouth = wideMouth;
+    public void repaintFace(int xPos, int yPos) {
+        // WORK IN PROGRESS
     }
 
     private void drawFace(boolean isSmile, boolean wideMouth) {

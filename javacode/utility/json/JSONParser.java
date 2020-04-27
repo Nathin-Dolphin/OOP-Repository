@@ -1,99 +1,189 @@
 
 /**
- * @author Nathin Wascher
- * @version 1.5
- * @since March 27, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
+ * 
+ * This file is part of the utility library and is under the MIT License.
  */
-
-// [!] parseJSON(AR<S>) does account for values without quotation marks (ex. "number": 12,) [!]
 
 package utility.json;
 
 import java.util.ArrayList;
 
+/**
+ * Parses the information from an {@code .json} file into a
+ * {@code ArrayList<String>}. For reading a {@code .json} file from an url,
+ * check {@link URLReader}. For locating and reading directly from a
+ * {@code .json} file, check {@link JSONReader}.
+ * 
+ * <p>
+ * <b>Planned Features:</b>
+ * <p>
+ * Implement a {@code toString()} to output the parsed {@code .json} data as a
+ * single {@code String}.
+ * <p>
+ * Implement threading.
+ * <p>
+ * Have 2 {@code ArrayList<String>}, where one includes brackets and the other
+ * does not.
+ * 
+ * <p>
+ * <b>WARNING:</b> A very messy {@code .json} file may not get parsed correctly.
+ * 
+ * @author Nathin Wascher
+ * @version 1.6
+ * @since March 27, 2020
+ * 
+ * @see JSONReader
+ * @see URLReader
+ */
+
 public class JSONParser {
-    private ArrayList<String> parsedList;
+    private ArrayList<String> parsedArrayList;
     private String[] parsedLine;
-    private String string;
+    private String tempString, tempStr2;
+
+    /**
+     * Contains a list of brackets found in parsed {@code .json} data:
+     * <p>
+     * <code>[{</code>, <code>[</code>, <code>{</code>, <code>}{</code>,
+     * <code>}</code>, <code>]</code>, <code>}]</code>
+     */
+    public String[] bracketList;
 
     public JSONParser() {
+        String[] brackets = { "[{", "[", "{", "}{", "}", "]", "}]" };
+        bracketList = brackets;
     }
 
-    public ArrayList<String> parseJSON(ArrayList<String> jsonContents) {
-        if (jsonContents.size() <= 2)
-            return jsonContents;
-
-        parsedList = new ArrayList<String>();
+    /**
+     * Parses data from a {@code .json} file and puts it into a
+     * {@code ArrayList<String>}.
+     * 
+     * @param jsonContents    The raw data from a single {@code .json} file
+     * @param includeBrackets If {@code true}, the parsed {@code .json} data should
+     *                        keep the brackets else if {@code false}, remove them
+     * @return An {@code ArrayList<String>} consisting of the {@code .json} data
+     */
+    public ArrayList<String> parseJSON(ArrayList<String> jsonContents, boolean includeBrackets) {
+        tempStr2 = null;
+        parsedArrayList = new ArrayList<String>();
         for (int h = 0; h < jsonContents.size(); h++) {
             parsedLine = jsonContents.get(h).split("\"");
 
             for (int i = 0; i < parsedLine.length; i++) {
-                string = parsedLine[i];
-                string = string.replaceAll("\t", "");
-                sortJSONComponents(i);
-
-                // [!] Potential problem [!]
-                if (!string.equals("")) {
-                    parsedList.add(string);
+                tempString = parsedLine[i];
+                if (!tempString.equals("")) {
+                    tempString = tempString.replaceAll("    ", "");
+                    if (tempString.equals(""))
+                        tempString = null;
                 }
+
+                if (i % 2 == 0) {
+                    if (tempString != null)
+                        sortJSONComponents(i, includeBrackets);
+                    if (tempString != null) {
+                        parsedArrayList.add(tempString);
+                        if (tempStr2 != null) {
+                            parsedArrayList.add(tempStr2);
+                            tempStr2 = null;
+                        }
+                    }
+                } else
+                    parsedArrayList.add(tempString);
             }
         }
-        return parsedList;
+        return parsedArrayList;
     }
 
-    private void sortJSONComponents(int i) {
+    // Sorts the json into names, values, and brackets as well as erase the colons
+    // and commas between them.
+    private void sortJSONComponents(int i, boolean includeBrackets) {
+        tempString.replaceAll(" ", "");
+
         // Removes the colons between the names and their values.
         // Also removes some commas not considered part of a name or value.
-        if ((i - 2) % 4 == 0 & string.startsWith(":")) {
-            if (string.endsWith("[{")) {
-                string = "[{";
+        if (tempString.startsWith(":")) {
+            if (tempString.contains("[{")) {
+                tempString = "[{";
 
-            } else if (string.endsWith("{")) {
-                string = "{";
+            } else if (tempString.contains("{")) {
+                tempString = "{";
 
-            } else if (string.endsWith("[")) {
-                string = "[";
+            } else if (tempString.contains("[")) {
+                tempString = "[";
 
             } else {
-                string = "";
+                // Checks if this string contains a numerical (or unquoted) value
+                tempString = tempString.replaceAll(":", "").replaceAll(",", "");
+                if (!tempString.equals("")) {
+                    if (tempString.contains("}]")) {
+                        tempString.replaceAll("}]", "");
+                        tempStr2 = "}]";
+
+                    } else if (tempString.contains("}")) {
+                        tempString.replaceAll("}", "");
+                        tempStr2 = "}";
+
+                    } else if (tempString.contains("]")) {
+                        tempString.replaceAll("]", "");
+                        tempStr2 = "]";
+
+                    } else
+                        try {
+                            Integer.parseInt(tempString);
+                        } catch (NumberFormatException e) {
+                            tempString = null;
+                        }
+                } else
+                    tempString = null;
             }
-        } else if (string.equals(",") || string.equals(", ")) {
-            string = "";
-        } else if (i % 2 == 0) {
-            string = string.replaceAll(" ", "");
+        } else if (tempString.equals(",") || tempString.equals(", ")) {
+            tempString = null;
         }
 
-        // Fixes inconsistencies with (object and array) brackets.
-        if (string.startsWith("}")) {
-            if (string.equals("},")) {
-                string = "}";
+        if (tempString != null) {
+            // Simplifies strings containing brackets.
+            if (tempString.contains("}")) {
+                if (tempString.contains("},{")) {
+                    tempString = "}{";
 
-            } else if (string.equals("},{")) {
-                string = "}{";
+                } else if (tempString.contains("},")) {
+                    tempString = "}";
 
-            } else if (string.equals("}],")) {
-                string = "}]";
+                } else if (tempString.contains("}],")) {
+                    tempString = "}]";
+                }
+            } else if (tempString.contains(",{")) {
+                tempString = "{";
+
+            } else if (tempString.startsWith("],")) {
+                tempString = "]";
             }
-        } else if (string.equals(",{")) {
-            string = "{";
 
-        } else if (string.startsWith("],")) {
-            string = "]";
-        }
+            if (includeBrackets) {
+                // combines brackets if possible.
+                int maxIndex = parsedArrayList.size() - 1;
+                if (maxIndex > 1) {
+                    if (parsedArrayList.get(maxIndex).equals("[") & tempString.equals("{")) {
+                        parsedArrayList.remove(maxIndex);
+                        tempString = "[{";
 
-        // combines brackets if possible.
-        if (parsedList.size() != 0) {
-            if (parsedList.get(parsedList.size() - 1).equals("[") & string.equals("{")) {
-                parsedList.remove(parsedList.size() - 1);
-                string = "[{";
+                    } else if (parsedArrayList.get(maxIndex).equals("}") & tempString.equals("]")) {
+                        parsedArrayList.remove(maxIndex);
+                        tempString = "}]";
 
-            } else if (parsedList.get(parsedList.size() - 1).equals("}") & string.equals("]")) {
-                parsedList.remove(parsedList.size() - 1);
-                string = "}]";
-
-            } else if (parsedList.get(parsedList.size() - 1).equals("}") & string.equals("{")) {
-                parsedList.remove(parsedList.size() - 1);
-                string = "}{";
+                    } else if (parsedArrayList.get(maxIndex).equals("}") & tempString.equals("{")) {
+                        parsedArrayList.remove(maxIndex);
+                        tempString = "}{";
+                    }
+                }
+            } else {
+                tempStr2 = null;
+                for (String s : bracketList) {
+                    if (tempString.equals(s)) {
+                        tempString = null;
+                    }
+                }
             }
         }
     }

@@ -1,129 +1,171 @@
 
 /**
- * @author Nathin Wascher
- * @version 1.3.2
- * @since March 28, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
+ * 
+ * This file is part of the utility library and is under the MIT License.
  */
-
-// [?] What happens if get() detects a value that is equal to objectName [?]
 
 package utility.json;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.File;
 
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ * Locates, reads and stores the information from a {@code .json} file into an
+ * {@code ArrayList<String>}. Also has a {@code get()} method to find specific
+ * values.
+ * 
+ * <p>
+ * <b>Planned Features:</b>
+ * <p>
+ * Implement a {@code toString()} method that calls the same from
+ * {@code JSONParser}.
+ * <p>
+ * Add an option to the method {@code readJSON()} to print the contents of the
+ * {@code .json} to the terminal.
+ * <p>
+ * Have 2 {@code ArrayList<String>}, where one includes brackets and the other
+ * does not.
+ * <p>
+ * Implement threading.
+ * 
+ * <p>
+ * <b>Known Issues:</b>
+ * <p>
+ * If {@code objectName} in method {@code get()} has the same name as a value,
+ * it will add the next {@code String} to the {@code ArrayList<String>}.
+ * 
+ * @author Nathin Wascher
+ * @version 1.4
+ * @since March 28, 2020
+ * 
+ * @see JSONParser
+ */
 
 public class JSONReader extends JSONParser {
     private Scanner fileScan;
     private ArrayList<String> jsonContents, tempArray;
-    private String nextLine, nextString;
+    private String nextLine, tempString;
     private int intPos;
-    private boolean oneJSON;
 
-    //
     public JSONReader() {
-        oneJSON = false;
     }
 
-    // Creating a new JSONReader object with this constructor bases all other
-    // methods on 'fileName'
-    public JSONReader(String fileName) {
-        readJSON(fileName);
-        oneJSON = true;
-    }
+    /**
+     * Looks for a file with the same name as {@code fileName}, then reads and
+     * stores the data into an {@code ArrayList<String>}.
+     * <p>
+     * <b>[!] WARNING:</b>
+     * <p>
+     * If {@code includeBrackets} is {@code false}, {@code get()} may not function
+     * as expected.
+     * 
+     * @param fileName        The name of the {@code .json} to read from
+     * @param includeBrackets If the returning {@code ArrayList<String>} should
+     *                        include the brackets from the {@code .json} file
+     * @return An {@code ArrayList<String>} of the parsed {@code .json} data
+     * @throws FileNotFoundException If {@code fileName} is not a {@code .json} or
+     *                               can not be found
+     * @see JSONParser
+     */
+    public ArrayList<String> readJSON(String fileName, boolean includeBrackets) throws FileNotFoundException {
+        if (fileName.endsWith(".json"))
+            fileScan = new Scanner(new File(fileName));
+        else
+            fileScan = new Scanner(new File(fileName + ".json"));
 
-    public ArrayList<String> readJSON(String fileName) {
-        if (!oneJSON) {
-            try {
-                if (fileName.endsWith(".json"))
-                    fileScan = new Scanner(new File(fileName));
-                else
-                    fileScan = new Scanner(new File(fileName + ".json"));
-                jsonContents = new ArrayList<String>();
-
-                while (fileScan.hasNextLine()) {
-                    nextLine = fileScan.nextLine();
-                    jsonContents.add(nextLine);
-                }
-                jsonContents = parseJSON(jsonContents);
-
-            } catch (FileNotFoundException e) {
-                System.out.println("\nERROR: FILE NOT FOUND");
-            }
-            return jsonContents;
-
-        } else
-            return null;
-    }
-
-    // Outputs an array that INCLUDES brackets
-    public ArrayList<String> getRaw(String objectName) {
+        jsonContents = new ArrayList<String>();
+        while (fileScan.hasNextLine()) {
+            nextLine = fileScan.nextLine();
+            jsonContents.add(nextLine);
+        }
+        jsonContents = parseJSON(jsonContents, includeBrackets);
         return jsonContents;
     }
 
-    // [?] What happens if get() detects a value that is equal to objectName [?]
-    public ArrayList<String> get(String objectName) {
-        if (jsonContents == null || !oneJSON) {
-            System.out.println("\nERROR: NO JSON FILE TO READ FROM");
+    /**
+     * Overloaded Method
+     * <p>
+     * Looks for a file with the same name as {@code fileName}, then reads and
+     * stores the data into an {@code ArrayList<String>}. Includes the brackets
+     * found in a {@code .json}.
+     * 
+     * @param fileName The name of the {@code .json} to read from
+     * @return An {@code ArrayList<String>} of the parsed {@code .json} data
+     * @throws FileNotFoundException If {@code fileName} is not a {@code .json} or
+     *                               can not be found
+     * @see #readJSON(String, boolean)
+     */
+    public ArrayList<String> readJSON(String fileName) throws FileNotFoundException {
+        return readJSON(fileName, true);
+    }
 
-        } else if (jsonContents.contains(objectName)) {
+    /**
+     * Finds the value(s) associated with {@code ObjectName}.
+     * 
+     * @param objectName The name of an object or array in th {@code .json} file
+     * @return An {@code ArrayList<String>} of values with the specified
+     *         {@code objectName}
+     * @throws NullPointerException If {@code readJSON} is not called before this
+     *                              method, {@code jsonContents} equals null or the
+     *                              {@code .json} file is completely empty
+     * @see #readJSON(String, boolean)
+     */
+    public ArrayList<String> get(String objectName) throws NullPointerException {
+        if (jsonContents == null) {
+            throw new NullPointerException();
+
+        } else {
             tempArray = new ArrayList<String>();
+            for (intPos = 0; intPos < jsonContents.size(); intPos++) {
+                tempString = jsonContents.get(intPos);
 
-            for (intPos = 1; intPos < jsonContents.size() - 1; intPos++) {
-                nextString = jsonContents.get(intPos);
+                if (tempString.equals(objectName)) {
+                    tempString = jsonContents.get(++intPos);
 
-                if (nextString.equals(objectName)) {
-                    nextString = jsonContents.get(++intPos);
-
-                    // Checks if the value is an object or array
-                    if (!startArrayCheck()) {
-                        tempArray.add(nextString);
+                    if (!isNewArray()) {
+                        tempArray.add(tempString);
                     }
                 }
             }
-            // [?] If objectName was detected as a value instead of a name [?]
-            if (tempArray == null) {
-                System.out.println("\nERROR: FILE DOES NOT CONTAIN OBJECT");
-            }
-        } else {
-            System.out.println("\nERROR: FILE DOES NOT CONTAIN OBJECT");
         }
         return tempArray;
     }
 
-    // Checks if a new array or object is beginning
-    private boolean startArrayCheck() {
-        if (nextString.equals("[")) {
+    // Checks if a new json array or object is beginning
+    private boolean isNewArray() {
+        if (tempString.equals("[")) {
             endArrayCheck("]");
             return true;
 
-        } else if (nextString.equals("{")) {
+        } else if (tempString.equals("{")) {
             endArrayCheck("}");
             return true;
 
-        } else if (nextString.equals("[{")) {
+        } else if (tempString.equals("[{")) {
             endArrayCheck("}]");
             return true;
         }
         return false;
     }
 
-    // Checks if the current array or object is ending
+    // Checks if the current json array or object is ending
     private void endArrayCheck(String endBracket) {
-        nextString = jsonContents.get(++intPos);
+        tempString = jsonContents.get(++intPos);
 
-        while (!nextString.equals(endBracket)) {
-            if (nextString.equals("}{")) {
-                nextString = jsonContents.get(++intPos);
+        while (!tempString.equals(endBracket)) {
+            if (tempString.equals("}{")) {
+                tempString = jsonContents.get(++intPos);
 
             } else {
-                tempArray.add(nextString);
-                nextString = jsonContents.get(++intPos);
-                startArrayCheck();
+                tempArray.add(tempString);
+                tempString = jsonContents.get(++intPos);
+                isNewArray();
             }
         }
-        nextString = jsonContents.get(++intPos);
+        tempString = jsonContents.get(++intPos);
     }
 }

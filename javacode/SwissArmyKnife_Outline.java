@@ -1,36 +1,39 @@
 
 /**
- * @author Nathin Wascher
- * @version 1.0
- * @since April 14, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
+ * 
+ * This file is under the MIT License.
  */
 
-import utility.URLReader;
+import utility.json.URLReader;
 
 import java.util.ArrayList;
 
+/**
+ * @author Nathin Wascher
+ * @version 1.0.1
+ * @since April 14, 2020
+ */
+
 public class SwissArmyKnife_Outline {
-    private final String REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+    private final static String REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
 
-    private URLReader urlReader;
-    private ArrayList<ArrayList<String>> urlDoubleList;
-    private ArrayList<String> urlList, tempList;
+    private static ArrayList<ArrayList<String>> urlDoubleList;
+    private static ArrayList<String> urlList, tempList;
 
-    private String tempString;
-    private long startTime;
-    private int validationNum, listNum, stringNum;
-    private boolean validURL;
+    private static String tempString;
+    private static long startTime;
+    private static int validationNum, listNum, stringNum;
 
-    public SwissArmyKnife_Outline(URLReader urlReader) {
-        this.urlReader = urlReader;
+    public static URLReader urlReader;
+    public static boolean validURL;
+
+    public SwissArmyKnife_Outline() {
+        urlReader = new URLReader();
         validURL = false;
     }
 
-    public boolean getValidURL() {
-        return validURL;
-    }
-
-    public void urlRequest(String url, boolean printContents) {
+    public static void urlRequest(String url, boolean printContents) {
         if (urlReader.isValidURL(url)) {
             validURL = true;
             startTime = System.nanoTime();
@@ -43,7 +46,7 @@ public class SwissArmyKnife_Outline {
             System.out.println("\nERROR: INVALID URL");
     }
 
-    public void urlIndexRequest(String url) {
+    public static void urlIndexRequest(String url) {
         urlReader = new URLReader();
 
         if (urlReader.isValidURL(url)) {
@@ -55,6 +58,7 @@ public class SwissArmyKnife_Outline {
             urlReader.readURLIndex(url, true);
             System.out.println("\nElapsed Time: " + (System.nanoTime() - startTime) / 1000000 + " Milliseconds");
 
+            // [!] Currently broken [!]
             urlList = urlReader.getURLList();
             System.out.println("Number of URLs:  " + urlList.size());
             System.out.println("Average Elapsed Time Per URL: "
@@ -64,7 +68,7 @@ public class SwissArmyKnife_Outline {
             System.out.println("\nERROR: INVALID URL");
     }
 
-    public void validateJSON(String url, boolean threaded) {
+    public static void validateJSON(String url, boolean threaded) {
         urlDoubleList = new ArrayList<ArrayList<String>>();
         tempList = new ArrayList<String>();
         urlReader = new URLReader();
@@ -73,13 +77,13 @@ public class SwissArmyKnife_Outline {
             startTime = System.nanoTime();
 
             if (urlReader.isValidURL(url)) {
-                urlDoubleList.add(urlReader.getParsedURLContents(url));
+                urlDoubleList.add(urlReader.readURL(url));
                 urlList = urlReader.getURLList();
 
                 if (!threaded) {
                     for (String s : urlList) {
                         tempList = urlReader.readURL(s, false);
-                        urlDoubleList.add(urlReader.parseJSON(tempList));
+                        urlDoubleList.add(urlReader.parseJSON(tempList, false));
                     }
                     validateContents(url);
 
@@ -87,7 +91,7 @@ public class SwissArmyKnife_Outline {
                     // WORK IN PROGRESS
                     for (String s : urlList) {
                         tempList = urlReader.readURL(s, false);
-                        urlDoubleList.add(urlReader.parseJSON(tempList));
+                        urlDoubleList.add(urlReader.parseJSON(tempList, false));
                     }
                     validateContents(url);
                 }
@@ -100,7 +104,7 @@ public class SwissArmyKnife_Outline {
             System.out.println("\nERROR: INVALID URL");
     }
 
-    private void validateContents(String url) {
+    private static void validateContents(String url) {
         listNum = 1;
 
         while (listNum < urlDoubleList.size()) {
@@ -151,7 +155,7 @@ public class SwissArmyKnife_Outline {
         }
     }
 
-    private void nameTest(int stringNum, String namePos) {
+    private static void nameTest(int stringNum, String namePos) {
         tempString = tempList.get(stringNum);
 
         if (tempString.length() < 2) {
@@ -164,7 +168,7 @@ public class SwissArmyKnife_Outline {
         }
     }
 
-    private void errorDetected() {
+    private static void errorDetected() {
         validationNum = -1;
         stringNum = tempList.size();
         tempList = urlDoubleList.get(0);
@@ -183,23 +187,6 @@ public class SwissArmyKnife_Outline {
                 f = tempList.size();
             }
         }
-    }
-
-    public void help() {
-        System.out.println("\njava SwissArmyKnife -HttpRequest [URL]");
-        System.out.println(
-                "   (ex.) java SwissArmyKnife -HttpRequest https://thunderbird-index.azurewebsites.net/w0a6zk195e.json");
-
-        System.out.println("\njava SwissArmyKnife -HttpRequestIndex [URL]");
-        System.out.println(
-                "   (ex.) java SwissArmyKnife -HttpRequestIndex https://thunderbird-index.azurewebsites.net/w0a6zk195d.json");
-
-        System.out.println("\njava SwissArmyKnife -JSONValidateIndex");
-        System.out.println("\njava SwissArmyKnife -JSONValidateIndexThreaded");
-        System.out.println("\njava SwissArmyKnife -Sleep");
-        System.out.println("\njava SwissArmyKnife -SleepFast");
-        System.out.println("\njava SwissArmyKnife -SleepFastImplementsRunnable");
-        System.out.println("\njava SwissArmyKnife -AutoRequest");
     }
 
     // WORK IN PROGRESS

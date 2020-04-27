@@ -2,29 +2,52 @@
 
 Programs for Object-Oriented Programming.
 
-Main method java file names (refered to as "MM"):
+Executable java file names (refered to as "MM" or Main Method):
 
 	FaceDraw
 	Mosaic
+	PokemonSearch
 	SwissArmyKnife
 	ShapeCreator
+
+	[!] Caution is advised when using the program(s) below [!]
+	PokedexWriter
+
 
 NOTES: 
 
 	'...' is the path from the storage device to the repository.
-	"MM" referes to the names of the main method java files.
 	To run a java file, the terminal's directory must be in the 'class' folder. ( ex. ...\javacode\class> )
 
 
-# Method 1:
+## Method 1:
 At the specified locations in the terminal, enter these commands in order,
 
 	...\OOP-Repository\javacode> javac -d '...\OOP-Repository\javacode\class' *.java
 	...\OOP-Repository\javacode\class> java "MM"
 
 
-# Method 2:
+## Method 2:
 At the specified locations in the terminal, enter these commands in order,
 
 	...\OOP-Repository\javacode> javac -d '...\OOP-Repository\javacode\class' *.java
 	...\OOP-Repository\javacode> java -classpath '...\OOP-Repository\javacode\class' "MM"
+
+
+## PokemonSearch
+	## Version 1.0 Features:
+		(Implemented) - Search Pokemon by name, number, type and/or region
+		(Implemented) - Implement a list for type and region
+		(Implemented) - Print the results to the terminal (for now)
+		(In Progress) - Create PokedexWriter to assist in producing the necessary json files
+
+	## Version 2.0 Features:
+		Print more information about each pokemon
+		Print the output to the frame instead of the terminal
+		Use threading while reading the many json files
+		Implement option to search by evolution
+		Implement method to automatically find and download the needed json files via URLs
+
+	## Version 3.0 Features:
+		Implement option to search by weaknessess
+		Allow PokedexWriter to modify already existing files and add size and weight

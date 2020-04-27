@@ -4,9 +4,6 @@
     "type": "",
     "evolution": ""
 }
-        #0043 Oddish         Grass, Poison
-        #0044 Gloom          Grass, Poison
-        #0045 Vileplume      Grass, Poison
         #0046 Paras          Bug, Grass
         #0047 Parasect       Bug, Grass
         #0048 Venonat        Bug, Poison

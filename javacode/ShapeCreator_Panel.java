@@ -1,21 +1,19 @@
 
 /**
- * @author Nathin Wascher
- * @version 1.3.1
- * @since Februrary 12, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
+ * 
+ * This file is under the MIT License.
  */
-
-// allow user to create an arc
-// [!] Warning label does not always show up [!]
-// [!] Rearange buttons and text fields with panels [!]
 
 import utility.graphics.DrawShape;
 
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import utility.SimpleFrame;
+
 import javax.swing.JColorChooser;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -23,7 +21,20 @@ import java.awt.event.ActionEvent;
 import java.awt.Graphics;
 import java.awt.Color;
 
+// Allow user to create an arc
+// [!] Warning label does not always show up [!]
+// [!] Rearange buttons and text fields with panels [!]
+
+/**
+ * @author Nathin Wascher
+ * @version 1.3.2
+ * @since Februrary 12, 2020
+ */
+
+@SuppressWarnings("serial")
 class ShapeCreator_Panel extends JPanel implements ActionListener {
+    private SimpleFrame frame;
+
     private JButton rectButton, ovalButton, colorButton, fillButton, emptyButton;
     private JTextField setWidth, setHeight;
     private JLabel widthLabel, heightLabel, warningLabel;
@@ -34,6 +45,8 @@ class ShapeCreator_Panel extends JPanel implements ActionListener {
     private String shape;
 
     ShapeCreator_Panel() {
+        frame = new SimpleFrame("ShapeCreator", "Simple Shape and Color Mixer", 1000, 600, false);
+
         shape = "rect";
         newColor = Color.black;
         fillShape = true;
@@ -69,6 +82,9 @@ class ShapeCreator_Panel extends JPanel implements ActionListener {
         add(setWidth);
         add(heightLabel);
         add(setHeight);
+
+        frame.add(this);
+        frame.setVisible(true);
     }
 
     public void paint(Graphics g) {
@@ -84,7 +100,7 @@ class ShapeCreator_Panel extends JPanel implements ActionListener {
             remove(warningLabel);
             width = Integer.parseInt(setWidth.getText());
             height = Integer.parseInt(setHeight.getText());
-        } catch (NumberFormatException z) {
+        } catch (NumberFormatException n) {
             width = height = 0;
             add(warningLabel);
             setVisible(true);

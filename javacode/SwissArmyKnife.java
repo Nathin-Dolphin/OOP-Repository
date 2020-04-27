@@ -1,38 +1,35 @@
 
 /**
- * @author Nathin Wascher
- * @version 2.0
- * @since March 25, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
+ * 
+ * This file is under the MIT License.
  */
-
-// [?] put some methods into another class [?]
-
-import utility.URLReader;
 
 import utility.sleep.Sleep;
 import utility.sleep.SleepFast;
 import utility.sleep.SleepFastRunnable;
 
-public class SwissArmyKnife {
-    // SwissArmyKnife shares the same urlReader object with it's support classes
-    // resulting in shared information within URLReader
-    private static URLReader urlReader;
-    private static SwissArmyKnife_Outline sakO;
+/**
+ * @author Nathin Wascher
+ * @version SwissArmyKnife v2.0.1
+ * @since March 25, 2020
+ */
+
+public class SwissArmyKnife extends SwissArmyKnife_Outline {
     private static String autoRequestedURL = "https://thunderbird-index.azurewebsites.net/w0a6zk195d.json";
 
     public static void main(String[] args) {
         System.out.println("Executing Program (SwissArmyKnife)...");
-        urlReader = new URLReader();
-        sakO = new SwissArmyKnife_Outline(urlReader);
 
+        // TODO: Modify 'if' statements
         if (args.length == 0) {
             System.out.println("\nERROR: NO ARGUMENT FOUND. USE \"-Help\"");
-            sakO.help();
+            help();
 
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("-Help")) {
                 System.out.println("Executing Command -Help...");
-                sakO.help();
+                help();
 
             } else if (args[0].equalsIgnoreCase("-Sleep")) {
                 System.out.println("Executing Command -Sleep...");
@@ -48,42 +45,59 @@ public class SwissArmyKnife {
 
             } else if (args[0].equalsIgnoreCase("-JSONValidateIndex")) {
                 System.out.println("Executing Command -JSONValidateIndex...");
-                sakO.validateJSON(autoRequestedURL, false);
+                validateJSON(autoRequestedURL, false);
 
             } else if (args[0].equalsIgnoreCase("-JSONValidateIndexThreaded")) {
                 System.out.println("Executing Command -JSONValidateIndexThreaded...{WIP}...");
-                sakO.validateJSON(autoRequestedURL, true);
+                validateJSON(autoRequestedURL, true);
 
             } else if (args[0].equalsIgnoreCase("-AutoRequest")) {
                 System.out.println("Executing Command -AutoRequest...");
-                sakO.urlRequest(autoRequestedURL, false);
+                urlRequest(autoRequestedURL, false);
 
-                if (sakO.getValidURL()) {
+                if (validURL) {
                     int num = 1;
 
-                    for (String s : urlReader.getParsedURLContents(autoRequestedURL)) {
+                    for (String s : urlReader.readURLIndex(autoRequestedURL)) {
                         System.out.println("String " + num + ":  " + s);
                         num++;
                     }
                 }
             } else
-                System.out.println("\nERROR 4018: INVALID COMMAND");
+                System.out.println("\nERROR: INVALID COMMAND");
 
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("-HttpRequest")) {
                 System.out.println("Executing Command -HttpRequest...");
-                sakO.urlRequest(args[1], true);
+                urlRequest(args[1], true);
 
             } else if (args[0].equalsIgnoreCase("-HttpRequestIndex")) {
                 System.out.println("Executing Command -HttpRequestIndex...");
-                sakO.urlIndexRequest(args[1]);
+                urlIndexRequest(args[1]);
 
             } else
-                System.out.println("\nERROR 1074: INVALID COMMAND");
+                System.out.println("\nERROR: INVALID COMMAND");
 
         } else
-            System.out.println("\nERROR: INVALID COMMAND AND/OR MISSING PARAMETERS");
+            System.out.println("\nERROR: INVALID COMMAND AND/OR MISSING PARAMETERS \"-Help\"");
 
         System.out.println("\n...Terminating Program (SwissArmyKnife)");
+    }
+
+    private static void help() {
+        System.out.println("\njava SwissArmyKnife -HttpRequest [URL]");
+        System.out.println(
+                "   (ex.) java SwissArmyKnife -HttpRequest https://thunderbird-index.azurewebsites.net/w0a6zk195e.json");
+
+        System.out.println("\njava SwissArmyKnife -HttpRequestIndex [URL]");
+        System.out.println(
+                "   (ex.) java SwissArmyKnife -HttpRequestIndex https://thunderbird-index.azurewebsites.net/w0a6zk195d.json");
+
+        System.out.println("\njava SwissArmyKnife -JSONValidateIndex");
+        System.out.println("\njava SwissArmyKnife -JSONValidateIndexThreaded");
+        System.out.println("\njava SwissArmyKnife -Sleep");
+        System.out.println("\njava SwissArmyKnife -SleepFast");
+        System.out.println("\njava SwissArmyKnife -SleepFastImplementsRunnable");
+        System.out.println("\njava SwissArmyKnife -AutoRequest");
     }
 }

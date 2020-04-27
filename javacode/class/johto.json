@@ -1,0 +1,22 @@
+{
+    "johto": [
+        {
+            "name": "Chikorita",
+            "number": "152",
+            "type": "Grass",
+            "evolution": "?-1"
+        },
+        {
+            "name": "Bayleef",
+            "number": "153",
+            "type": "Grass",
+            "evolution": "?-2"
+        },
+        {
+            "name": "Meganium",
+            "number": "154",
+            "type": "Grass",
+            "evolution": "?-3"
+        }
+    ]
+}

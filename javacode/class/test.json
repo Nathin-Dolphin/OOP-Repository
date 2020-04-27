@@ -1,24 +1,24 @@
 {
 	"object1": "1",
-	"object2": "2",
+	"object2": 2,
 	"objectTypes": {
-		"type1": "t1",
-		"type2": "t2"
+		"type1": "4",
+		"type2": 5
 	},
 	"objectStuff": [{
-			"stuff1": "s1",
+			"stuff1": "5",
 			"stuff2": "s2"
 		}],
 	"objectArrays": [{
 			"array1": [
 				{
-					"a1": "b1"}
+					"a1": 6}
 			],
 			"array2": [
-					{"a1": "b2"
+					{"a1": 3
 				},
 				{
-					"a2": "b3"
+					"a2": "a8"
 				}]
 		}
 	]

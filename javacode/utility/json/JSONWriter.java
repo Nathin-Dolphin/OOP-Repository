@@ -1,18 +1,24 @@
 
 /**
- * @author Nathin Wascher
- * @version 0.1.2 CAUTION: EXPERIMENTAL VERSION
- * @since March 28, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
+ * 
+ * This file is part of the utility library and is under the MIT License.
  */
 
-package utility;
+package utility.json;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.FileWriter;
 
 import java.util.Scanner;
+
+/**
+ * @author Nathin Wascher
+ * @version 0.1.3 CAUTION: EXPERIMENTAL VERSION
+ * @since March 28, 2020
+ */
 
 public class JSONWriter {
     private Scanner scan = new Scanner(System.in);
@@ -23,10 +29,10 @@ public class JSONWriter {
     private String fileName, input;
 
     public JSONWriter(String fileName) {
-        this.fileName = fileName;
         if (!fileName.endsWith(".json")) {
             fileName = fileName + ".json";
         }
+        this.fileName = fileName;
         pw = newFile();
     }
 

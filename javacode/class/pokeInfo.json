@@ -1,4 +1,5 @@
 {
+    "version": "1.0",
     "types": {
         "bug": "dark",
         "dragon": "electric",
@@ -11,280 +12,25 @@
         "steel": "water"
     },
     "regions": {
-        "kanto": "1-151",
-        "johto": "152-251",
-        "hoenn": "252-386",
-        "sinnoh": "387-493",
-        "unova": "494-649",
-        "kalos": "650-721",
-        "alola": "722-809",
-        "galar": "810-890",
-        "alternateForm": "---"
+        "kanto": "151",
+        "johto": "251",
+        "hoenn": "386",
+        "sinnoh": "493",
+        "unova": "649",
+        "kalos": "721",
+        "alola": "809",
+        "galar": "890",
+        "alternateForm": "0"
     },
-    "fullPokedex": [
-        {
-            "kanto": [
-                {
-                    "name": "Bulbasaur",
-                    "number": "1",
-                    "type": "Grass-Poison",
-                    "evolution": "0-1"
-                },
-                {
-                    "name": "Ivysaur",
-                    "number": "2",
-                    "type": "Grass-Poison",
-                    "evolution": "0-2"
-                },
-                {
-                    "name": "Venusaur",
-                    "number": "3",
-                    "type": "Grass-Poison",
-                    "evolution": "0-3"
-                },
-                {
-                    "name": "Charmander",
-                    "number": "4",
-                    "type": "Fire",
-                    "evolution": "1-1"
-                },
-                {
-                    "name": "Charmeleon",
-                    "number": "5",
-                    "type": "Fire",
-                    "evolution": "1-2"
-                },
-                {
-                    "name": "Charizard",
-                    "number": "6",
-                    "type": "Fire-Flying",
-                    "evolution": "1-3"
-                },
-                {
-                    "name": "Squirtle",
-                    "number": "7",
-                    "type": "Water",
-                    "evolution": "2-1"
-                },
-                {
-                    "name": "Wartortle",
-                    "number": "8",
-                    "type": "Water",
-                    "evolution": "2-2"
-                },
-                {
-                    "name": "Blastoise",
-                    "number": "9",
-                    "type": "Water",
-                    "evolution": "2-3"
-                },
-                {
-                    "name": "Caterpie",
-                    "number": "10",
-                    "type": "Bug",
-                    "evolution": "3-1"
-                },
-                {
-                    "name": "Metapod",
-                    "number": "11",
-                    "type": "Bug",
-                    "evolution": "3-2"
-                },
-                {
-                    "name": "Butterfree",
-                    "number": "12",
-                    "type": "Bug-Flying",
-                    "evolution": "3-3"
-                },
-                {
-                    "name": "Weedle",
-                    "number": "13",
-                    "type": "Bug-Poison",
-                    "evolution": "4-1"
-                },
-                {
-                    "name": "Kakuna",
-                    "number": "14",
-                    "type": "Bug-Poison",
-                    "evolution": "4-2"
-                },
-                {
-                    "name": "Beedrill",
-                    "number": "15",
-                    "type": "Bug-Poison",
-                    "evolution": "4-3"
-                },
-                {
-                    "name": "Pidgey",
-                    "number": "16",
-                    "type": "Normal-Flying",
-                    "evolution": "5-1"
-                },
-                {
-                    "name": "Pidgeotto",
-                    "number": "17",
-                    "type": "Normal-Flying",
-                    "evolution": "5-2"
-                },
-                {
-                    "name": "Pidgeot",
-                    "number": "18",
-                    "type": "Normal-Flying",
-                    "evolution": "5-3"
-                },
-                {
-                    "name": "Rattata",
-                    "number": "19",
-                    "type": "Normal",
-                    "evolution": "6-1"
-                },
-                {
-                    "name": "Raticate",
-                    "number": "20",
-                    "type": "Normal",
-                    "evolution": "6-4"
-                },
-                {
-                    "name": "Spearow",
-                    "number": "21",
-                    "type": "Normal-Flying",
-                    "evolution": "7-1"
-                },
-                {
-                    "name": "Fearow",
-                    "number": "22",
-                    "type": "Normal-Flying",
-                    "evolution": "7-4"
-                },
-                {
-                    "name": "Ekans",
-                    "number": "23",
-                    "type": "Poison",
-                    "evolution": "8-1"
-                },
-                {
-                    "name": "Arbok",
-                    "number": "24",
-                    "type": "Poison",
-                    "evolution": "8-4"
-                },
-                {
-                    "name": "Pikachu",
-                    "number": "25",
-                    "type": "Electric",
-                    "evolution": "9-2"
-                },
-                {
-                    "name": "Raichu",
-                    "number": "26",
-                    "type": "Electric",
-                    "evolution": "9-3"
-                },
-                {
-                    "name": "Sandshrew",
-                    "number": "27",
-                    "type": "Ground",
-                    "evolution": "10-1"
-                },
-                {
-                    "name": "Sandslash",
-                    "number": "28",
-                    "type": "Ground",
-                    "evolution": "10-4"
-                },
-                {
-                    "name": "Nidoran-(f)",
-                    "number": "29",
-                    "type": "Poison",
-                    "evolution": "11-1"
-                },
-                {
-                    "name": "Nidorina",
-                    "number": "30",
-                    "type": "Poison",
-                    "evolution": "11-2"
-                },
-                {
-                    "name": "Nidoqueen",
-                    "number": "31",
-                    "type": "Poison-Ground",
-                    "evolution": "11-3"
-                },
-                {
-                    "name": "Nidoran-(m)",
-                    "number": "32",
-                    "type": "Poison",
-                    "evolution": "12-1"
-                },
-                {
-                    "name": "Nidorino",
-                    "number": "33",
-                    "type": "Poison",
-                    "evolution": "12-2"
-                },
-                {
-                    "name": "Nidoking",
-                    "number": "34",
-                    "type": "Poison-Ground",
-                    "evolution": "12-3"
-                },
-                {
-                    "name": "Clefairy",
-                    "number": "35",
-                    "type": "Fairy",
-                    "evolution": "13-2"
-                },
-                {
-                    "name": "Clefable",
-                    "number": "36",
-                    "type": "Fairy",
-                    "evolution": "13-3"
-                },
-                {
-                    "name": "Vulpix",
-                    "number": "37",
-                    "type": "Fire",
-                    "evolution": "14-1"
-                },
-                {
-                    "name": "Ninetales",
-                    "number": "38",
-                    "type": "Fire",
-                    "evolution": "14-4"
-                },
-                {
-                    "name": "Jigglypuff",
-                    "number": "39",
-                    "type": "Normal-Fairy",
-                    "evolution": "15-2"
-                },
-                {
-                    "name": "Wigglypuff",
-                    "number": "40",
-                    "type": "Normal-Fairy",
-                    "evolution": "15-3"
-                },
-                {
-                    "name": "Zubat",
-                    "number": "41",
-                    "type": "Poison-Flying",
-                    "evolution": "16-1"
-                },
-                {
-                    "name": "Golbat",
-                    "number": "42",
-                    "type": "Poison-Flying",
-                    "evolution": "16-2"
-                }
-            ],
-            "johto": [
-                {
-                    "name": "Chikorita",
-                    "number": "152",
-                    "type": "Grass",
-                    "evolution": "?-?"
-                }
-            ]
-        }
-    ]
+    "regionURLs": {
+        "kanto": "",
+        "johto": "",
+        "hoenn": "",
+        "sinnoh": "",
+        "unova": "",
+        "kalos": "",
+        "alola": "",
+        "galar": "",
+        "alternateForm": ""
+    }
 }

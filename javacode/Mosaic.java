@@ -1,17 +1,19 @@
 
 /**
- * @author Nathin Wascher
- * @version 1.0.4
- * @since February 26, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
+ * 
+ * This file is under the MIT License.
  */
 
-// [!] System.out.println("...Terminating Program ()") prints even though
-// program is not terminated [!]
+/**
+ * @author Nathin Wascher
+ * @version Mosaic v1.0
+ * @since February 26, 2020
+ */
 
 public class Mosaic {
     public static void main(String[] args) {
         System.out.println("Executing Program (Mosaic)...");
         new Mosaic_Frame();
-        System.out.println("\n...Terminating program (Mosaic)");
     }
 }

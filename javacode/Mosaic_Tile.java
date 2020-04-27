@@ -1,33 +1,52 @@
 
 /**
- * @author Nathin Wascher
- * @version 1.2.3
- * @since February 26, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
+ * 
+ * This file is under the MIT License.
  */
 
 import utility.graphics.DrawFace;
+
 import utility.RandomGen;
 
 import javax.swing.JPanel;
 
-import java.awt.event.MouseListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
 
-class Mosaic_Tile extends JPanel implements MouseListener {
+/**
+ * <b>[!] Known Issues:</b>
+ * <p>
+ * Faces do not resize when the window resizes.
+ * <p>
+ * Letters are not always centered on the tile.
+ * 
+ * @author Nathin Wascher
+ * @version 1.2.4
+ * @since February 26, 2020
+ */
+
+@SuppressWarnings("serial")
+class Mosaic_Tile extends JPanel {
     private DrawFace face;
     private RandomGen gen;
+
     private int width, height, pos, shapeInt, complexity, angle, extraPos;
     private Color color1, color2;
     private String letter;
 
     Mosaic_Tile() {
-        super();
         gen = new RandomGen();
-        addMouseListener(this);
+        addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent m) {
+                face = new DrawFace(true, true, false, pos, pos, width, height);
+                repaint();
+            }
+        });
         randomize();
     }
 
@@ -46,6 +65,10 @@ class Mosaic_Tile extends JPanel implements MouseListener {
         face = null;
     }
 
+    // WORK IN PROGRESS
+    public void repaintTile() {
+    }
+
     public void paint(Graphics g) {
         super.paint(g);
         g.setColor(color1);
@@ -59,10 +82,10 @@ class Mosaic_Tile extends JPanel implements MouseListener {
             extraPos = 0;
 
         // determines what shape(s) to output
-        if (face != null)
+        if (face != null) {
             face.paint(g);
 
-        else if (shapeInt == 1) {
+        } else if (shapeInt == 1) {
             g.fillArc(pos, pos, width, height, 0, angle);
             g.setColor(color2);
             g.fillArc(pos, pos, width, height, 0, -angle);
@@ -72,9 +95,9 @@ class Mosaic_Tile extends JPanel implements MouseListener {
             g.setColor(color2);
             g.fillRect(pos + width / 2 - extraPos, pos, width / 2, height);
 
-        } else if (shapeInt == 3)
+        } else if (shapeInt == 3) {
             g.fillRect(pos, pos, width, height);
-        else if (shapeInt == 4)
+        } else if (shapeInt == 4)
             g.fillOval(pos, pos, width, height);
 
         if (face == null) {
@@ -85,22 +108,5 @@ class Mosaic_Tile extends JPanel implements MouseListener {
         }
 
         repaint();
-    }
-
-    public void mouseClicked(MouseEvent e) {
-        face = new DrawFace(true, true, false, pos, pos, width, height);
-        repaint();
-    }
-
-    public void mousePressed(MouseEvent e) {
-    }
-
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    public void mouseExited(MouseEvent e) {
-    }
-
-    public void mouseReleased(MouseEvent e) {
     }
 }

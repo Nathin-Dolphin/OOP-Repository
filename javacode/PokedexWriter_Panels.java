@@ -1,12 +1,14 @@
 
 /**
- * @author Nathin Wascher
- * @version 0.4 CAUTION: EXPERIMENTAL VERSION
- * @since March 28, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
+ * 
+ * This file is under the MIT License.
  */
 
 import utility.json.JSONReader;
-import utility.JSONWriter;
+import utility.json.JSONWriter;
+
+import utility.SimpleFrame;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -17,6 +19,7 @@ import javax.swing.JLabel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
+import java.io.FileNotFoundException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 
@@ -26,8 +29,17 @@ import java.awt.List;
 
 import java.util.ArrayList;
 
-public class PokedexWriter_Panels extends JPanel implements ActionListener {
-    private PW_ItemListener itemListen;
+// [?] Implement loading bar [?]
+// [?] Change each region to have its own json file and allow for threading [?]
+
+/**
+ * @author Nathin Wascher
+ * @version 0.5
+ * @since March 28, 2020
+ */
+
+public class PokedexWriter_Panels extends JPanel implements ActionListener, ItemListener {
+    private SimpleFrame frame;
     private JSONReader jsonReader;
     private JSONWriter jsonWriter;
     private GridBagConstraints gbc;
@@ -47,16 +59,25 @@ public class PokedexWriter_Panels extends JPanel implements ActionListener {
     private boolean evo1, evo2, evo3;
 
     public PokedexWriter_Panels(String fileName) {
+        frame = new SimpleFrame("PokedexWriter", "(WIP)", 900, 650, true);
+
         this.fileName = fileName;
-        itemListen = new PW_ItemListener();
         jsonWriter = new JSONWriter(fileName);
-        jsonReader = new JSONReader("pokeInfo");
+        jsonReader = new JSONReader();
+        try {
+            jsonReader.readJSON("pokeInfo");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         typeList = jsonReader.get("types");
 
         setUpTextPanel();
         setUpControlPanel();
         add(textPanel);
         add(controlPanel);
+
+        frame.add(this);
+        frame.setVisible(true);
     }
 
     private void setUpTextPanel() {
@@ -90,11 +111,11 @@ public class PokedexWriter_Panels extends JPanel implements ActionListener {
         gbc.gridwidth = 2;
         setGBC(0, 0);
         topPanel.add(fileLabel, gbc);
+        gbc.gridwidth = 1;
 
         regionLowJL = new JLabel("Min number range: ");
         regionLowJTF = new JTextField(3);
 
-        gbc.gridwidth = 1;
         setGBC(0, 1);
         topPanel.add(regionLowJL, gbc);
         setGBC(1, 1);
@@ -107,7 +128,6 @@ public class PokedexWriter_Panels extends JPanel implements ActionListener {
         topPanel.add(regionHighJL, gbc);
         setGBC(1, 2);
         topPanel.add(regionHighJTF, gbc);
-
     }
 
     private void setUpMiddlePanel() {
@@ -147,9 +167,9 @@ public class PokedexWriter_Panels extends JPanel implements ActionListener {
         secondJCB = new JCheckBox("second evolution", false);
         lastJCB = new JCheckBox("last evolution", false);
 
-        firstJCB.addItemListener(itemListen);
-        secondJCB.addItemListener(itemListen);
-        lastJCB.addItemListener(itemListen);
+        firstJCB.addItemListener(this);
+        secondJCB.addItemListener(this);
+        lastJCB.addItemListener(this);
 
         gbc.gridwidth = 2;
         setGBC(0, 0);
@@ -185,33 +205,34 @@ public class PokedexWriter_Panels extends JPanel implements ActionListener {
 
     }
 
+    private void setMinMax() {
+
+    }
+
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == enterJB) {
-
         }
     }
 
-    class PW_ItemListener implements ItemListener {
-        public void itemStateChanged(ItemEvent e) {
-            if (e.getSource() == firstJCB) {
-                if (e.getStateChange() == 1)
-                    evo1 = true;
-                else
-                    evo1 = false;
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getSource() == firstJCB) {
+            if (e.getStateChange() == 1)
+                evo1 = true;
+            else
+                evo1 = false;
 
-            } else if (e.getSource() == secondJCB) {
-                if (e.getStateChange() == 1)
-                    evo2 = true;
-                else
-                    evo2 = false;
+        } else if (e.getSource() == secondJCB) {
+            if (e.getStateChange() == 1)
+                evo2 = true;
+            else
+                evo2 = false;
 
-            } else if (e.getSource() == lastJCB) {
-                if (e.getStateChange() == 1)
-                    evo3 = true;
-                else
-                    evo3 = false;
-            }
-            setEvolution();
+        } else if (e.getSource() == lastJCB) {
+            if (e.getStateChange() == 1)
+                evo3 = true;
+            else
+                evo3 = false;
         }
+        setEvolution();
     }
 }
