@@ -11,7 +11,7 @@ import utility.sleep.SleepFastRunnable;
 
 /**
  * @author Nathin Wascher
- * @version SwissArmyKnife v2.0.1
+ * @version SwissArmyKnife v2.0.2
  * @since March 25, 2020
  */
 

@@ -52,7 +52,7 @@ public class URLReader extends JSONParser {
     /**
      * Tests if the input {@code URL} can be found and opened.
      * 
-     * @param url The {@code URL} to be teseted
+     * @param url The {@code URL} to be tested
      * @return {@code true} if the provided {@code URL} can be opened
      */
     public boolean isValidURL(String url) {

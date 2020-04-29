@@ -39,7 +39,7 @@ At the specified locations in the terminal, enter these commands in order,
 		(Implemented) - Search Pokemon by name, number, type and/or region
 		(Implemented) - Implement a list for type and region
 		(Implemented) - Print the results to the terminal (for now)
-		(In Progress) - Create PokedexWriter to assist in producing the necessary json files
+		(Implemented) - Create PokedexWriter to assist in producing the necessary json files
 
 	## Version 2.0 Features:
 		Print more information about each pokemon
@@ -49,5 +49,7 @@ At the specified locations in the terminal, enter these commands in order,
 		Implement method to automatically find and download the needed json files via URLs
 
 	## Version 3.0 Features:
+		Put PokemonSearch into its own repository
 		Implement option to search by weaknessess
 		Allow PokedexWriter to modify already existing files and add size and weight
+		Implement option to search by size and weight

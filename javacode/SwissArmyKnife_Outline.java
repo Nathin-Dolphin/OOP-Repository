@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  * @author Nathin Wascher
- * @version 1.0.1
+ * @version 1.0.2
  * @since April 14, 2020
  */
 
@@ -29,11 +29,11 @@ public class SwissArmyKnife_Outline {
     public static boolean validURL;
 
     public SwissArmyKnife_Outline() {
-        urlReader = new URLReader();
         validURL = false;
     }
 
     public static void urlRequest(String url, boolean printContents) {
+        urlReader = new URLReader();
         if (urlReader.isValidURL(url)) {
             validURL = true;
             startTime = System.nanoTime();
