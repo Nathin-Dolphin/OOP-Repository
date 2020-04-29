@@ -47,6 +47,7 @@ At the specified locations in the terminal, enter these commands in order,
 		Use threading while reading the many json files
 		Implement option to search by evolution
 		Implement method to automatically find and download the needed json files via URLs
+		Finish adding pokemon to the json files
 
 	## Version 3.0 Features:
 		Put PokemonSearch into its own repository
