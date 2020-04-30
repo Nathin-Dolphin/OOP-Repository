@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 /**
  * @author Nathin Wascher
- * @version 1.0
+ * @version 1.0.1
  * @since March 28, 2020
  */
 @SuppressWarnings("serial")
@@ -35,7 +35,7 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
     public JSONWriter jsonWriter;
 
     public JTextField maxJTF, minJTF, nameJTF, evoNumJTF;
-    public List type1CheckList, type2CheckList, visualCheckList, evolutionCheckList;
+    public List type1CheckList, type2CheckList, outputList, evolutionCheckList;
     public JButton enterJB;
 
     private ArrayList<ArrayList<String>> pokedexEntries;
@@ -139,7 +139,7 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
     private String capitalize(String input) {
         try {
             tempString = input.substring(0, 1).toUpperCase();
-            tempString = tempString.concat(input.substring(1, input.length()).toLowerCase());
+            tempString = tempString.concat(input.substring(1, input.length()));
             return tempString;
         } catch (StringIndexOutOfBoundsException e) {
             return "NULL>>>>>>>>>>>>>>>>>>>>>>";
@@ -150,7 +150,7 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         setPokemon(pokeNum++, null);
     }
 
-    // TODO: Make 'visualCheckList' easier to read
+    // TODO: Make 'outputList' easier to read
     private void setPokemon(int num, String newEvo) {
         tempArrayList = new ArrayList<String>();
 
@@ -222,17 +222,17 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
                 warning("TYPE 1 CAN NOT EQUAL TYPE 2");
 
                 // Is user creating a new pokemon
-            } else if (visualCheckList.getSelectedItem().equals("Add New Pokemon!")) {
+            } else if (outputList.getSelectedItem().equals("Add New Pokemon!")) {
                 changeMin();
                 setPokemon();
-                visualCheckList.add(tempString, visualCheckList.getItemCount() - 1);
+                outputList.add(tempString, outputList.getItemCount() - 1);
                 pokedexEntries.add(tempArrayList);
 
                 if (urlLine >= 0 & urlLine < urlContents.size())
                     test();
 
                 if (pokeNum == max + 1) {
-                    visualCheckList.remove(visualCheckList.getItemCount() - 1);
+                    outputList.remove(outputList.getItemCount() - 1);
 
                     if (fileName.endsWith(".json"))
                         System.out.println("Creating File: \"" + fileName + "\"");
@@ -249,19 +249,19 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
                     System.out.println("File Successfully Created!");
                 }
 
-                // Is the 'almost useless' line seleceted in 'visualCheckList'
-            } else if (visualCheckList.getSelectedItem().equals(visualCheckList.getItem(0))) {
+                // Is the 'almost useless' line seleceted in 'outputList'
+            } else if (outputList.getSelectedItem().equals(outputList.getItem(0))) {
                 warning("INVALID SELECTED LINE");
-                visualCheckList.select(visualCheckList.getItemCount() - 1);
+                outputList.select(outputList.getItemCount() - 1);
 
                 // If an already existing pokemon is selected
             } else {
-                int tempInt = visualCheckList.getSelectedIndex();
+                int tempInt = outputList.getSelectedIndex();
                 setPokemon(tempInt, "NULL>>>>>>>>>>>>>>>>>>>>>>");
 
-                visualCheckList.remove(tempInt);
-                visualCheckList.add(tempString, tempInt);
-                visualCheckList.select(visualCheckList.getItemCount() - 1);
+                outputList.remove(tempInt);
+                outputList.add(tempString, tempInt);
+                outputList.select(outputList.getItemCount() - 1);
 
                 pokedexEntries.remove(tempInt - 1);
                 pokedexEntries.add(tempInt - 1, tempArrayList);

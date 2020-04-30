@@ -18,11 +18,15 @@ import java.awt.event.WindowEvent;
  * {@code SimpleFrame} also gives the option to add a {@code JOptionPane} option
  * message that asks to leave the program.
  * 
+ * <b>Planned Feature:</b>
+ * <p>
+ * If not maxamized, start the {@code JFrame} in the middle of the screen
+ * 
  * <p>
  * <b>No Known Issues</b>
  * 
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.1.1
  * @since April 4, 2020
  * 
  * @see JFrame
@@ -41,8 +45,8 @@ public class SimpleFrame extends JFrame {
      * Creates a {@code JFrame} with the specified title. The dimensions are set to
      * 720 x 500.
      * 
-     * @param fileName The name of the main class file (without the '.java').
-     * @param frameTitle    The title at the top of the {@code JFrame}.
+     * @param fileName   The name of the main class file (without the '.java').
+     * @param frameTitle The title at the top of the {@code JFrame}.
      * @see JFrame
      * @see #SimpleFrame(String, String, boolean, boolean)
      * @see #SimpleFrame(String, String, int, int, boolean)
@@ -65,7 +69,7 @@ public class SimpleFrame extends JFrame {
      * 
      * @param fileName         The name of the main class file (without the
      *                         '.java').
-     * @param frameTitle            The title at the top of the {@code JFrame}.
+     * @param frameTitle       The title at the top of the {@code JFrame}.
      * @param fullscreen       If the {@code JFrame} should start maxamized.
      * @param addWarningWindow When a user attempts to exit the {@code JFrame}, if a
      *                         {@code JOptionPane} should appear and ask to exit the
@@ -94,7 +98,7 @@ public class SimpleFrame extends JFrame {
      * 
      * @param fileName         The name of the main class file (without the
      *                         '.java').
-     * @param frameTitle            The title at the top of the {@code JFrame}.
+     * @param frameTitle       The title at the top of the {@code JFrame}.
      * @param width            The initial width of the {@code JFrame}. This value
      *                         should be less than 1540.
      * @param height           The initial height of the {@code JFrame}. This value
@@ -121,7 +125,7 @@ public class SimpleFrame extends JFrame {
      * 
      * @param fileName         The name of the main class file (without the
      *                         '.java').
-     * @param frameTitle            The title at the top of the {@code JFrame}.
+     * @param frameTitle       The title at the top of the {@code JFrame}.
      * @param width            The initial width of the {@code JFrame}. This value
      *                         should be less than 1540.
      * @param height           The initial height of the {@code JFrame}. This value

@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Color;
 import java.awt.List;
 
 import java.io.FileNotFoundException;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 
 /**
  * @author Nathin Wascher
- * @version 1.0.4
+ * @version 1.1
  * @since March 31, 2020
  */
 
@@ -53,33 +54,35 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
     public PokemonSearch_Panel() {
         frame = new SimpleFrame("PokemonSearch", "Guess That Pokemon!", 800, 600, false);
         frame.setLayout(new GridLayout(1, 2));
-        setLayout(new GridBagLayout());
-        gbc = new GridBagConstraints();
 
-        pokeSearch = new PokemonSearch_Searcher(frame);
+        gbc = new GridBagConstraints();
+        jsonReader = new JSONReader();
+        pokeSearch = new PokemonSearch_Searcher(frame, jsonReader);
+
+        setLayout(new GridBagLayout());
+        setBackground(Color.GREEN);
         readPokeInfo();
         setUpPanels();
 
+        frame.add(pokeSearch.outputList);
         frame.add(this);
         frame.setVisible(true);
     }
 
     private void readPokeInfo() {
-        jsonReader = new JSONReader();
         try {
             jsonReader.readJSON("pokeInfo");
         } catch (FileNotFoundException e) {
             pokeSearch.killProgram("pokeInfo");
         }
-        pokeSearch.setJSONReader(jsonReader);
 
         typeList = jsonReader.get("types");
-        typeCheckList = new List(5, true);
+        typeCheckList = new List(9, true);
         for (int i = 0; i < typeList.size(); i++)
             typeCheckList.add(typeList.get(i));
 
         regionList = jsonReader.get("regions");
-        regionCheckList = new List(5, true);
+        regionCheckList = new List(9, true);
         for (int i = 0; i < regionList.size(); i = i + 2)
             regionCheckList.add(regionList.get(i));
     }
@@ -90,11 +93,15 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         checkBoxPanel = new JPanel(new GridLayout(3, 1));
         searchBarPanel = new JPanel(new GridLayout(2, 1));
 
-        firstCB = new JCheckBox("first evolution", true);
-        secondCB = new JCheckBox("second evolution", true);
-        lastCB = new JCheckBox("last evolution", true);
+        firstCB = new JCheckBox("First Evolution", true);
+        secondCB = new JCheckBox("Second Evolution", true);
+        lastCB = new JCheckBox("Last Evolution", true);
+        firstCB.setBackground(Color.GREEN);
+        secondCB.setBackground(Color.GREEN);
+        lastCB.setBackground(Color.GREEN);
 
-        searchBarLabel = new JLabel("Pokemon Search!");
+
+        searchBarLabel = new JLabel("   Pokemon Search!");
         regionLabel = new JLabel("Region(s)");
         typeLabel = new JLabel("Type(s)");
 
@@ -110,9 +117,9 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         checkBoxPanel.add(firstCB);
         checkBoxPanel.add(secondCB);
         checkBoxPanel.add(lastCB);
-
         searchBarPanel.add(searchBarLabel);
         searchBarPanel.add(searchTF);
+        searchBarPanel.setBackground(Color.GREEN);
 
         setGBC(0, 0);
         add(searchBarPanel, gbc);

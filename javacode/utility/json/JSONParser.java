@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * <b>WARNING:</b> A very messy {@code .json} file may not get parsed correctly.
  * 
  * @author Nathin Wascher
- * @version 1.6
+ * @version 1.7
  * @since March 27, 2020
  * 
  * @see JSONReader
@@ -67,16 +67,21 @@ public class JSONParser {
     public ArrayList<String> parseJSON(ArrayList<String> jsonContents, boolean includeBrackets) {
         tempStr2 = null;
         parsedArrayList = new ArrayList<String>();
+
         for (int h = 0; h < jsonContents.size(); h++) {
             parsedLine = jsonContents.get(h).split("\"");
 
             for (int i = 0; i < parsedLine.length; i++) {
                 tempString = parsedLine[i];
+
+                // TODO: Fix so that spaces in names and values do not get deleted
                 if (!tempString.equals("")) {
-                    tempString = tempString.replaceAll("    ", "");
+                    tempString = tempString.replaceAll(" ", "").replaceAll("\t", "");
                     if (tempString.equals(""))
                         tempString = null;
                 }
+
+                // TODO: Implement print to terminal feature here
 
                 if (i % 2 == 0) {
                     if (tempString != null)

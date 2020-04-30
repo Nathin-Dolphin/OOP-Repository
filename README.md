@@ -43,7 +43,7 @@ At the specified locations in the terminal, enter these commands in order,
 
 	## Version 2.0 Features:
 		Print more information about each pokemon
-		Print the output to the frame instead of the terminal
+		(Implemented) - Print the output to the frame instead of the terminal
 		Use threading while reading the many json files
 		Implement option to search by evolution
 		Implement method to automatically find and download the needed json files via URLs

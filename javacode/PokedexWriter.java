@@ -7,7 +7,7 @@
 
 /**
  * @author Nathin Wascher
- * @version PokedexWriter v1.0
+ * @version PokedexWriter v1.0.1
  * @since March 28, 2020
  */
 

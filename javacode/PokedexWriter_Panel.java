@@ -22,7 +22,7 @@ import java.awt.List;
 
 /**
  * @author Nathin Wascher
- * @version 1.0
+ * @version 1.0.1
  * @since March 28, 2020
  */
 @SuppressWarnings("serial")
@@ -69,8 +69,8 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
         frame.add(this);
         frame.setVisible(true);
 
-        visualCheckList.remove(0);
-        visualCheckList.select(0);
+        outputList.remove(0);
+        outputList.select(0);
 
         if (useURL)
             openURL();
@@ -109,12 +109,12 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
     private void setUpTextPanel() {
         textPanel = new JPanel(new GridBagLayout());
 
-        visualCheckList = new List(40);
-        visualCheckList.add("pokemon here; number here; type here; evolution here");
-        visualCheckList.add("Add New Pokemon!");
+        outputList = new List(40);
+        outputList.add("pokemon here; number here; type here; evolution here");
+        outputList.add("Add New Pokemon!");
 
         setGBC(0, 0);
-        textPanel.add(visualCheckList, gbc);
+        textPanel.add(outputList, gbc);
     }
 
     private void setUpControlPanel() {

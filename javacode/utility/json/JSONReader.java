@@ -39,7 +39,7 @@ import java.util.Scanner;
  * it will add the next {@code String} to the {@code ArrayList<String>}.
  * 
  * @author Nathin Wascher
- * @version 1.4
+ * @version 1.4.1
  * @since March 28, 2020
  * 
  * @see JSONParser
@@ -110,12 +110,12 @@ public class JSONReader extends JSONParser {
      * @return An {@code ArrayList<String>} of values with the specified
      *         {@code objectName}
      * @throws NullPointerException If {@code readJSON} is not called before this
-     *                              method, {@code jsonContents} equals null or the
-     *                              {@code .json} file is completely empty
+     *                              method, {@code jsonContents} equals null or if
+     *                              the {@code .json} file is empty
      * @see #readJSON(String, boolean)
      */
     public ArrayList<String> get(String objectName) throws NullPointerException {
-        if (jsonContents == null) {
+        if (jsonContents == null || jsonContents.size() == 0) {
             throw new NullPointerException();
 
         } else {

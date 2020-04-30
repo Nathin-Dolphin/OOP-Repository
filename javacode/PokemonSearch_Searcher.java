@@ -12,6 +12,8 @@ import utility.SimpleFrame;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
+import java.awt.List;
+
 import java.util.ArrayList;
 
 import java.io.FileNotFoundException;
@@ -21,7 +23,7 @@ import javax.swing.JCheckBox;
 
 /**
  * @author Nathin Wascher
- * @version 1.2
+ * @version 1.3
  * @since April 2, 2020
  */
 
@@ -29,6 +31,7 @@ public class PokemonSearch_Searcher implements ItemListener {
     private SimpleFrame frame;
     private JSONReader jsonReader;
     private JCheckBox firstCB, secondCB, lastCB;
+    public List outputList;
 
     private ArrayList<String> pokedex, tempPokedex;
     private String[] tempArray;
@@ -37,12 +40,10 @@ public class PokemonSearch_Searcher implements ItemListener {
     private int tempInt;
     private boolean evo1, evo2, evo3;
 
-    public PokemonSearch_Searcher(SimpleFrame frame) {
+    public PokemonSearch_Searcher(SimpleFrame frame, JSONReader jsonReader) {
         this.frame = frame;
-    }
-
-    public void setJSONReader(JSONReader jsonReader) {
         this.jsonReader = jsonReader;
+        outputList = new List(40);
     }
 
     public void setJCheckBoxes(JCheckBox firstCB, JCheckBox secondCB, JCheckBox lastCB) {
@@ -53,6 +54,8 @@ public class PokemonSearch_Searcher implements ItemListener {
     }
 
     public void findPokemon(ArrayList<String> regionInputList, ArrayList<String> typeInputList, String input) {
+        outputList.removeAll();
+
         searchByRegion(regionInputList);
 
         // TODO: Create method to search evolutions
@@ -69,8 +72,8 @@ public class PokemonSearch_Searcher implements ItemListener {
             tempString = pokedex.get(f);
 
             if (tempString.equals("name")) {
-                // WORK IN PROGRESS
-                System.out.println(pokedex.get(++f));
+                // WORK IN PROGRES
+                outputList.add(pokedex.get(++f));
             }
         }
     }
@@ -102,6 +105,7 @@ public class PokemonSearch_Searcher implements ItemListener {
                 tempInt = Integer.parseInt(pokedex.get(++g));
                 if (input == tempInt) {
                     System.out.println(pokedex.get(g - 2));
+                    outputList.add(pokedex.get(g - 2));
                     g = pokedex.size();
                 }
             }
@@ -123,10 +127,9 @@ public class PokemonSearch_Searcher implements ItemListener {
                 // TODO: Implement threading
                 jsonReader.readJSON(s + ".json");
                 pokedex.addAll(jsonReader.get(s));
-            } catch (FileNotFoundException e) {
-                // TODO: Only load the files that are found, but do killProgram() if no files
-                // are found.
-                killProgram(s);
+
+            } catch (Exception e) {
+                System.out.println("ERROR: FILE NOT FOUND OR IS EMPTY: " + s + ".json");
             }
         }
     }
