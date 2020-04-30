@@ -20,19 +20,16 @@ NOTES:
 	To run a java file, the terminal's directory must be in the 'class' folder. ( ex. ...\javacode\class> )
 
 
-## Method 1:
+## Create Class Files:
 At the specified locations in the terminal, enter these commands in order,
 
+	...> cd ...\OOP-Repository\javacode
 	...\OOP-Repository\javacode> javac -d '...\OOP-Repository\javacode\class' *.java
+	...\OOP-Repository\javacode> cd class
+
+## Execute Program
+
 	...\OOP-Repository\javacode\class> java "MM"
-
-
-## Method 2:
-At the specified locations in the terminal, enter these commands in order,
-
-	...\OOP-Repository\javacode> javac -d '...\OOP-Repository\javacode\class' *.java
-	...\OOP-Repository\javacode> java -classpath '...\OOP-Repository\javacode\class' "MM"
-
 
 ## PokemonSearch
 	## Version 1.0 Features:
