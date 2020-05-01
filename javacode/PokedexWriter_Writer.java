@@ -26,11 +26,12 @@ import java.util.ArrayList;
 
 /**
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.1.1
  * @since March 28, 2020
  */
-@SuppressWarnings("serial")
 public class PokedexWriter_Writer extends JPanel implements ActionListener {
+    private static final long serialVersionUID = 2911032048461996161L;
+
     private final String pokedexSourceURL = "https://pokemondb.net/pokedex/national";
     public JSONWriter jsonWriter;
 

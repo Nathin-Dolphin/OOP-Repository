@@ -28,12 +28,12 @@ import java.awt.Graphics;
  * Faces can spawn partly offscreen.
  * 
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.1.1
  * @since Februrary 18, 2020
  */
-
-@SuppressWarnings("serial")
 public class FaceDraw_Panel extends JPanel {
+    private static final long serialVersionUID = -9172571347099713463L;
+
     private SimpleFrame frame;
     private RandomGen gen;
 

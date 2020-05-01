@@ -1,8 +1,8 @@
 
 /**
- * @author Nathin Wascher
- * @version 1.1.1
- * @since March 6, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
+ * 
+ * This file is part of the utility library and is under the MIT License.
  */
 
 package utility.graphics;
@@ -12,7 +12,14 @@ import utility.RandomGen;
 import java.awt.Graphics;
 import java.awt.Color;
 
+/**
+ * @author Nathin Wascher
+ * @version 1.1.2
+ * @since March 6, 2020
+ */
 public class DrawArc extends RandomGen {
+    private static final long serialVersionUID = 4954228904271827036L;
+
     public int xPos, yPos, height, width, startAngle, arcAngle;
     public boolean fillShape;
     public Color newColor;

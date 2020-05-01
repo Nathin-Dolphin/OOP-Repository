@@ -1,10 +1,8 @@
 
 /**
- * @author Nathin Wascher
- * @version 1.0.4
- * @since March 3, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
  * 
- * String shape = "oval" or "rect"
+ * This file is part of the utility library and is under the MIT License.
  */
 
 package utility.graphics;
@@ -14,6 +12,13 @@ import utility.RandomGen;
 import java.awt.Graphics;
 import java.awt.Color;
 
+/**
+ * @author Nathin Wascher
+ * @version 1.0.5
+ * @since March 3, 2020
+ * 
+ * String shape = "oval" or "rect"
+ */
 public class DrawShape {
     public RandomGen gen = new RandomGen();
     

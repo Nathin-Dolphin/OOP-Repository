@@ -1,12 +1,9 @@
 
 /**
- * @author Nathin Wascher
- * @version 1.2.4
- * @since Februrary 18, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
+ * 
+ * This file is part of the utility library and is under the MIT License.
  */
-
-// allow classes more control over the features of a face object
-// have colors not blend in with background, face color, etc.
 
 package utility.graphics;
 
@@ -15,6 +12,14 @@ import utility.graphics.DrawShape;
 import java.awt.Graphics;
 import java.awt.Color;
 
+// allow classes more control over the features of a face object
+// have colors not blend in with background, face color, etc.
+
+/**
+ * @author Nathin Wascher
+ * @version 1.2.5
+ * @since Februrary 18, 2020
+ */
 public class DrawFace extends DrawShape {
     private DrawShape leftEye, rightEye;
     private DrawArc mouth;

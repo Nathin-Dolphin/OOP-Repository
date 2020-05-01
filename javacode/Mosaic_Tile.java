@@ -26,12 +26,12 @@ import java.awt.Font;
  * Letters are not always centered on the tile.
  * 
  * @author Nathin Wascher
- * @version 1.2.4
+ * @version 1.2.5
  * @since February 26, 2020
  */
-
-@SuppressWarnings("serial")
 class Mosaic_Tile extends JPanel {
+    private static final long serialVersionUID = 6954635475757328552L;
+    
     private DrawFace face;
     private RandomGen gen;
 

@@ -40,16 +40,16 @@ import java.awt.Color;
  * gray.
  * 
  * @author Nathin Wascher
- * @version 1.3
+ * @version 1.3.1
  * @since Februrary 27, 2020
  * 
  * @see Color
  * @see Random
  * @see java.util.concurrent.ThreadLocalRandom
  */
-
-@SuppressWarnings("serial")
 public class RandomGen extends Random {
+   private static final long serialVersionUID = 7005972888370276446L;
+
    private char[] characters;
    private char letter;
    private int r, g, b;

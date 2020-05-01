@@ -36,12 +36,12 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.2.2
+ * @version 1.2.3
  * @since March 31, 2020
  */
-
-@SuppressWarnings("serial")
 public class PokemonSearch_Panel extends JPanel implements ActionListener {
+    private static final long serialVersionUID = 6168657140878114472L;
+
     private final String pokeInfoURL = "https://jsontextfiles.azurewebsites.net/pokeInfo.json";
 
     private SimpleFrame frame;

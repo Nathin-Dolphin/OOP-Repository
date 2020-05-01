@@ -27,12 +27,12 @@ import java.awt.Color;
 
 /**
  * @author Nathin Wascher
- * @version 1.3.2
+ * @version 1.3.3
  * @since Februrary 12, 2020
  */
-
-@SuppressWarnings("serial")
 class ShapeCreator_Panel extends JPanel implements ActionListener {
+    private static final long serialVersionUID = 8026636665019564883L;
+
     private SimpleFrame frame;
 
     private JButton rectButton, ovalButton, colorButton, fillButton, emptyButton;

@@ -22,11 +22,12 @@ import java.awt.List;
 
 /**
  * @author Nathin Wascher
- * @version 1.0.2
+ * @version 1.0.3
  * @since March 28, 2020
  */
-@SuppressWarnings("serial")
 public class PokedexWriter_Panel extends PokedexWriter_Writer {
+    private static final long serialVersionUID = 2628539169557674903L;
+    
     private SimpleFrame frame;
     private GridBagConstraints gbc;
     private JSONReader jsonReader;
