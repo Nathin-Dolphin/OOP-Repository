@@ -27,7 +27,6 @@ import java.awt.List;
 
 import java.io.FileNotFoundException;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.File;
@@ -37,7 +36,7 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.2
+ * @version 1.2.1
  * @since March 31, 2020
  */
 
@@ -60,6 +59,7 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
 
     private ArrayList<String> typeInputList, regionInputList, typeList, regionList, tempArr2, tempArray;
     private String input, pokeInfoVersion;
+    private int failSafeNum = 0;
 
     public PokemonSearch_Panel() {
         frame = new SimpleFrame("PokemonSearch", "Guess That Pokemon!", 800, 600, false);
@@ -88,21 +88,21 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
             jsonReader.readJSON("pokeInfo");
             tempArray = jsonReader.get("version");
             pokeInfoVersion = tempArray.get(0);
+
+            typeList = jsonReader.get("types");
+            typeCheckList = new List(9, true);
+            for (int i = 0; i < typeList.size(); i++)
+                typeCheckList.add(typeList.get(i));
+
+            regionList = jsonReader.get("regions");
+            regionCheckList = new List(9, true);
+            for (int i = 0; i < regionList.size(); i = i + 2)
+                regionCheckList.add(regionList.get(i));
+
+            downloadRegionFiles();
         } catch (FileNotFoundException e) {
-            pokeSearch.killProgram("pokeInfo");
+            downloadRegionFiles();
         }
-
-        typeList = jsonReader.get("types");
-        typeCheckList = new List(9, true);
-        for (int i = 0; i < typeList.size(); i++)
-            typeCheckList.add(typeList.get(i));
-
-        regionList = jsonReader.get("regions");
-        regionCheckList = new List(9, true);
-        for (int i = 0; i < regionList.size(); i = i + 2)
-            regionCheckList.add(regionList.get(i));
-
-        downloadRegionFiles();
     }
 
     // TODO: Implement size, weight, abilities, and weakness options
@@ -166,7 +166,21 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         urlReader.parseJSON(tempArr2);
         tempArray = urlReader.get("version");
 
-        if (!pokeInfoVersion.equals(tempArray.get(0))) {
+        if (pokeInfoVersion == null) {
+            downloadFile("pokeInfo");
+            tempArray = urlReader.get("regionURLs");
+
+            for (int d = 0; d < tempArray.size(); d = d + 2) {
+                tempArr2 = urlReader.readURL(tempArray.get(++d));
+                downloadFile(tempArray.get(--d));
+            }
+
+            if (failSafeNum == 2)
+                pokeSearch.killProgram("pokeInfo");
+            readPokeInfo();
+            failSafeNum++;
+
+        } else if (!pokeInfoVersion.equals(tempArray.get(0))) {
             downloadFile("pokeInfo");
             tempArray = urlReader.get("regionURLs");
 

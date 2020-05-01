@@ -14,10 +14,13 @@ Executable java file names (refered to as "MM" or Main Method):
 	PokedexWriter
 
 
-NOTES: 
+[!] IMPORTANT PLEASE READ [!] NOTES: 
 
 	'...' is the path from your storage device to the location of the repository.
-	To run a java file, the terminal's directory must be in the 'class' folder. ( ex. ...\javacode\class> )
+	To run a java file, the terminal's directory must be in the 'class' folder (Windows example: ...\javacode\class> ).
+	"MM" refers to executable java files as previously mentioned above.
+
+	[!] The method of compiling and running was done on a Windows computer, if you are using a MAC, the instructions may be 		confusing. If this is so, anything before the '>' is the terminal on Windows Powershell showing the current 				directory. After that, it is the actual command, however when doing 'javac' make sure to compile into the 'class' 			folder from the 'javacode' folder. [!]
 
 
 ## Create Class Files:
