@@ -26,7 +26,7 @@ import java.awt.event.WindowEvent;
  * <b>No Known Issues</b>
  * 
  * @author Nathin Wascher
- * @version 1.1.1
+ * @version 1.1.2
  * @since April 4, 2020
  * 
  * @see JFrame
@@ -34,8 +34,9 @@ import java.awt.event.WindowEvent;
  * @see java.awt.event.WindowListener#windowClosing
  */
 
-@SuppressWarnings("serial")
 public class SimpleFrame extends JFrame {
+    private static final long serialVersionUID = -7776272663682391914L;
+
     private String fileName, title;
     private boolean fullscreen = false, addWarningWindow = false;
 
@@ -176,7 +177,7 @@ public class SimpleFrame extends JFrame {
                 System.exit(0);
             }
         } else {
-            System.out.println("...Terminating Program (" + fileName + ")");
+            System.out.println("\n...Terminating Program (" + fileName + ")");
             System.exit(0);
         }
     }

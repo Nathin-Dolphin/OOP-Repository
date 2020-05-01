@@ -33,12 +33,11 @@ import java.util.ArrayList;
  * <b>No Known Issues</b>
  * 
  * @author Nathin Wascher
- * @version 1.3.2
+ * @version 1.3.3
  * @since March 26, 2020
  * 
  * @see JSONParser
  */
-
 public class URLReader extends JSONParser {
     private BufferedReader br;
     private URL openURL;
@@ -75,8 +74,8 @@ public class URLReader extends JSONParser {
      *         Returns null if the {@code URL} is invalid
      */
     public ArrayList<String> readURL(String url, boolean printContents) {
+        System.out.println("\nREADING URL:  " + url);
         if (isValidURL(url)) {
-            System.out.println("\nREADING URL:  " + url);
             urlContents = new ArrayList<String>();
 
             try {
@@ -89,11 +88,11 @@ public class URLReader extends JSONParser {
                 br.close();
 
             } catch (IOException e) {
-                System.out.println("\nERROR: I/O EXCEPTION\n" + e);
+                System.out.println("ERROR: I/O EXCEPTION\n" + e);
             }
             return urlContents;
         } else {
-            System.out.println("\nERROR: INVALID URL");
+            System.out.println("ERROR: INVALID URL");
             return null;
         }
     }

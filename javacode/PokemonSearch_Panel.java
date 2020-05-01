@@ -36,7 +36,7 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.2.1
+ * @version 1.2.2
  * @since March 31, 2020
  */
 
@@ -167,41 +167,52 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         tempArray = urlReader.get("version");
 
         if (pokeInfoVersion == null) {
+            System.out.println("POKEINFO VERSION " + tempArray.get(0) + " != " + null);
             downloadFile("pokeInfo");
             tempArray = urlReader.get("regionURLs");
 
             for (int d = 0; d < tempArray.size(); d = d + 2) {
-                tempArr2 = urlReader.readURL(tempArray.get(++d));
-                downloadFile(tempArray.get(--d));
+                tempArr2 = urlReader.readURL(tempArray.get(d + 1));
+                downloadFile(tempArray.get(d));
             }
 
             if (failSafeNum == 2)
                 pokeSearch.killProgram("pokeInfo");
-            readPokeInfo();
             failSafeNum++;
+            readPokeInfo();
 
         } else if (!pokeInfoVersion.equals(tempArray.get(0))) {
+            System.out.println("POKEINFO VERSION " + tempArray.get(0) + " != " + pokeInfoVersion);
             downloadFile("pokeInfo");
             tempArray = urlReader.get("regionURLs");
 
             for (int d = 0; d < tempArray.size(); d = d + 2) {
-                tempArr2 = urlReader.readURL(tempArray.get(++d));
-                downloadFile(tempArray.get(--d));
+                tempArr2 = urlReader.readURL(tempArray.get(d + 1));
+                downloadFile(tempArray.get(d));
             }
 
-        } else
-            for (int i = 0; i < regionList.size(); i = i + 2) {
-                try {
-                    Scanner fileScan = new Scanner(new File(regionList.get(i) + ".json"));
-                } catch (FileNotFoundException e) {
+        } else {
+            System.out.println("POKEINFO VERSION " + tempArray.get(0) + " == " + pokeInfoVersion);
+            tempArray = urlReader.get("regionURLs");
 
+            for (int i = 0; i < tempArray.size(); i = i + 2) {
+                try {
+                    Scanner fileScan = new Scanner(new File(tempArray.get(i) + ".json"));
+
+                } catch (FileNotFoundException e) {
+                    tempArr2 = urlReader.readURL(tempArray.get(i + 1));
+                    downloadFile(tempArray.get(i));
                 }
             }
+        }
     }
 
     private void downloadFile(String fileName) {
         System.out.println("Downloading file: " + fileName + ".json");
         try {
+            if (tempArr2 == null)
+                throw new Exception();
+
             FileWriter fw = new FileWriter(fileName + ".json");
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
@@ -211,7 +222,7 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
             }
             pw.close();
         } catch (Exception e) {
-            System.out.println("ERROR: FAILED TO DOWNLOAD \"" + fileName + "\"");
+            System.out.println("ERROR: FAILED TO DOWNLOAD " + fileName + ".json");
         }
     }
 
