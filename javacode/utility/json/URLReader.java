@@ -23,8 +23,7 @@ import java.util.ArrayList;
  * <p>
  * <b>Planned Features:</b>
  * <p>
- * Implement a {@code toString()} method that calls the same from
- * {@code JSONParser}.
+ * Overload the method {@code readURLIndex} to allow indexing multiple files
  * <p>
  * Add an option to exclude the brackets from a {@code .json}.
  * <p>
@@ -34,7 +33,7 @@ import java.util.ArrayList;
  * <b>No Known Issues</b>
  * 
  * @author Nathin Wascher
- * @version 1.3.1 [!]
+ * @version 1.3.2
  * @since March 26, 2020
  * 
  * @see JSONParser

@@ -5,6 +5,7 @@
  * This file is under the MIT License.
  */
 
+import utility.json.URLReader;
 import utility.json.JSONReader;
 
 import utility.SimpleFrame;
@@ -25,31 +26,40 @@ import java.awt.Color;
 import java.awt.List;
 
 import java.io.FileNotFoundException;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.1
+ * @version 1.2
  * @since March 31, 2020
  */
 
 @SuppressWarnings("serial")
 public class PokemonSearch_Panel extends JPanel implements ActionListener {
+    private final String pokeInfoURL = "https://jsontextfiles.azurewebsites.net/pokeInfo.json";
+
     private SimpleFrame frame;
     private PokemonSearch_Searcher pokeSearch;
+    private URLReader urlReader;
     private JSONReader jsonReader;
     private GridBagConstraints gbc;
-    private JPanel searchBarPanel, checkBoxPanel;
 
+    private JPanel searchBarPanel, checkBoxPanel;
     private List typeCheckList, regionCheckList;
     private JTextField searchTF;
     private JCheckBox firstCB, secondCB, lastCB;
     private JLabel searchBarLabel, regionLabel, typeLabel;
     private JButton enterB;
 
-    private ArrayList<String> typeInputList, regionInputList, typeList, regionList;
-    private String input;
+    private ArrayList<String> typeInputList, regionInputList, typeList, regionList, tempArr2, tempArray;
+    private String input, pokeInfoVersion;
 
     public PokemonSearch_Panel() {
         frame = new SimpleFrame("PokemonSearch", "Guess That Pokemon!", 800, 600, false);
@@ -57,6 +67,7 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
 
         gbc = new GridBagConstraints();
         jsonReader = new JSONReader();
+        urlReader = new URLReader();
         pokeSearch = new PokemonSearch_Searcher(frame, jsonReader);
 
         setLayout(new GridBagLayout());
@@ -70,8 +81,13 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
     }
 
     private void readPokeInfo() {
+        tempArray = new ArrayList<String>();
+        tempArr2 = new ArrayList<String>();
+
         try {
             jsonReader.readJSON("pokeInfo");
+            tempArray = jsonReader.get("version");
+            pokeInfoVersion = tempArray.get(0);
         } catch (FileNotFoundException e) {
             pokeSearch.killProgram("pokeInfo");
         }
@@ -85,6 +101,8 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         regionCheckList = new List(9, true);
         for (int i = 0; i < regionList.size(); i = i + 2)
             regionCheckList.add(regionList.get(i));
+
+        downloadRegionFiles();
     }
 
     // TODO: Implement size, weight, abilities, and weakness options
@@ -99,7 +117,6 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         firstCB.setBackground(Color.GREEN);
         secondCB.setBackground(Color.GREEN);
         lastCB.setBackground(Color.GREEN);
-
 
         searchBarLabel = new JLabel("   Pokemon Search!");
         regionLabel = new JLabel("Region(s)");
@@ -142,6 +159,46 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
     private void setGBC(int gridX, int gridY) {
         gbc.gridx = gridX;
         gbc.gridy = gridY;
+    }
+
+    private void downloadRegionFiles() {
+        tempArr2 = urlReader.readURL(pokeInfoURL);
+        urlReader.parseJSON(tempArr2);
+        tempArray = urlReader.get("version");
+
+        if (!pokeInfoVersion.equals(tempArray.get(0))) {
+            downloadFile("pokeInfo");
+            tempArray = urlReader.get("regionURLs");
+
+            for (int d = 0; d < tempArray.size(); d = d + 2) {
+                tempArr2 = urlReader.readURL(tempArray.get(++d));
+                downloadFile(tempArray.get(--d));
+            }
+
+        } else
+            for (int i = 0; i < regionList.size(); i = i + 2) {
+                try {
+                    Scanner fileScan = new Scanner(new File(regionList.get(i) + ".json"));
+                } catch (FileNotFoundException e) {
+
+                }
+            }
+    }
+
+    private void downloadFile(String fileName) {
+        System.out.println("Downloading file: " + fileName + ".json");
+        try {
+            FileWriter fw = new FileWriter(fileName + ".json");
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+
+            for (int i = 0; i < tempArr2.size(); i++) {
+                pw.println(tempArr2.get(i));
+            }
+            pw.close();
+        } catch (Exception e) {
+            System.out.println("ERROR: FAILED TO DOWNLOAD \"" + fileName + "\"");
+        }
     }
 
     public void actionPerformed(ActionEvent e) {

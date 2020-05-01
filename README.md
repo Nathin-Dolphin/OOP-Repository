@@ -16,7 +16,7 @@ Executable java file names (refered to as "MM" or Main Method):
 
 NOTES: 
 
-	'...' is the path from the storage device to the repository.
+	'...' is the path from your storage device to the location of the repository.
 	To run a java file, the terminal's directory must be in the 'class' folder. ( ex. ...\javacode\class> )
 
 
@@ -39,12 +39,12 @@ At the specified locations in the terminal, enter these commands in order,
 		(Implemented) - Create PokedexWriter to assist in producing the necessary json files
 
 	## Version 2.0 Features:
-		Print more information about each pokemon
-		(Implemented) - Print the output to the frame instead of the terminal
-		Use threading while reading the many json files
+		(In Progress) - Print more information about each pokemon
 		Implement option to search by evolution
-		Implement method to automatically find and download the needed json files via URLs
-		Finish adding pokemon to the json files
+		Use threading while reading the many json files
+		(Implemented) - Print the output to the frame instead of the terminal
+		(Implemented) - Finish adding pokemon to the json files
+		(Implemented) - Implement method to automatically find and download the needed json files via URLs
 
 	## Version 3.0 Features:
 		Put PokemonSearch into its own repository

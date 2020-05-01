@@ -21,12 +21,6 @@ import java.util.Scanner;
  * <p>
  * <b>Planned Features:</b>
  * <p>
- * Implement a {@code toString()} method that calls the same from
- * {@code JSONParser}.
- * <p>
- * Add an option to the method {@code readJSON()} to print the contents of the
- * {@code .json} to the terminal.
- * <p>
  * Have 2 {@code ArrayList<String>}, where one includes brackets and the other
  * does not.
  * <p>
@@ -39,7 +33,7 @@ import java.util.Scanner;
  * it will add the next {@code String} to the {@code ArrayList<String>}.
  * 
  * @author Nathin Wascher
- * @version 1.4.1
+ * @version 1.5
  * @since March 28, 2020
  * 
  * @see JSONParser
@@ -47,9 +41,8 @@ import java.util.Scanner;
 
 public class JSONReader extends JSONParser {
     private Scanner fileScan;
-    private ArrayList<String> jsonContents, tempArray;
-    private String nextLine, tempString;
-    private int intPos;
+    private ArrayList<String> jsonContents;
+    private String nextLine;
 
     public JSONReader() {
     }
@@ -101,71 +94,5 @@ public class JSONReader extends JSONParser {
      */
     public ArrayList<String> readJSON(String fileName) throws FileNotFoundException {
         return readJSON(fileName, true);
-    }
-
-    /**
-     * Finds the value(s) associated with {@code ObjectName}.
-     * 
-     * @param objectName The name of an object or array in th {@code .json} file
-     * @return An {@code ArrayList<String>} of values with the specified
-     *         {@code objectName}
-     * @throws NullPointerException If {@code readJSON} is not called before this
-     *                              method, {@code jsonContents} equals null or if
-     *                              the {@code .json} file is empty
-     * @see #readJSON(String, boolean)
-     */
-    public ArrayList<String> get(String objectName) throws NullPointerException {
-        if (jsonContents == null || jsonContents.size() == 0) {
-            throw new NullPointerException();
-
-        } else {
-            tempArray = new ArrayList<String>();
-            for (intPos = 0; intPos < jsonContents.size(); intPos++) {
-                tempString = jsonContents.get(intPos);
-
-                if (tempString.equals(objectName)) {
-                    tempString = jsonContents.get(++intPos);
-
-                    if (!isNewArray()) {
-                        tempArray.add(tempString);
-                    }
-                }
-            }
-        }
-        return tempArray;
-    }
-
-    // Checks if a new json array or object is beginning
-    private boolean isNewArray() {
-        if (tempString.equals("[")) {
-            endArrayCheck("]");
-            return true;
-
-        } else if (tempString.equals("{")) {
-            endArrayCheck("}");
-            return true;
-
-        } else if (tempString.equals("[{")) {
-            endArrayCheck("}]");
-            return true;
-        }
-        return false;
-    }
-
-    // Checks if the current json array or object is ending
-    private void endArrayCheck(String endBracket) {
-        tempString = jsonContents.get(++intPos);
-
-        while (!tempString.equals(endBracket)) {
-            if (tempString.equals("}{")) {
-                tempString = jsonContents.get(++intPos);
-
-            } else {
-                tempArray.add(tempString);
-                tempString = jsonContents.get(++intPos);
-                isNewArray();
-            }
-        }
-        tempString = jsonContents.get(++intPos);
     }
 }
