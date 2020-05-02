@@ -1,17 +1,22 @@
 
 /**
- * @author Nathin
- * @version 1.0.3
- * @since Februrary 18, 2020
+ * Copyright (c) 2020 Nathin-Dolphin.
+ * 
+ * This file  is under the MIT License.
  */
 
-// currently unusable
+package experimental;
 
 import java.awt.Graphics;
 import java.awt.Color;
 
 import java.util.Random;
 
+/**
+ * @author Nathin
+ * @version 1.0.4
+ * @since Februrary 18, 2020
+ */
 public class BasicShapes {
     public Random gen = new Random();
     public boolean fillShape;

@@ -7,11 +7,16 @@
 
 /**
  * @author Nathin Wascher
- * @version PokemonSearch v1.2.1
+ * @version PokemonSearch v1.2.2
  * @since March 28, 2020
  */
 
 public class PokemonSearch {
+
+    public PokemonSearch() {
+        main(null);
+    }
+
     public static void main(String[] args) {
         System.out.println("Executing Program (PokemonSearch)...");
         new PokemonSearch_Panel();

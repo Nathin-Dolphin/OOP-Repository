@@ -11,12 +11,16 @@ import utility.sleep.SleepFastRunnable;
 
 /**
  * @author Nathin Wascher
- * @version SwissArmyKnife v2.0.2
+ * @version SwissArmyKnife v2.0.3
  * @since March 25, 2020
  */
 
 public class SwissArmyKnife extends SwissArmyKnife_Outline {
     private static String autoRequestedURL = "https://thunderbird-index.azurewebsites.net/w0a6zk195d.json";
+
+    public SwissArmyKnife(String[] args) {
+        main(args);
+    }
 
     public static void main(String[] args) {
         System.out.println("Executing Program (SwissArmyKnife)...");
@@ -64,7 +68,7 @@ public class SwissArmyKnife extends SwissArmyKnife_Outline {
                     }
                 }
             } else
-                System.out.println("\nERROR: INVALID COMMAND");
+                System.out.println("\nERROR: INVALID COMMAND AND/OR MISSING PARAMETERS. USE \"-Help\"");
 
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("-HttpRequest")) {
@@ -76,10 +80,10 @@ public class SwissArmyKnife extends SwissArmyKnife_Outline {
                 urlIndexRequest(args[1]);
 
             } else
-                System.out.println("\nERROR: INVALID COMMAND");
+                System.out.println("\nERROR: INVALID COMMAND. USE \"-Help\"");
 
         } else
-            System.out.println("\nERROR: INVALID COMMAND AND/OR MISSING PARAMETERS \"-Help\"");
+            System.out.println("\nERROR: INVALID COMMAND AND/OR TOO MANY PARAMETERS. USE \"-Help\"");
 
         System.out.println("\n...Terminating Program (SwissArmyKnife)");
     }

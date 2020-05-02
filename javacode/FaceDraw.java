@@ -9,11 +9,16 @@
  * Draws between 3 and 10 randomly generated faces.
  * 
  * @author Nathin Wascher
- * @version FaceDraw v1.0
+ * @version FaceDraw v1.0.1
  * @since Februrary 18, 2020
  */
 
 public class FaceDraw {
+
+    public FaceDraw() {
+        main(null);
+    }
+
     public static void main(String[] args) {
         System.out.println("Executing Program (FaceDraw)...");
         new FaceDraw_Panel(3, 10);

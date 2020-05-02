@@ -36,7 +36,7 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.2.3
+ * @version 1.2.4
  * @since March 31, 2020
  */
 public class PokemonSearch_Panel extends JPanel implements ActionListener {
@@ -198,6 +198,7 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
             for (int i = 0; i < tempArray.size(); i = i + 2) {
                 try {
                     Scanner fileScan = new Scanner(new File(tempArray.get(i) + ".json"));
+                    fileScan.close();
 
                 } catch (FileNotFoundException e) {
                     tempArr2 = urlReader.readURL(tempArray.get(i + 1));

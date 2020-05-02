@@ -22,12 +22,12 @@ import java.awt.List;
 
 /**
  * @author Nathin Wascher
- * @version 1.0.3
+ * @version 1.0.4
  * @since March 28, 2020
  */
 public class PokedexWriter_Panel extends PokedexWriter_Writer {
     private static final long serialVersionUID = 2628539169557674903L;
-    
+
     private SimpleFrame frame;
     private GridBagConstraints gbc;
     private JSONReader jsonReader;
@@ -39,14 +39,14 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
     private JLabel regionHighJL, regionLowJL, nameJL, evolutionJL, evoNumJL, type1JL, type2JL;
 
     public PokedexWriter_Panel(String fileName, boolean useURL) {
-        if (fileName.endsWith(".json"))
-            frame = new SimpleFrame("PokedexWriter", "Creating file: \"" + fileName + "\"", 900, 650, true);
-        else
-            frame = new SimpleFrame("PokedexWriter", "Creating file: \"" + fileName + ".json\"", 900, 650, true);
+        String tempString = fileName;
+        if (!fileName.endsWith(".json"))
+            tempString = fileName + ".json";
 
+        frame = new SimpleFrame("pokedexWriter", "Creating file: \"" + tempString + "\"", 900, 650, true);
         gbc = new GridBagConstraints();
         jsonReader = new JSONReader();
-        jsonWriter = new JSONWriter(fileName);
+        jsonWriter = new JSONWriter(this, fileName);
         this.fileName = fileName;
 
         try {
@@ -73,7 +73,7 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
 
         if (useURL)
             openURL();
-            
+
         outputList.remove(0);
         outputList.select(0);
     }

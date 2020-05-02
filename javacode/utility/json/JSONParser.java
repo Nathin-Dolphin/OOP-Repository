@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * <b>WARNING:</b> A very messy {@code .json} file may not get parsed correctly.
  * 
  * @author Nathin Wascher
- * @version 1.8
+ * @version 1.8.1
  * @since March 27, 2020
  * 
  * @see JSONReader
@@ -76,7 +76,6 @@ public class JSONParser {
             for (int i = 0; i < parsedLine.length; i++) {
                 tempString = parsedLine[i];
 
-                // TODO: Fix so that spaces in names and values do not get deleted
                 if (!tempString.equals("")) {
                     tempString = tempString.replaceAll(" ", "").replaceAll("\t", "");
                     if (tempString.equals(""))

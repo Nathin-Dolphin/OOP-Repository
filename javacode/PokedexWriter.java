@@ -7,11 +7,15 @@
 
 /**
  * @author Nathin Wascher
- * @version PokedexWriter v1.0.2
+ * @version PokedexWriter v1.0.3
  * @since March 28, 2020
  */
 
 public class PokedexWriter {
+
+    public PokedexWriter(String[] args) {
+        main(args);
+    }
 
     public static void main(String[] args) {
         System.out.println("Excecuting Program (PokedexWriter)...");
@@ -33,17 +37,21 @@ public class PokedexWriter {
             } else if (args[0].equalsIgnoreCase("-AddToPokedex")) {
                 System.out.println("Executing Command -AddToPokedex...");
                 System.out.println("THIS FEATURE IS CURRENTLY NOT IMPLEMENTED");
+                System.out.println("\n...Terminating Program (PokedexWriter)");
 
-            } else
+            } else {
                 System.out.println("\nERROR: INVALID COMMAND. USE \"-Help\"");
-
+                System.out.println("\n...Terminating Program (PokedexWriter)");
+            }
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("-Help")) {
                 System.out.println("Executing Command -Help...");
                 help();
 
-            } else
-                System.out.println("\nERROR: INVALID COMMAND AND/OR MISSING PARAMETERS. USE \"-Help\"");
+            } else {
+                System.out.println("\nERROR: INVALID COMMAND. USE \"-Help\"");
+                System.out.println("\n...Terminating Program (PokedexWriter)");
+            }
         }
     }
 
@@ -57,5 +65,6 @@ public class PokedexWriter {
 
         System.out.println("\njava PokedexWriter -AddToPokedex [region name]");
         System.out.println("    ex. java PokedexWriter -AddToPokedex alolan");
+        System.out.println("\n...Terminating Program (PokedexWriter)");
     }
 }

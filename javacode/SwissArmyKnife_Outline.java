@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  * @author Nathin Wascher
- * @version 1.0.2
+ * @version 1.0.3
  * @since April 14, 2020
  */
 
@@ -186,15 +186,6 @@ public class SwissArmyKnife_Outline {
                 System.out.println("Contact URL: " + tempList.get(++f));
                 f = tempList.size();
             }
-        }
-    }
-
-    // WORK IN PROGRESS
-    private class SAK_Threading extends Thread {
-        public SAK_Threading() {
-        }
-
-        public void run() {
         }
     }
 }

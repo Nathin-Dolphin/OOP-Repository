@@ -2,25 +2,12 @@
 
 Programs for Object-Oriented Programming.
 
-Executable java file names (refered to as "MM" or Main Method):
-
-	FaceDraw
-	Mosaic
-	PokemonSearch
-	SwissArmyKnife
-	ShapeCreator
-
-	[!] Caution is advised when using the program(s) below [!]
-	PokedexWriter
-
-
 [!] IMPORTANT PLEASE READ [!] NOTES: 
 
-	'...' is the path from your storage device to the location of the repository.
-	To run a java file, the terminal's directory must be in the 'class' folder (Windows example: ...\javacode\class> ).
-	"MM" refers to executable java files as previously mentioned above.
+	'...' is the path from your storage device to the location of the repository (for Windows terminal at least).
+	The program 'Hub' allows quick and easier access to the other programs in the repository.
 
-	[!] The method of compiling and running was done on a Windows computer, if you are using a MAC, the instructions may be 		confusing. If this is so, anything before the '>' is the terminal on Windows Powershell showing the current 				directory. After that, it is the actual command, however when doing 'javac' make sure to compile into the 'class' 			folder from the 'javacode' folder. [!]
+	[!] The method of compiling and running was done on a Windows computer, if you are using a MAC, the instructions may be confusing. If this is so, anything before the '>' is the terminal on Windows Powershell showing the current directory. After that, it is the actual command, however when doing 'javac' make sure to compile into the 'class' folder from the 'javacode' folder. [!]
 
 
 ## Create Class Files:
@@ -32,7 +19,7 @@ At the specified locations in the terminal, enter these commands in order,
 
 ## Execute Program
 
-	...\OOP-Repository\javacode\class> java "MM"
+	...\OOP-Repository\javacode\class> java Hub
 
 ## PokemonSearch
 	## Version 1.0 Features:

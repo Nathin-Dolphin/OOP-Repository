@@ -7,21 +7,26 @@
 
 package utility.json;
 
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.FileWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.0
+ * @version 1..1
  * @since March 28, 2020
  */
 public class JSONWriter {
-    private Scanner scan = new Scanner(System.in);
+    private Scanner scan;
     private PrintWriter pw;
 
     private ArrayList<String> jsonContents, endBrackets;
@@ -31,7 +36,7 @@ public class JSONWriter {
      * 
      * @param fileName
      */
-    public JSONWriter(String fileName) {
+    public JSONWriter(JPanel panel, String fileName) {
         jsonContents = new ArrayList<String>();
         endBrackets = new ArrayList<String>();
         tabs = "\t";
@@ -40,7 +45,23 @@ public class JSONWriter {
         if (!fileName.endsWith(".json")) {
             fileName = fileName + ".json";
         }
-        pw = newFile(fileName);
+
+        try {
+            scan = new Scanner(new File(fileName));
+
+            String warning = "The file " + fileName + " was found.\nDo you want to overwrite this file?";
+
+            int output = JOptionPane.showInternalConfirmDialog(panel, warning, "WARNING", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+            if (output == JOptionPane.NO_OPTION) {
+                System.out.println("\n...Terminating Program From (JSONWriter)");
+                System.exit(0);
+            }
+            scan.close();
+
+        } catch (FileNotFoundException e) {
+            pw = newFile(fileName);
+        }
     }
 
     /**
