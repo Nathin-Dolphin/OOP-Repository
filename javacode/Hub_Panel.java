@@ -5,6 +5,8 @@
  * This file  is under the MIT License.
  */
 
+import utility.RandomGen;
+
 import utility.SimpleFrame;
 
 import javax.swing.JTextField;
@@ -22,12 +24,13 @@ import java.util.ArrayList;
 
 /**
  * @author Nathin Wascher
- * @version 1.0
+ * @version 1.0.1
  * @since May 1, 2020
  */
 public class Hub_Panel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 361412748756007463L;
 
+    private RandomGen gen;
     private SimpleFrame frame;
     private GridBagConstraints gbc;
 
@@ -47,6 +50,7 @@ public class Hub_Panel extends JPanel implements ActionListener {
     public Hub_Panel() {
         frame = new SimpleFrame("Hub", "A Hub For Programs", 800, 600, true, false);
         gbc = new GridBagConstraints();
+        gen = new RandomGen();
         requiresCommand = false;
         parameters = null;
 
@@ -60,6 +64,7 @@ public class Hub_Panel extends JPanel implements ActionListener {
 
     private void setUpMainPanel() {
         this.setLayout(new GridBagLayout());
+        this.setBackground(gen.colorGen());
         gbc.weighty = 1;
         gbc.weightx = 1;
 
@@ -86,6 +91,8 @@ public class Hub_Panel extends JPanel implements ActionListener {
 
     private void setUpSecondaryPanel() {
         secondaryPanel = new JPanel(new GridBagLayout());
+        this.setBackground(gen.colorGen());
+        secondaryPanel.setBackground(gen.colorGen());
         requiresCommand = true;
 
         int b = 0;
@@ -145,40 +152,40 @@ public class Hub_Panel extends JPanel implements ActionListener {
         buttonList = new ArrayList<ArrayList<JButton>>();
         buttonArray = new ArrayList<JButton>();
 
-        buttonArray.add(new JButton("FaceDraw")); // FaceDraw
+        buttonArray.add(new JButton("FaceDraw")); // 0 FaceDraw
         buttonList.add(buttonArray);
         buttonArray = new ArrayList<JButton>();
 
-        buttonArray.add(new JButton("Mosaic")); // Mosaic
+        buttonArray.add(new JButton("Mosaic")); // 1 Mosaic
         buttonList.add(buttonArray);
         buttonArray = new ArrayList<JButton>();
 
-        buttonArray.add(new JButton("PokedexWriter")); // PokedexWriter
-        buttonArray.add(new JButton("-Help"));
-        buttonArray.add(new JButton("-WriteNewpokedex"));
-        buttonArray.add(new JButton("-AddToPokedex"));
-        buttonArray.add(new JButton("-WriteNewPokedexAssisted"));
+        buttonArray.add(new JButton("PokedexWriter")); // 2 PokedexWriter
+        buttonArray.add(new JButton("Help"));
+        buttonArray.add(new JButton("WriteNewpokedex"));
+        buttonArray.add(new JButton("AddToPokedex"));
+        buttonArray.add(new JButton("WriteNewPokedexAssisted"));
         buttonList.add(buttonArray);
         buttonArray = new ArrayList<JButton>();
 
-        buttonArray.add(new JButton("PokemonSearch")); // PokemonSearch
+        buttonArray.add(new JButton("PokemonSearch")); // 3 PokemonSearch
         buttonList.add(buttonArray);
         buttonArray = new ArrayList<JButton>();
 
-        buttonArray.add(new JButton("ShapeCreator")); // ShapeCreator
+        buttonArray.add(new JButton("ShapeCreator")); // 4 ShapeCreator
         buttonList.add(buttonArray);
         buttonArray = new ArrayList<JButton>();
 
-        buttonArray.add(new JButton("SAK(WIP)")); // SwissArmyknife
-        buttonArray.add(new JButton("-Help"));
-        buttonArray.add(new JButton("-HttpRequest [URL]"));
-        buttonArray.add(new JButton("-HttpRequestIndex [URL]"));
-        buttonArray.add(new JButton("-JSONValidateIndex"));
-        buttonArray.add(new JButton("-JSONValidateIndexThreaded"));
-        buttonArray.add(new JButton("-Sleep"));
-        buttonArray.add(new JButton("-SleepFast"));
-        buttonArray.add(new JButton("-SleepFastImplementsRunnable"));
-        buttonArray.add(new JButton("-AutoRequest"));
+        buttonArray.add(new JButton("SAK(WIP)")); // 5 SwissArmyknife
+        buttonArray.add(new JButton("Help"));
+        buttonArray.add(new JButton("HttpRequest [URL]"));
+        buttonArray.add(new JButton("HttpRequestIndex [URL]"));
+        buttonArray.add(new JButton("JSONValidateIndex"));
+        buttonArray.add(new JButton("JSONValidateIndexThreaded"));
+        buttonArray.add(new JButton("Sleep"));
+        buttonArray.add(new JButton("SleepFast"));
+        buttonArray.add(new JButton("SleepFastImplementsRunnable"));
+        buttonArray.add(new JButton("AutoRequest"));
         buttonList.add(buttonArray);
         buttonArray = new ArrayList<JButton>();
 
@@ -196,9 +203,9 @@ public class Hub_Panel extends JPanel implements ActionListener {
             }
         }
         if (parameters == null)
-            stringArray = new String[] { buttonList.get(program).get(h).getText() };
+            stringArray = new String[] { "-" + buttonList.get(program).get(h).getText() };
         else
-            stringArray = new String[] { buttonList.get(program).get(h).getText(), parameters };
+            stringArray = new String[] { "-" + buttonList.get(program).get(h).getText(), parameters };
     }
 
     private void setGBC(int gridX, int gridY) {
@@ -208,6 +215,7 @@ public class Hub_Panel extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == returnButton) {
+            parametersJTF.setText(null);
             secondaryPanel.setVisible(false);
             frame.remove(secondaryPanel);
             frame.add(this);

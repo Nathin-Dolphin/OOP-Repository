@@ -22,7 +22,7 @@ import java.awt.List;
 
 /**
  * @author Nathin Wascher
- * @version 1.0.4
+ * @version 1.0.5
  * @since March 28, 2020
  */
 public class PokedexWriter_Panel extends PokedexWriter_Writer {
@@ -33,7 +33,7 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
     private JSONReader jsonReader;
 
     // TODO: Reorganize JPanels
-    private JPanel textPanel, controlPanel;
+    private JPanel controlPanel;
     private JPanel topPanel, middlePanel, bottomPanel, evoNumPanel, nameBarPanel;
 
     private JLabel regionHighJL, regionLowJL, nameJL, evolutionJL, evoNumJL, type1JL, type2JL;
@@ -60,22 +60,18 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
         if (!useURL)
             initializeRange();
         setLayout(new GridBagLayout());
-        setUpTextPanel();
         setUpControlPanel();
 
         setGBC(0, 0);
-        add(textPanel);
+        add(outputList, gbc);
         setGBC(1, 0);
-        add(controlPanel);
+        add(controlPanel, gbc);
 
         frame.add(this);
         frame.setVisible(true);
 
         if (useURL)
             openURL();
-
-        outputList.remove(0);
-        outputList.select(0);
     }
 
     private void initializeRange() {
@@ -106,17 +102,6 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
                 }
             } while (j.equals(""));
         } while (max <= min);
-    }
-
-    private void setUpTextPanel() {
-        textPanel = new JPanel(new GridBagLayout());
-
-        outputList = new List(40);
-        outputList.add("pokemon here; number here; type here; evolution here");
-        outputList.add("Add New Pokemon!");
-
-        setGBC(0, 0);
-        textPanel.add(outputList, gbc);
     }
 
     private void setUpControlPanel() {
@@ -160,6 +145,7 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
 
         nameJL = new JLabel("Pokemon Name: ");
         nameJTF = new JTextField(10);
+        nameJTF.addActionListener(this);
 
         setGBC(0, 0);
         nameBarPanel.add(nameJL, gbc);
@@ -199,7 +185,7 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
         evoNumPanel = new JPanel(new GridBagLayout());
 
         evoNumJL = new JLabel(" EvoNumber: ");
-        evoNumJTF = new JTextField(3);
+        evoNumJTF = new JTextField("000", 3);
 
         setGBC(0, 0);
         evoNumPanel.add(evoNumJL, gbc);

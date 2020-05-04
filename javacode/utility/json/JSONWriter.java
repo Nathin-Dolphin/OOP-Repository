@@ -22,7 +22,7 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1..1
+ * @version 1.1.1
  * @since March 28, 2020
  */
 public class JSONWriter {
@@ -39,6 +39,7 @@ public class JSONWriter {
     public JSONWriter(JPanel panel, String fileName) {
         jsonContents = new ArrayList<String>();
         endBrackets = new ArrayList<String>();
+        String warning = "The file " + fileName + " was found.\nDo you want to overwrite this file?";
         tabs = "\t";
         jsonContents.add("{");
 
@@ -49,15 +50,16 @@ public class JSONWriter {
         try {
             scan = new Scanner(new File(fileName));
 
-            String warning = "The file " + fileName + " was found.\nDo you want to overwrite this file?";
-
             int output = JOptionPane.showInternalConfirmDialog(panel, warning, "WARNING", JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE);
             if (output == JOptionPane.NO_OPTION) {
                 System.out.println("\n...Terminating Program From (JSONWriter)");
+                // TODO: Have it close the frame/panel its attached too
                 System.exit(0);
-            }
-            scan.close();
+                scan.close();
+
+            } else
+                pw = newFile(fileName);
 
         } catch (FileNotFoundException e) {
             pw = newFile(fileName);

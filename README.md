@@ -29,15 +29,15 @@ At the specified locations in the terminal, enter these commands in order,
 		(Implemented) - Create PokedexWriter to assist in producing the necessary json files
 
 	## Version 2.0 Features:
-		(In Progress) - Print more information about each pokemon
-		Implement option to search by evolution
-		Use threading while reading the many json files
+		(In Prpgress) - Use threading while reading the many json files
 		(Implemented) - Print the output to the frame instead of the terminal
 		(Implemented) - Finish adding pokemon to the json files
 		(Implemented) - Implement method to automatically find and download the needed json files via URLs
+		(Implemented) - Print more information about each pokemon
+		(Implemented) - Implement option to search by evolution
 
 	## Version 3.0 Features:
-		Put PokemonSearch into its own repository
+		Put PokemonSearch and PokedexWriter into its own repository
 		Implement option to search by weaknessess
 		Allow PokedexWriter to modify already existing files and add size and weight
 		Implement option to search by size and weight
