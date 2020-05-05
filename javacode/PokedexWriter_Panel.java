@@ -7,6 +7,7 @@
 
 import utility.json.JSONReader;
 import utility.json.JSONWriter;
+import utility.json.URLReader;
 
 import utility.SimpleFrame;
 
@@ -20,17 +21,26 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.List;
 
+import java.io.FileNotFoundException;
+import java.io.BufferedWriter;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+
+import java.util.ArrayList;
+
 /**
  * @author Nathin Wascher
- * @version 1.0.5
+ * @version 1.1
  * @since March 28, 2020
  */
 public class PokedexWriter_Panel extends PokedexWriter_Writer {
     private static final long serialVersionUID = 2628539169557674903L;
+    private final String pokeInfoURL = "https://jsontextfiles.azurewebsites.net/pokeInfo.json";
 
     private SimpleFrame frame;
     private GridBagConstraints gbc;
     private JSONReader jsonReader;
+    private URLReader urlReader;
 
     // TODO: Reorganize JPanels
     private JPanel controlPanel;
@@ -38,23 +48,33 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
 
     private JLabel regionHighJL, regionLowJL, nameJL, evolutionJL, evoNumJL, type1JL, type2JL;
 
-    public PokedexWriter_Panel(String fileName, boolean useURL) {
-        String tempString = fileName;
-        if (!fileName.endsWith(".json"))
-            tempString = fileName + ".json";
+    private ArrayList<String> tempArray;
 
-        frame = new SimpleFrame("pokedexWriter", "Creating file: \"" + tempString + "\"", 900, 650, true);
+    public PokedexWriter_Panel() {
+    }
+
+    public PokedexWriter_Panel(String regionName, boolean useURL) {
+        String tempString = regionName;
+        if (!regionName.endsWith(".json"))
+            tempString = regionName + ".json";
+
+        frame = new SimpleFrame("PokedexWriter", "Creating file: \"" + tempString + "\"", 900, 650, true);
         gbc = new GridBagConstraints();
         jsonReader = new JSONReader();
-        jsonWriter = new JSONWriter(this, fileName);
-        this.fileName = fileName;
+        jsonWriter = new JSONWriter(this, regionName);
+        this.regionName = regionName;
 
         try {
             jsonReader.readJSON("pokeInfo");
             typeList = jsonReader.get("types");
             regionList = jsonReader.get("regions");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            try {
+                urlReader = new URLReader();
+                tempArray = urlReader.readURL(pokeInfoURL);
+                downloadPokeInfo();
+            } catch (Exception x) {
+            }
         }
 
         if (!useURL)
@@ -72,6 +92,27 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
 
         if (useURL)
             openURL();
+    }
+
+    private void downloadPokeInfo() {
+        System.out.println("Downloading file: pokeInfo.json");
+        try {
+            if (tempArray == null)
+                throw new Exception();
+
+            FileWriter fw = new FileWriter("pokeInfo.json");
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+
+            for (int i = 0; i < tempArray.size() - 1; i++) {
+                pw.println(tempArray.get(i));
+            }
+            pw.print(tempArray.size() - 1);
+            pw.close();
+
+        } catch (Exception e) {
+            System.out.println("ERROR: FAILED TO DOWNLOAD " + regionName + ".json");
+        }
     }
 
     private void initializeRange() {
@@ -160,48 +201,52 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
         type1JL = new JLabel("Primary Type");
         type2JL = new JLabel("Secondary Type");
 
-        type1CheckList = new List(15);
-        type2CheckList = new List(15);
-        type2CheckList.add("none");
+        type1CL = new List(15);
+        type2CL = new List(15);
+        type2CL.add("none");
         for (String s : typeList) {
-            type1CheckList.add(s);
-            type2CheckList.add(s);
+            type1CL.add(s);
+            type2CL.add(s);
         }
-        type1CheckList.select(0);
-        type2CheckList.select(0);
+        type1CL.select(0);
+        type2CL.select(0);
 
         setGBC(0, 1);
         middlePanel.add(type1JL, gbc);
         setGBC(0, 2);
-        middlePanel.add(type1CheckList, gbc);
+        middlePanel.add(type1CL, gbc);
         setGBC(1, 1);
         middlePanel.add(type2JL, gbc);
         setGBC(1, 2);
-        middlePanel.add(type2CheckList, gbc);
+        middlePanel.add(type2CL, gbc);
     }
 
     private void setUpBottomPanel() {
         bottomPanel = new JPanel(new GridBagLayout());
         evoNumPanel = new JPanel(new GridBagLayout());
 
+        nextEvoNumJB = new JButton("Next EvoNum");
+        nextEvoNumJB.addActionListener(this);
         evoNumJL = new JLabel(" EvoNumber: ");
         evoNumJTF = new JTextField("000", 3);
 
         setGBC(0, 0);
-        evoNumPanel.add(evoNumJL, gbc);
+        evoNumPanel.add(nextEvoNumJB, gbc);
         setGBC(0, 1);
+        evoNumPanel.add(evoNumJL, gbc);
+        setGBC(0, 2);
         evoNumPanel.add(evoNumJTF, gbc);
 
         evolutionJL = new JLabel("Evolution");
-        evolutionCheckList = new List(5);
+        evolutionCL = new List(5);
         for (String s : evolutionStates)
-            evolutionCheckList.add(s);
-        evolutionCheckList.select(1);
+            evolutionCL.add(s);
+        evolutionCL.select(1);
 
         setGBC(0, 0);
         bottomPanel.add(evolutionJL, gbc);
         setGBC(0, 1);
-        bottomPanel.add(evolutionCheckList, gbc);
+        bottomPanel.add(evolutionCL, gbc);
         setGBC(1, 1);
         bottomPanel.add(evoNumPanel, gbc);
 

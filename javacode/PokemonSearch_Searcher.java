@@ -19,10 +19,9 @@ import javax.swing.JOptionPane;
 
 /**
  * @author Nathin Wascher
- * @version 1.4
+ * @version 1.4.1
  * @since April 2, 2020
  */
-
 public class PokemonSearch_Searcher {
     private SimpleFrame frame;
     private JSONReader jsonReader;
@@ -34,6 +33,8 @@ public class PokemonSearch_Searcher {
     private String tempString, tempStr2;
     private int tempInt;
 
+    private final int objectLength = 8;
+
     public PokemonSearch_Searcher(SimpleFrame frame, JSONReader jsonReader) {
         this.frame = frame;
         this.jsonReader = jsonReader;
@@ -44,8 +45,6 @@ public class PokemonSearch_Searcher {
             ArrayList<String> evolutionInput, String input) {
         long startTime = System.nanoTime();
         outputList.removeAll();
-
-        // TODO: Implement int 'objectLength'
 
         searchByRegion(regionInput);
 
@@ -59,48 +58,55 @@ public class PokemonSearch_Searcher {
             searchByName(input);
 
         // Prints the pokemon to the screen
-        for (int f = 0; f < pokedex.size(); f = f + 2) {
+        for (int f = 0; f < pokedex.size(); f = f + objectLength) {
             tempString = pokedex.get(f);
-            if (tempString.equals("name"))
+
+            if (tempString.equals("name")) {
                 printToScreen(f + 1, foundInRegion(f));
+            }
         }
         System.out
                 .println("\nElapsed Time: " + (double) ((System.nanoTime() - startTime) / 1000000) / 1000 + " Seconds");
     }
 
+    // TODO: search for evolution sets with the inputted number
     public void searchByNumber(int input, ArrayList<String> regionList) {
         pokedex = new ArrayList<String>();
         outputList.removeAll();
 
         for (int i = 1; i < regionList.size(); i = i + 2) {
-            tempString = regionList.get(i);
-            tempInt = Integer.parseInt(tempString);
+            tempArray = regionList.get(i).split("-");
+            tempInt = Integer.parseInt(tempArray[0]);
 
             if (input <= tempInt) {
-                try {
-                    pokedex = jsonReader.readJSON(regionList.get(i - 1) + ".json");
-                } catch (FileNotFoundException e) {
-                    killProgram(regionList.get(i - 1));
-                }
                 tempStr2 = regionList.get(i - 1);
+                try {
+                    // 'pokedex' includes brackets here only
+                    jsonReader.readJSON(tempStr2 + ".json");
+                    pokedex.addAll(jsonReader.get(tempStr2));
+                } catch (FileNotFoundException e) {
+                    // TODO: replace killProgram with a non 'system.exit' warning
+                    killProgram(tempStr2);
+                }
                 i = regionList.size();
             }
         }
 
         // TODO: Implement binary sorting
-        for (int g = 0; g < pokedex.size(); g++) {
+        for (int g = 2; g < pokedex.size(); g = g + objectLength) {
             tempString = pokedex.get(g);
 
             if (tempString.equals("number")) {
-                tempInt = Integer.parseInt(pokedex.get(++g));
+                tempInt = Integer.parseInt(pokedex.get(g + 1));
                 if (input == tempInt) {
-                    printToScreen(g - 2, tempStr2);
+                    printToScreen(g - 1, tempStr2);
                     g = pokedex.size();
                 }
             }
         }
     }
 
+    // TODO: change this method
     public void killProgram(String s) {
         JOptionPane.showMessageDialog(frame, "ERROR: UNABLE TO FIND \"" + s + ".json\".\nTERMINATING PROGRAM!", "ERROR",
                 JOptionPane.ERROR_MESSAGE);
@@ -127,17 +133,16 @@ public class PokemonSearch_Searcher {
         tempPokedex = pokedex;
         pokedex = new ArrayList<String>();
 
-        for (int g = 0; g < tempPokedex.size(); g++) {
+        for (int g = 6; g < tempPokedex.size(); g = g + objectLength) {
             tempString = tempPokedex.get(g);
-
             if (tempString.equals("evolution")) {
-                tempArray = tempPokedex.get(++g).split("-");
+                tempArray = tempPokedex.get(g + 1).split("-");
 
                 for (String e : evolutionInput) {
                     if (e.equals(tempArray[1])) {
 
                         for (int h = 0; h < 8; h++)
-                            pokedex.add(tempPokedex.get(h + g - 7));
+                            pokedex.add(tempPokedex.get(h + g - 6));
                     }
                 }
             }
@@ -148,18 +153,18 @@ public class PokemonSearch_Searcher {
         tempPokedex = pokedex;
         pokedex = new ArrayList<String>();
 
-        for (int g = 0; g < tempPokedex.size(); g++) {
+        for (int g = 4; g < tempPokedex.size(); g = g + objectLength) {
             tempString = tempPokedex.get(g);
 
             if (tempString.equals("type")) {
-                tempArray = tempPokedex.get(++g).split("-");
+                tempArray = tempPokedex.get(g + 1).split("-");
 
                 for (int n = 0; n < tempArray.length; n++) {
                     for (int s = 0; s < typeInput.size(); s++) {
                         if (tempArray[n].equalsIgnoreCase(typeInput.get(s))) {
 
                             for (int h = 0; h < 8; h++) {
-                                pokedex.add(tempPokedex.get(g + h - 5));
+                                pokedex.add(tempPokedex.get(g + h - 4));
                                 n = 3;
                                 s = typeInput.size();
                             }
@@ -174,18 +179,18 @@ public class PokemonSearch_Searcher {
         tempPokedex = pokedex;
         pokedex = new ArrayList<String>();
 
-        for (int g = 0; g < tempPokedex.size(); g++) {
+        for (int g = 0; g < tempPokedex.size(); g = g + objectLength) {
             tempString = tempPokedex.get(g);
 
             if (tempString.equals("name")) {
-                tempString = tempPokedex.get(++g);
+                tempString = tempPokedex.get(g + 1);
 
                 for (int v = 0; v + input.length() <= tempString.length(); v++) {
                     if (tempString.substring(v, v + input.length()).equalsIgnoreCase(input)) {
                         v = tempString.length();
 
                         for (int h = 0; h < 8; h++)
-                            pokedex.add(tempPokedex.get(g + h - 1));
+                            pokedex.add(tempPokedex.get(g + h));
                     }
                 }
             }

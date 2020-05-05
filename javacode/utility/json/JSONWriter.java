@@ -22,7 +22,7 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.1.1
+ * @version 1.1.2
  * @since March 28, 2020
  */
 public class JSONWriter {
@@ -125,9 +125,10 @@ public class JSONWriter {
         jsonContents.add("}");
 
         // TODO: Add loading bar here
-        for (String s : jsonContents) {
-            pw.println(s);
+        for (int f = 0; f < jsonContents.size() - 1; f++) {
+            pw.println(jsonContents.get(f));
         }
+        pw.print(jsonContents.get(jsonContents.size() - 1));
         pw.close();
     }
 

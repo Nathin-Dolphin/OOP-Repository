@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * <b>No Known Issues</b>
  * 
  * @author Nathin Wascher
- * @version 1.3.3
+ * @version 1.3.4
  * @since March 26, 2020
  * 
  * @see JSONParser
@@ -41,10 +41,20 @@ import java.util.ArrayList;
 public class URLReader extends JSONParser {
     private BufferedReader br;
     private URL openURL;
-    private String tempString;
+
     private ArrayList<String> urlContents, urlIndexContents, urlList;
+    private String tempString;
+    private boolean validURL;
 
     public URLReader() {
+    }
+
+    // WORK IN PROGRESS
+    /**
+     * @return
+     */
+    public boolean isValidURL() {
+        return validURL;
     }
 
     /**
@@ -56,8 +66,11 @@ public class URLReader extends JSONParser {
     public boolean isValidURL(String url) {
         try {
             openURL = new URL(url);
+            validURL = true;
             return true;
+
         } catch (MalformedURLException e) {
+            validURL = false;
             return false;
         }
     }

@@ -19,15 +19,10 @@ import java.awt.event.WindowEvent;
  * message that asks to leave the program.
  * 
  * <p>
- * <b>Planned Feature:</b>
- * <p>
- * If not maxamized, start the {@code JFrame} in the middle of the screen
- * 
- * <p>
  * <b>No Known Issues</b>
  * 
  * @author Nathin Wascher
- * @version 1.1.3
+ * @version 1.1.4
  * @since April 4, 2020
  * 
  * @see JFrame
@@ -44,8 +39,8 @@ public class SimpleFrame extends JFrame {
     /**
      * Overloaded Method
      * <p>
-     * Creates a {@code JFrame} with the specified title. The dimensions are set to
-     * 720 x 500.
+     * Creates a {@code JFrame} with the specified title in the center of the
+     * screen. The dimensions are set to 720 x 500.
      * 
      * @param javaFileName The name of the main class file (without the '.java').
      * @param frameTitle   The title at the top of the {@code JFrame}.
@@ -62,7 +57,8 @@ public class SimpleFrame extends JFrame {
     /**
      * Overloaded Method
      * <p>
-     * Creates a {@code JFrame} with the specified title and dimensions.
+     * Creates a {@code JFrame} with the specified title and dimensions in the
+     * center of the screen.
      * 
      * @param javaFileName The name of the main class file (without the '.java').
      * @param frameTitle   The title at the top of the {@code JFrame}.
@@ -82,10 +78,11 @@ public class SimpleFrame extends JFrame {
     /**
      * Overloaded Method
      * <p>
-     * Creates a {@code JFrame} with the specified title and dimensions. It also
-     * gives the option to allow a {@code JOptionPane} that is created when clicking
-     * the {@code JFrame} exit. The {@code JOptionPane} is a warning message asking
-     * to exit the program completely or to keep the window open.
+     * Creates a {@code JFrame} with the specified title and dimensions in the
+     * center of the screen. It also gives the option to allow a {@code JOptionPane}
+     * that is created when clicking the {@code JFrame} exit. The
+     * {@code JOptionPane} is a warning message asking to exit the program
+     * completely or to keep the window open.
      * 
      * @param javaFileName     The name of the main class file (without the
      *                         '.java').
@@ -111,11 +108,12 @@ public class SimpleFrame extends JFrame {
      * Overloaded Method
      * <p>
      * Creates a {@code JFrame} with the specified title and the option to start out
-     * maxamized, otherwise the dimensions are automatically set to 720 x 500. When
-     * the {@code JFrame} is unmaxamized, it goes to the before mentioned size. It
-     * also gives the option to allow {@code JOptionPane} that is created when
-     * clicking the {@code JFrame} exit. The {@code JOptionPane} is a warning
-     * message asking to exit the program completely or to keep the window open.
+     * maxamized, otherwise the dimensions are automatically set to 720 x 500 and
+     * put in the center of the screen. When the {@code JFrame} is unmaxamized, it
+     * goes to the before mentioned size. It also gives the option to allow
+     * {@code JOptionPane} that is created when clicking the {@code JFrame} exit.
+     * The {@code JOptionPane} is a warning message asking to exit the program
+     * completely or to keep the window open.
      * 
      * @param javaFileName     The name of the main class file (without the
      *                         '.java').
@@ -139,10 +137,10 @@ public class SimpleFrame extends JFrame {
     /**
      * Creates a {@code JFrame} with the specified title and the option to start out
      * maxamized. When the {@code JFrame} is unmaxamized, it goes to the specified
-     * dimensions. It also gives the option to allow a {@code JOptionPane} that is
-     * created when clicking the {@code JFrame} exit. The {@code JOptionPane} is a
-     * warning message asking to exit the program completely or to keep the window
-     * open.
+     * dimensions tn the center of the screen. It also gives the option to allow a
+     * {@code JOptionPane} that is created when clicking the {@code JFrame} exit.
+     * The {@code JOptionPane} is a warning message asking to exit the program
+     * completely or to keep the window open.
      * 
      * @param javaFileName     The name of the main class file (without the
      *                         '.java').
@@ -175,7 +173,7 @@ public class SimpleFrame extends JFrame {
     // Creates a new JFrame with the variables from the constructor
     private void newFrame(int width, int height) {
         setTitle(frameTitle);
-        setBounds(1540 - width, 840 - height, width, height);
+        setBounds((1540 - width) / 2, (840 - height) / 2, width, height);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         if (fullscreen)
             this.setExtendedState(JFrame.MAXIMIZED_BOTH);

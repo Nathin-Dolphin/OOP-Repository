@@ -29,7 +29,7 @@ At the specified locations in the terminal, enter these commands in order,
 		(Implemented) - Create PokedexWriter to assist in producing the necessary json files
 
 	## Version 2.0 Features:
-		(In Prpgress) - Use threading while reading the many json files
+		(In Progress) - Use threading while reading the many json files
 		(Implemented) - Print the output to the frame instead of the terminal
 		(Implemented) - Finish adding pokemon to the json files
 		(Implemented) - Implement method to automatically find and download the needed json files via URLs
