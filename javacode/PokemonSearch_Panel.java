@@ -36,7 +36,7 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.3.1
+ * @version 1.3.2
  * @since March 31, 2020
  */
 public class PokemonSearch_Panel extends JPanel implements ActionListener {
@@ -222,7 +222,7 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
             for (int i = 0; i < tempArr2.size() - 1; i++) {
                 pw.println(tempArr2.get(i));
             }
-            pw.print(tempArray.size() - 1);
+            pw.print(tempArr2.get(tempArr2.size() - 1));
             pw.close();
 
         } catch (Exception e) {

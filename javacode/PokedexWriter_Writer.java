@@ -25,11 +25,12 @@ import javax.swing.JPanel;
 import java.util.ArrayList;
 
 // TODO: Implement save button
-// TODO: optimize 'evoNum' and 'nextEvoNumJB'
+// TODO: Optimize 'evoNum' and 'nextEvoNumJB'
+// TODO: Have start at '001' instead of '000'
 
 /**
  * @author Nathin Wascher
- * @version 1.2.1
+ * @version 1.2.2
  * @since March 28, 2020
  */
 public class PokedexWriter_Writer extends JPanel implements ActionListener {

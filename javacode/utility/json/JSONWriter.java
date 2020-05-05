@@ -22,7 +22,7 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.1.2
+ * @version 1.1.3
  * @since March 28, 2020
  */
 public class JSONWriter {
@@ -52,14 +52,15 @@ public class JSONWriter {
 
             int output = JOptionPane.showInternalConfirmDialog(panel, warning, "WARNING", JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE);
-            if (output == JOptionPane.NO_OPTION) {
+            if (output == JOptionPane.YES_OPTION) {
+                pw = newFile(fileName);
+
+            } else {
                 System.out.println("\n...Terminating Program From (JSONWriter)");
                 // TODO: Have it close the frame/panel its attached too
                 System.exit(0);
                 scan.close();
-
-            } else
-                pw = newFile(fileName);
+            }
 
         } catch (FileNotFoundException e) {
             pw = newFile(fileName);
