@@ -26,21 +26,19 @@ import java.util.ArrayList;
 
 // TODO: Implement save button
 // TODO: Optimize 'evoNum' and 'nextEvoNumJB'
-// TODO: Have start at '001' instead of '000'
 
 /**
  * @author Nathin Wascher
- * @version 1.2.2
- * @since March 28, 2020
+ * @version 1.2.3
+ * @since October 17, 2020
  */
 public class PokedexWriter_Writer extends JPanel implements ActionListener {
     private static final long serialVersionUID = 2911032048461996161L;
     private final String pokedexSourceURL = "https://pokemondb.net/pokedex/national";
 
     private ArrayList<ArrayList<String>> pokedexEntries;
-    private ArrayList<String> tempArrayList, urlContents, urlRegionList;
-    private String[] tempArray;
-    private String tempString, nextEvoNum;
+    private ArrayList<String> tempPokedexEntry, urlContents, urlRegionList;
+    private String nextEvoNum;
     private int evoNum, urlContentsLine, evolutionPos;
 
     public JSONWriter jsonWriter;
@@ -75,6 +73,8 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
     public void openURL() {
         urlContents = new ArrayList<String>();
         urlRegionList = new ArrayList<String>();
+        String[] tempArray;
+        String tempString;
         boolean stopSearch = false;
 
         for (int i = 0; i < 8; i++)
@@ -158,7 +158,9 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         return changeMax();
     }
 
-    private void setEvolution() {
+    private String setEvolution() {
+        String tempString;
+
         for (int i = 0; i < evolutionStates.size(); i++) {
             if (evolutionCL.getSelectedItem().equals(evolutionStates.get(i))) {
                 evolutionPos = i;
@@ -193,9 +195,11 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         else
             nextEvoNum = "" + evoNum;
 
+        return tempString;
     }
 
     private String capitalize(String input) {
+        String tempString;
         try {
             tempString = input.substring(0, 1).toUpperCase();
             tempString = tempString.concat(input.substring(1, input.length()));
@@ -205,38 +209,39 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         }
     }
 
-    private void setPokemon() {
-        setPokemon(pokeNum++);
+    private String setPokemon() {
+        return setPokemon(pokeNum++);
     }
 
     // TODO: Make 'outputList' easier to read
-    private void setPokemon(int num) {
-        tempArrayList = new ArrayList<String>();
+    private String setPokemon(int num) {
+        tempPokedexEntry = new ArrayList<String>();
+        String tempString;
 
-        tempArrayList.add("name");
+        tempPokedexEntry.add("name");
         tempString = capitalize(nameJTF.getText().replaceAll(" ", ""));
-        tempArrayList.add(tempString);
+        tempPokedexEntry.add(tempString);
 
-        tempArrayList.add("number");
+        tempPokedexEntry.add("number");
         if (num > 999)
-            tempArrayList.add("" + num);
+            tempPokedexEntry.add("" + num);
         else if (num > 99)
-            tempArrayList.add("0" + num);
+            tempPokedexEntry.add("0" + num);
         else if (num > 9)
-            tempArrayList.add("00" + num);
+            tempPokedexEntry.add("00" + num);
         else
-            tempArrayList.add("000" + num);
+            tempPokedexEntry.add("000" + num);
 
-        tempArrayList.add("type");
+        tempPokedexEntry.add("type");
         if (type2CL.getSelectedItem().equals("none")) {
-            tempArrayList.add(capitalize(type1CL.getSelectedItem()));
+            tempPokedexEntry.add(capitalize(type1CL.getSelectedItem()));
         } else {
-            tempArrayList.add(capitalize(type1CL.getSelectedItem()) + "-" + capitalize(type2CL.getSelectedItem()));
+            tempPokedexEntry.add(capitalize(type1CL.getSelectedItem()) + "-" + capitalize(type2CL.getSelectedItem()));
         }
 
-        tempArrayList.add("evolution");
-        setEvolution();
-        tempArrayList.add(tempString + "-" + evolutionPos);
+        tempPokedexEntry.add("evolution");
+        tempString = setEvolution();
+        tempPokedexEntry.add(tempString + "-" + evolutionPos);
         evoNumJTF.setText(nextEvoNum);
 
         if (evolutionPos == 1)
@@ -246,15 +251,15 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         else
             evolutionCL.select(1);
 
-        tempString = "";
-        tempString = tempString + "Evo:" + tempArrayList.get(7); // Adds the evolutionPos number
-        tempString = tempString + "   #" + tempArrayList.get(3); // Adds the pokemon number
-        tempString = tempString + "   " + tempArrayList.get(1); // Adds the name
-        tempString = tempString + "     " + tempArrayList.get(5); // Adds the type(s)
+        tempString = "Evo:" + tempPokedexEntry.get(7); // Adds the evolutionPos number
+        tempString = tempString + "   #" + tempPokedexEntry.get(3); // Adds the pokemon number
+        tempString = tempString + "   " + tempPokedexEntry.get(1); // Adds the name
+        tempString = tempString + "     " + tempPokedexEntry.get(5); // Adds the type(s)
+        return tempString;
     }
 
     private void getPokeNameFromURL() {
-        tempArray = urlContents.get(urlContentsLine++).split("\"");
+        String[] tempArray = urlContents.get(urlContentsLine++).split("\"");
         boolean type1Set = false;
 
         for (String s : tempArray) {
@@ -278,6 +283,8 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
+        String tempString;
+
         if (e.getSource() == enterJB || e.getSource() == nameJTF) {
             if (pokeNum == max + 1) {
                 warning("MAX NUMBER REACHED");
@@ -298,10 +305,10 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
                 // Is user creating a new pokemon
             } else if (outputList.getSelectedItem().equals("Add New Pokemon!")) {
                 changeMin();
-                setPokemon();
+                tempString = setPokemon();
                 outputList.add(tempString, outputList.getItemCount() - 1);
                 outputList.select(outputList.getItemCount() - 1);
-                pokedexEntries.add(tempArrayList);
+                pokedexEntries.add(tempPokedexEntry);
 
                 if (urlContentsLine >= 0 & urlContentsLine < urlContents.size())
                     getPokeNameFromURL();
@@ -327,14 +334,14 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
                 // If an already existing pokemon is selected
             } else {
                 int tempInt = outputList.getSelectedIndex();
-                setPokemon(tempInt + min - 1);
+                tempString = setPokemon(tempInt + min - 1);
 
                 outputList.remove(tempInt);
                 outputList.add(tempString, tempInt);
                 outputList.select(outputList.getItemCount() - 1);
 
                 pokedexEntries.remove(tempInt - 1);
-                pokedexEntries.add(tempInt - 1, tempArrayList);
+                pokedexEntries.add(tempInt - 1, tempPokedexEntry);
 
                 if (urlContentsLine >= 0 & urlContentsLine < urlContents.size()) {
                     urlContentsLine--;

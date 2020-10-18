@@ -36,8 +36,8 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.3.2
- * @since March 31, 2020
+ * @version 1.3.2 [!]
+ * @since October 17, 2020
  */
 public class PokemonSearch_Panel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 6168657140878114472L;
@@ -55,8 +55,8 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
     private JLabel searchBarLabel, regionLabel, typeLabel;
     private JButton enterB;
 
-    private ArrayList<String> typeInput, regionInput, evolutionInput, typeList, regionList, tempArr2, tempArray;
-    private String input, pokeInfoVersion;
+    private ArrayList<String> typeInput, regionInput, evolutionInput, typeList, regionList;
+    private String input;
     private int failSafeNum = 0;
 
     public PokemonSearch_Panel() {
@@ -66,10 +66,11 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         gbc = new GridBagConstraints();
         jsonReader = new JSONReader();
         urlReader = new URLReader();
-        pokeSearch = new PokemonSearch_Searcher(frame, jsonReader);
+        pokeSearch = new PokemonSearch_Searcher(jsonReader);
 
         setLayout(new GridBagLayout());
         setBackground(Color.GREEN);
+
         readPokeInfo();
         setUpPanels();
 
@@ -79,13 +80,11 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
     }
 
     private void readPokeInfo() {
-        tempArray = new ArrayList<String>();
-        tempArr2 = new ArrayList<String>();
+        String pokeInfoJSONVersion = null;
 
         try {
             jsonReader.readJSON("pokeInfo");
-            tempArray = jsonReader.get("version");
-            pokeInfoVersion = tempArray.get(0);
+            pokeInfoJSONVersion = jsonReader.get("version").get(0);
 
             typeList = jsonReader.get("types");
             typeCL = new List(9, true);
@@ -100,15 +99,15 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         } catch (FileNotFoundException e) {
         }
 
-        if (pokeInfoVersion == null) {
-            downloadRegionFiles();
+        if (pokeInfoJSONVersion == null) {
+            downloadRegionFiles(null);
 
-        } else if (pokeInfoVersion.equals("debug")) {
+        } else if (pokeInfoJSONVersion.equals("debug")) {
             frame.setTitle("PokemonSearch: DEBUG MODE");
             JOptionPane.showMessageDialog(this, "PokemonSearch is in debug mode\nand will NOT download any JSON files!",
                     "WARNING: DEBUG MODE ACTIVE", JOptionPane.INFORMATION_MESSAGE);
         } else
-            downloadRegionFiles();
+            downloadRegionFiles(pokeInfoJSONVersion);
     }
 
     // TODO: Implement size, weight, abilities, and weakness options
@@ -157,40 +156,50 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         gbc.gridy = gridY;
     }
 
-    // TODO: clean up this method
-    private void downloadRegionFiles() {
-        tempArr2 = urlReader.readURL(pokeInfoURL);
-        urlReader.parseJSON(tempArr2);
-        tempArray = urlReader.get("version");
+    private void downloadRegionFiles(String pokeInfoJSONVersion) {
+        ArrayList<String> tempArray, jsonContents;
+        String pokeInfoURLVersion;
 
-        if (pokeInfoVersion == null) {
-            System.out.println("POKEINFO VERSION " + tempArray.get(0) + " != " + null);
-            downloadFile("pokeInfo");
+        jsonContents = urlReader.readURL(pokeInfoURL);
+        urlReader.parseJSON(jsonContents);
+        try {
+            pokeInfoURLVersion = urlReader.get("version").get(0);
+        } catch (NullPointerException n) {
+            System.out.println("ERROR: URL NOT FOUND. MAKE SURE YOU HAVE AN INTERNET CONNECTION.");
+            pokeInfoURLVersion = null;
+        }
+
+        if (pokeInfoURLVersion == null) {
+            System.out.println("...Terminating Program (PokemonSearch)");
+            System.exit(0);
+
+        } else if (pokeInfoJSONVersion == null || pokeInfoJSONVersion.equals(pokeInfoURLVersion)) {
+            downloadFile("pokeInfo", jsonContents);
             tempArray = urlReader.get("regionURLs");
 
-            for (int d = 0; d < tempArray.size(); d = d + 2) {
-                tempArr2 = urlReader.readURL(tempArray.get(d + 1));
+            for (int i = 0; i < tempArray.size(); i = i + 2) {
+                jsonContents = urlReader.readURL(tempArray.get(i + 1));
                 if (urlReader.isValidURL())
-                    downloadFile(tempArray.get(d));
+                    downloadFile(tempArray.get(i), jsonContents);
             }
 
-            if (failSafeNum == 2)
-                pokeSearch.killProgram("pokeInfo");
-            failSafeNum++;
-            readPokeInfo();
+            if (pokeInfoJSONVersion == null) {
+                if (failSafeNum >= 1) {
+                    System.out.println("ERROR: UNABLE TO FIND \"pokeInfo.json\".");
+                    System.out.println("...Terminating Program (PokemonSearch)");
+                    System.exit(0);
+                } else {
+                    System.out.println("VERSION NOT FOUND  FOR \"pokeInfo.json\"");
+                    failSafeNum++;
+                    readPokeInfo();
+                }
 
-        } else if (!pokeInfoVersion.equals(tempArray.get(0))) {
-            System.out.println("POKEINFO VERSION " + tempArray.get(0) + " != " + pokeInfoVersion);
-            downloadFile("pokeInfo");
-            tempArray = urlReader.get("regionURLs");
-
-            for (int d = 0; d < tempArray.size(); d = d + 2) {
-                tempArr2 = urlReader.readURL(tempArray.get(d + 1));
-                if (urlReader.isValidURL())
-                    downloadFile(tempArray.get(d));
+            } else {
+                System.out.println("POKEINFO VERSION " + pokeInfoURLVersion + " != " + pokeInfoJSONVersion);
             }
+
         } else {
-            System.out.println("POKEINFO VERSION " + tempArray.get(0) + " == " + pokeInfoVersion);
+            System.out.println("POKEINFO VERSION " + pokeInfoURLVersion + " == " + pokeInfoJSONVersion);
             tempArray = urlReader.get("regionURLs");
 
             for (int i = 0; i < tempArray.size(); i = i + 2) {
@@ -201,32 +210,29 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
                     fileScan.close();
 
                 } catch (Exception e) {
-                    tempArr2 = urlReader.readURL(tempArray.get(i + 1));
+                    jsonContents = urlReader.readURL(tempArray.get(i + 1));
                     if (urlReader.isValidURL())
-                        downloadFile(tempArray.get(i));
+                        downloadFile(tempArray.get(i), jsonContents);
                 }
             }
         }
     }
 
-    private void downloadFile(String fileName) {
+    private void downloadFile(String fileName, ArrayList<String> jsonContents) {
         System.out.println("Downloading file: " + fileName + ".json");
         try {
-            if (tempArr2 == null)
-                throw new Exception();
-
             FileWriter fw = new FileWriter(fileName + ".json");
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
 
-            for (int i = 0; i < tempArr2.size() - 1; i++) {
-                pw.println(tempArr2.get(i));
+            for (int i = 0; i < jsonContents.size() - 1; i++) {
+                pw.println(jsonContents.get(i));
             }
-            pw.print(tempArr2.get(tempArr2.size() - 1));
+            pw.print(jsonContents.get(jsonContents.size() - 1));
             pw.close();
 
         } catch (Exception e) {
-            System.out.println("ERROR: FAILED TO DOWNLOAD " + fileName + ".json");
+            System.out.println("ERROR: FAILED TO DOWNLOAD " + fileName + ".json.");
         }
     }
 

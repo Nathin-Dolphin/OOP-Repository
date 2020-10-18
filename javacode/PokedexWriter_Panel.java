@@ -31,7 +31,7 @@ import java.util.ArrayList;
 /**
  * @author Nathin Wascher
  * @version 1.1
- * @since March 28, 2020
+ * @since October 17, 2020
  */
 public class PokedexWriter_Panel extends PokedexWriter_Writer {
     private static final long serialVersionUID = 2628539169557674903L;
@@ -49,6 +49,7 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
     private JLabel regionHighJL, regionLowJL, nameJL, evolutionJL, evoNumJL, type1JL, type2JL;
 
     private ArrayList<String> tempArray;
+    // private int paneValue;
 
     public PokedexWriter_Panel() {
     }
@@ -116,6 +117,10 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
     }
 
     private void initializeRange() {
+        //        Object[] minMaxPaneJTF = new Object[] { new JButton("OK"), new JTextField(5), new JButton("CANCEL") };
+        //        JOptionPane optionPane = new JOptionPane("test", JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+        //                minMaxPaneJTF, null);
+
         min = 0;
         String j = "";
         do {
@@ -128,6 +133,9 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
                     System.out.println("ERROR: NOT A NUMBER");
                 }
             } while (j.equals(""));
+
+            if (min <= 0)
+                System.out.println("ERROR: MIN CAN NOT BE LOWER THAN 1");
         } while (min <= 0);
 
         pokeNum = min;
@@ -139,9 +147,12 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
                     max = Integer.parseInt(j);
                 } catch (Exception e) {
                     j = "";
-                    System.out.println("ERROR: NOT A NUMBER");
+                    System.out.println("ERROR: NOT A NUMBER" + e);
                 }
             } while (j.equals(""));
+
+            if (max <= min)
+                System.out.println("ERROR: MAX CAN NOT BE LOWER THAN MIN");
         } while (max <= min);
     }
 

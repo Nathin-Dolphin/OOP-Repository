@@ -22,8 +22,8 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.1.3
- * @since March 28, 2020
+ * @version 1.1.4
+ * @since October 17, 2020
  */
 public class JSONWriter {
     private Scanner scan;
@@ -37,15 +37,13 @@ public class JSONWriter {
      * @param fileName
      */
     public JSONWriter(JPanel panel, String fileName) {
+        if (!fileName.endsWith(".json"))
+            fileName = fileName + ".json";
         jsonContents = new ArrayList<String>();
         endBrackets = new ArrayList<String>();
-        String warning = "The file " + fileName + " was found.\nDo you want to overwrite this file?";
+        String warning = "The file \"" + fileName + "\" was found.\nDo you want to overwrite this file?";
         tabs = "\t";
         jsonContents.add("{");
-
-        if (!fileName.endsWith(".json")) {
-            fileName = fileName + ".json";
-        }
 
         try {
             scan = new Scanner(new File(fileName));
