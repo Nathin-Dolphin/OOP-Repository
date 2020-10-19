@@ -22,46 +22,41 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.1.4
+ * @version 1.1.5
  * @since October 17, 2020
  */
 public class JSONWriter {
-    private Scanner scan;
-    private PrintWriter pw;
-
     private ArrayList<String> jsonContents, endBrackets;
-    private String tabs, tempString;
+    private String tabs, fileName;
 
     /**
      * 
      * @param fileName
      */
     public JSONWriter(JPanel panel, String fileName) {
-        if (!fileName.endsWith(".json"))
-            fileName = fileName + ".json";
+        String warning = "The file \"" + fileName + "\" was found.\nDo you want to overwrite this file?";
+        Scanner scan;
         jsonContents = new ArrayList<String>();
         endBrackets = new ArrayList<String>();
-        String warning = "The file \"" + fileName + "\" was found.\nDo you want to overwrite this file?";
         tabs = "\t";
+
+        if (!fileName.endsWith(".json"))
+            fileName = fileName + ".json";
+        this.fileName = fileName;
         jsonContents.add("{");
 
         try {
             scan = new Scanner(new File(fileName));
-
             int output = JOptionPane.showInternalConfirmDialog(panel, warning, "WARNING", JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE);
-            if (output == JOptionPane.YES_OPTION) {
-                pw = newFile(fileName);
 
-            } else {
+            if (output != JOptionPane.YES_OPTION) {
                 System.out.println("\n...Terminating Program From (JSONWriter)");
                 // TODO: Have it close the frame/panel its attached too
                 System.exit(0);
                 scan.close();
             }
-
         } catch (FileNotFoundException e) {
-            pw = newFile(fileName);
         }
     }
 
@@ -70,6 +65,8 @@ public class JSONWriter {
      * @param input
      */
     public void newObject(ArrayList<String> input) {
+        String tempString = "";
+
         if (jsonContents.get(jsonContents.size() - 1).endsWith("}")) {
             jsonContents.remove(jsonContents.size() - 1);
             jsonContents.add(tabs + "},{");
@@ -121,24 +118,23 @@ public class JSONWriter {
 
     /** */
     public void closeFile() {
+        PrintWriter pw;
         jsonContents.add("}");
 
-        // TODO: Add loading bar here
-        for (int f = 0; f < jsonContents.size() - 1; f++) {
-            pw.println(jsonContents.get(f));
-        }
-        pw.print(jsonContents.get(jsonContents.size() - 1));
-        pw.close();
-    }
-
-    private PrintWriter newFile(String fileName) {
         try {
             FileWriter fw = new FileWriter(fileName);
             BufferedWriter bw = new BufferedWriter(fw);
-            return new PrintWriter(bw);
+            pw = new PrintWriter(bw);
+
         } catch (IOException e) {
             System.out.println("ERROR: FAILED TO CREATE \"" + fileName + "\"");
-            return null;
+            return;
         }
+
+        // TODO: Add loading bar here
+        for (int f = 0; f < jsonContents.size() - 1; f++)
+            pw.println(jsonContents.get(f));
+        pw.print(jsonContents.get(jsonContents.size() - 1));
+        pw.close();
     }
 }
