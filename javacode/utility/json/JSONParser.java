@@ -19,20 +19,25 @@ import java.util.ArrayList;
  * <b>Planned Features:</b>
  * <p>
  * Implement threading.
+ * <p>
+ * Have get(String) take an ArrayList instead of a String
+ * <p>
+ * Allow option in get(String) to get only values from the JSON
  * 
  * <p>
- * <b>WARNING:</b> A very messy {@code .json} file may not get parsed correctly.
+ * <b>WARNING:</b> An extremely messy {@code .json} file may not get parsed
+ * correctly.
  * 
  * @author Nathin Wascher
- * @version 1.8.1
- * @since March 27, 2020
+ * @version 1.8.2
+ * @since October 20, 2020
  * 
  * @see JSONReader
  * @see URLReader
  */
 
 public class JSONParser {
-    private ArrayList<String> parsedContents, noBracketContents, jsonContents, tempArray;
+    private ArrayList<String> BracketedContents, BracketlessContents, jsonContents, tempArray;
     private String[] parsedLine;
     private String tempString, tempStr2;
     private int arrayIndex;
@@ -50,23 +55,36 @@ public class JSONParser {
         bracketList = brackets;
     }
 
+    /**Overloaded Method
+     * <p>
+     * Parses data from a {@code .json} file and puts it into a
+     * {@code ArrayList<String>}.
+     * 
+     * @param jsonContents    The raw data from a single {@code .json} file
+     * @return An {@code ArrayList<String>} consisting of the {@code .json} data
+     */
     public ArrayList<String> parseJSON(ArrayList<String> jsonContents) {
         return parseJSON(jsonContents, true);
     }
 
     /**
      * Parses data from a {@code .json} file and puts it into a
-     * {@code ArrayList<String>}.
+     * {@code ArrayList<String>}. If {@code includeBrackets} is false, an
+     * {@code ArrayList<String>} that contains brackets will still be created, but
+     * that array will not be returned. To access that array list, use
+     * {@code getBracketedContents}.
      * 
      * @param jsonContents    The raw data from a single {@code .json} file
      * @param includeBrackets If {@code true}, the parsed {@code .json} data should
      *                        keep the brackets else if {@code false}, remove them
      * @return An {@code ArrayList<String>} consisting of the {@code .json} data
+     * 
+     * @see #getBracketedContents()
      */
     public ArrayList<String> parseJSON(ArrayList<String> jsonContents, boolean includeBrackets) {
         if (!includeBrackets)
-            noBracketContents = new ArrayList<String>();
-        parsedContents = new ArrayList<String>();
+            BracketlessContents = new ArrayList<String>();
+        BracketedContents = new ArrayList<String>();
         tempStr2 = null;
         this.jsonContents = jsonContents;
 
@@ -86,33 +104,33 @@ public class JSONParser {
                     if (tempString != null)
                         sortJSONComponents(i, includeBrackets);
                     if (tempString != null) {
-                        parsedContents.add(tempString);
+                        BracketedContents.add(tempString);
                         if (tempStr2 != null) {
-                            parsedContents.add(tempStr2);
+                            BracketedContents.add(tempStr2);
                             tempStr2 = null;
                         }
                     }
                 } else {
-                    parsedContents.add(tempString);
+                    BracketedContents.add(tempString);
                     if (!includeBrackets)
-                        noBracketContents.add(tempString);
+                        BracketlessContents.add(tempString);
                 }
             }
         }
         if (includeBrackets)
-            return parsedContents;
+            return BracketedContents;
         else
-            return noBracketContents;
+            return BracketlessContents;
     }
 
     /**
-     * Primarily used to aquire {@code jsonContents} (witch includes brackets) after
-     * recieving {@code noBracketContents} from {@code parseJSON()}
+     * Primarily used to aquire {@code jsonContents} (which includes brackets) after
+     * recieving {@code BracketlessContents} from {@code parseJSON()}
      * 
      * @return The parsed {@code .json} contents that includes the brackets
      */
-    public ArrayList<String> getParsedContents() {
-        return parsedContents;
+    public ArrayList<String> getBracketedContents() {
+        return BracketedContents;
     }
 
     /**
@@ -127,16 +145,19 @@ public class JSONParser {
      * @see #readJSON(String, boolean)
      */
     public ArrayList<String> get(String objectName) throws NullPointerException {
-        if (parsedContents == null || parsedContents.size() == 0) {
+        if (BracketedContents == null) {
             throw new NullPointerException();
+
+        } else if (BracketedContents.size() == 0) {
+            throw new NullPointerException("JSON FILE IS EMPTY");
 
         } else {
             tempArray = new ArrayList<String>();
-            for (arrayIndex = 0; arrayIndex < parsedContents.size(); arrayIndex++) {
-                tempString = parsedContents.get(arrayIndex);
+            for (arrayIndex = 0; arrayIndex < BracketedContents.size(); arrayIndex++) {
+                tempString = BracketedContents.get(arrayIndex);
 
                 if (tempString.equals(objectName)) {
-                    tempString = parsedContents.get(++arrayIndex);
+                    tempString = BracketedContents.get(++arrayIndex);
 
                     if (!isNewArray()) {
                         tempArray.add(tempString);
@@ -166,19 +187,19 @@ public class JSONParser {
 
     // Checks if the current json array or object is ending
     private void endArrayCheck(String endBracket) {
-        tempString = parsedContents.get(++arrayIndex);
+        tempString = BracketedContents.get(++arrayIndex);
 
         while (!tempString.equals(endBracket)) {
             if (tempString.equals("}{")) {
-                tempString = parsedContents.get(++arrayIndex);
+                tempString = BracketedContents.get(++arrayIndex);
 
             } else {
                 tempArray.add(tempString);
-                tempString = parsedContents.get(++arrayIndex);
+                tempString = BracketedContents.get(++arrayIndex);
                 isNewArray();
             }
         }
-        tempString = parsedContents.get(++arrayIndex);
+        tempString = BracketedContents.get(++arrayIndex);
     }
 
     // Sorts the json into names, values, and brackets as well as erase the colons
@@ -248,18 +269,18 @@ public class JSONParser {
 
             if (includeBrackets) {
                 // combines brackets if possible.
-                int maxIndex = parsedContents.size() - 1;
+                int maxIndex = BracketedContents.size() - 1;
                 if (maxIndex > 1) {
-                    if (parsedContents.get(maxIndex).equals("[") & tempString.equals("{")) {
-                        parsedContents.remove(maxIndex);
+                    if (BracketedContents.get(maxIndex).equals("[") & tempString.equals("{")) {
+                        BracketedContents.remove(maxIndex);
                         tempString = "[{";
 
-                    } else if (parsedContents.get(maxIndex).equals("}") & tempString.equals("]")) {
-                        parsedContents.remove(maxIndex);
+                    } else if (BracketedContents.get(maxIndex).equals("}") & tempString.equals("]")) {
+                        BracketedContents.remove(maxIndex);
                         tempString = "}]";
 
-                    } else if (parsedContents.get(maxIndex).equals("}") & tempString.equals("{")) {
-                        parsedContents.remove(maxIndex);
+                    } else if (BracketedContents.get(maxIndex).equals("}") & tempString.equals("{")) {
+                        BracketedContents.remove(maxIndex);
                         tempString = "}{";
                     }
                 }
@@ -295,12 +316,12 @@ public class JSONParser {
     public String toString(boolean printParsedContents) {
         tempString = "";
 
-        if (jsonContents != null) {
+        if (jsonContents == null) {
             return null;
 
         } else if (printParsedContents) {
-            for (int i = 0; i < parsedContents.size(); i++)
-                tempString = "\n" + tempString + parsedContents.get(i);
+            for (int i = 0; i < BracketedContents.size(); i++)
+                tempString = "\n" + tempString + BracketedContents.get(i);
 
         } else
             for (int i = 0; i < jsonContents.size(); i++)

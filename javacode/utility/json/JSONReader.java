@@ -33,15 +33,15 @@ import java.util.Scanner;
  * it will add the next {@code String} to the {@code ArrayList<String>}.
  * 
  * @author Nathin Wascher
- * @version 1.5
- * @since March 28, 2020
+ * @version 1.5.1
+ * @since October 20, 2020
  * 
  * @see JSONParser
  */
 
 public class JSONReader extends JSONParser {
     private Scanner fileScan;
-    private ArrayList<String> jsonContents;
+    private ArrayList<String> jsonContents, BracketedContents, BracketlessContents;
     private String nextLine;
 
     public JSONReader() {
@@ -71,12 +71,18 @@ public class JSONReader extends JSONParser {
             fileScan = new Scanner(new File(fileName + ".json"));
 
         jsonContents = new ArrayList<String>();
+        BracketedContents = new ArrayList<String>();
         while (fileScan.hasNextLine()) {
             nextLine = fileScan.nextLine();
             jsonContents.add(nextLine);
         }
-        jsonContents = parseJSON(jsonContents, includeBrackets);
-        return jsonContents;
+
+        if (includeBrackets) {
+            BracketedContents = parseJSON(jsonContents, true);
+            return BracketedContents;
+        }
+        BracketlessContents = parseJSON(jsonContents, false);
+        return BracketlessContents;
     }
 
     /**
