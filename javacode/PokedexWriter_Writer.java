@@ -6,12 +6,14 @@
  */
 
 import utility.json.JSONWriter;
+import utility.json.JSONReader;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import java.awt.List;
 
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 
@@ -26,18 +28,20 @@ import java.util.ArrayList;
 
 // TODO: Implement save button
 // TODO: Optimize 'evoNum' and 'nextEvoNumJB'
+// TODO: Changing the 'min' and'max' is messy and only partly works
 
 /**
  * @author Nathin Wascher
- * @version 1.2.3
- * @since October 17, 2020
+ * @version 1.2.4
+ * @since October 20, 2020
  */
 public class PokedexWriter_Writer extends JPanel implements ActionListener {
     private static final long serialVersionUID = 2911032048461996161L;
     private final String pokedexSourceURL = "https://pokemondb.net/pokedex/national";
+    private final int NAME = 0, NUMBER = 2, TYPE = 4, EVOLUTION = 6, OBJECT_LENGTH = 8;
 
     private ArrayList<ArrayList<String>> pokedexEntries;
-    private ArrayList<String> tempPokedexEntry, urlContents, urlRegionList;
+    private ArrayList<String> tempPokedexEntry, urlContents, urlRegionList, jsonContents;
     private String nextEvoNum;
     private int evoNum, urlContentsLine, evolutionPos;
 
@@ -50,9 +54,11 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
     public String regionName;
     public int min, max, pokeNum;
 
+    // Initialize a bunch of stuff
     public PokedexWriter_Writer() {
         pokedexEntries = new ArrayList<ArrayList<String>>();
         evolutionStates = new ArrayList<String>();
+        urlContents = new ArrayList<String>();
         outputList = new List(40);
 
         outputList.add("!<<<<<>>>>>!!<<<<<>>>>>!!<<<<<>>>>>!!<<<<<>>>>>!");
@@ -70,19 +76,96 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         evoNum = 0;
     }
 
-    public void openURL() {
-        urlContents = new ArrayList<String>();
-        urlRegionList = new ArrayList<String>();
+    public void modifyFile() {
+        JSONReader pwwJsonReader = new JSONReader();
+        jsonContents = new ArrayList<String>();
+        String tempString = regionName;
         String[] tempArray;
+
+        getMinMax();
+
+        try {
+            pwwJsonReader.readJSON(tempString);
+            jsonContents.addAll(pwwJsonReader.get(regionName));
+        } catch (FileNotFoundException e) {
+            System.out.println("ERROR: FILE NOT FOUND");
+            System.exit(0);
+        }
+
+        nameJTF.setText(jsonContents.get(NAME + 1));
+
+        tempArray = jsonContents.get(TYPE + 1).split("-");
+        for (int g = 0; g < tempArray.length; g++)
+            for (int type = 0; type < typeList.size(); type++)
+                if (typeList.get(type).equalsIgnoreCase(tempArray[g]))
+                    if (g == 0)
+                        type1CL.select(type);
+                    else
+                        type2CL.select(type + 1);
+
+        // NOTE: Obtaining the evolution set from 'regionList' is temporary
+        for (int f = 0; f < regionList.size(); f = f + 2)
+            if (regionList.get(f).equals(regionName)) {
+                if (--f != -1) {
+                    tempString = regionList.get(f).split("-")[1];
+                    evoNum = Integer.parseInt(tempString) + 1;
+                    evoNumJTF.setText("" + evoNum);
+                }
+                f = regionList.size();
+            }
+
+        // TODO: Set the evolution set entirely from 'jsonContents'
+        // tempArray = jsonContents.get(EVOLUTION + 1).split("-");
+        // evolutionCL.select(Integer.parseInt(tempArray[1]));
+    }
+
+    public void openURL() {
+        urlRegionList = new ArrayList<String>();
         String tempString;
         boolean stopSearch = false;
 
         for (int i = 0; i < 8; i++)
             urlRegionList.add("id=\"gen-" + (i + 1) + "\"");
 
-        // Finds the min and max for the region
-        // 'regionList' is initialized in PokedexWriter_Panel constructor
+        int h = getMinMax();
+
+        if (h != -1) {
+            try {
+                System.out.println("\nREADING URL: " + pokedexSourceURL);
+                URL openURL = new URL(pokedexSourceURL);
+                BufferedReader br = new BufferedReader(new InputStreamReader(openURL.openStream()));
+
+                while ((tempString = br.readLine()) != null & !stopSearch) {
+                    if (tempString.contains(urlRegionList.get(h))) {
+                        tempString = br.readLine();
+
+                        while (!tempString.equals("</div>")) {
+                            urlContents.add(tempString);
+                            tempString = br.readLine();
+                        }
+                        stopSearch = true;
+                    }
+                }
+                urlContentsLine = 1;
+                getPokeInfoFromURL();
+                br.close();
+            } catch (Exception e) {
+                System.out.println("ERROR: FAILED TO LOAD URL " + pokedexSourceURL);
+            }
+        }
+    }
+
+    // TODO: Rework this to be a more general purpose pop-up box
+    private void warning(String s) {
+        JOptionPane.showConfirmDialog(this, "WARNING: " + s, "WARNING MESSAGE! (WIP)", JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+    }
+
+    // Finds the min and max for the region
+    private int getMinMax() {
+        String[] tempArray;
         int h = -1;
+
         for (int d = 0; d < regionList.size(); d = d + 2) {
             if (regionList.get(d).equalsIgnoreCase(regionName)) {
                 tempArray = regionList.get(d - 1).split("-");
@@ -106,39 +189,10 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
                 d = regionList.size();
             }
         }
-
-        if (h != -1) {
-            try {
-                System.out.println("\nREADING URL: " + pokedexSourceURL);
-                URL openURL = new URL(pokedexSourceURL);
-                BufferedReader br = new BufferedReader(new InputStreamReader(openURL.openStream()));
-
-                while ((tempString = br.readLine()) != null & !stopSearch) {
-                    if (tempString.contains(urlRegionList.get(h))) {
-                        tempString = br.readLine();
-
-                        while (!tempString.equals("</div>")) {
-                            urlContents.add(tempString);
-                            tempString = br.readLine();
-                        }
-                        stopSearch = true;
-                    }
-                }
-                urlContentsLine = 1;
-                getPokeNameFromURL();
-                br.close();
-            } catch (Exception e) {
-                System.out.println("ERROR: FAILED TO LOAD URL " + pokedexSourceURL);
-            }
-        }
+        return h;
     }
 
-    // TODO: make warning() look a bit better
-    private void warning(String s) {
-        JOptionPane.showConfirmDialog(this, "WARNING: " + s, "WARNING MESSAGE! (WIP)", JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.WARNING_MESSAGE);
-    }
-
+    // TODO: Rework changeMax()
     private boolean changeMax() {
         if (!maxJTF.getText().equals(String.valueOf(max))) {
             warning("MAX CHANGED");
@@ -148,6 +202,7 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         return false;
     }
 
+    // TODO: Rework changeMin()
     private boolean changeMin() {
         if (!minJTF.getText().equals(String.valueOf(min))) {
             warning("MIN CHANGED");
@@ -158,6 +213,7 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         return changeMax();
     }
 
+    //
     private String setEvolution() {
         String tempString;
 
@@ -209,41 +265,42 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         }
     }
 
-    private String setPokemon() {
-        return setPokemon(pokeNum++);
-    }
-
     // TODO: Make 'outputList' easier to read
-    private String setPokemon(int num) {
+    // Takes the user inputs and
+    private String setPokemon(int tempPokeNum) {
         tempPokedexEntry = new ArrayList<String>();
         String tempString;
 
+        // Set the name for the pokemon
         tempPokedexEntry.add("name");
         tempString = capitalize(nameJTF.getText().replaceAll(" ", ""));
         tempPokedexEntry.add(tempString);
 
+        // Set the number for the pokemon
         tempPokedexEntry.add("number");
-        if (num > 999)
-            tempPokedexEntry.add("" + num);
-        else if (num > 99)
-            tempPokedexEntry.add("0" + num);
-        else if (num > 9)
-            tempPokedexEntry.add("00" + num);
+        if (tempPokeNum > 999)
+            tempPokedexEntry.add("" + tempPokeNum);
+        else if (tempPokeNum > 99)
+            tempPokedexEntry.add("0" + tempPokeNum);
+        else if (tempPokeNum > 9)
+            tempPokedexEntry.add("00" + tempPokeNum);
         else
-            tempPokedexEntry.add("000" + num);
+            tempPokedexEntry.add("000" + tempPokeNum);
 
+        // Set the type(s) for the pokemon
         tempPokedexEntry.add("type");
-        if (type2CL.getSelectedItem().equals("none")) {
-            tempPokedexEntry.add(capitalize(type1CL.getSelectedItem()));
-        } else {
-            tempPokedexEntry.add(capitalize(type1CL.getSelectedItem()) + "-" + capitalize(type2CL.getSelectedItem()));
-        }
+        tempString = capitalize(type1CL.getSelectedItem());
+        if (!type2CL.getSelectedItem().equals("none"))
+            tempString = tempString + "-" + capitalize(type2CL.getSelectedItem());
+        tempPokedexEntry.add(tempString);
 
+        // Set the evolution string for the pokemon
         tempPokedexEntry.add("evolution");
         tempString = setEvolution();
         tempPokedexEntry.add(tempString + "-" + evolutionPos);
         evoNumJTF.setText(nextEvoNum);
 
+        // TODO: Put a comment here
         if (evolutionPos == 1)
             evolutionCL.select(2);
         else if (evolutionPos == 2)
@@ -258,15 +315,18 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         return tempString;
     }
 
-    private void getPokeNameFromURL() {
+    // Gather the name and type(s) for a pokemon from the URL's contents
+    private void getPokeInfoFromURL() {
         String[] tempArray = urlContents.get(urlContentsLine++).split("\"");
         boolean type1Set = false;
 
         for (String s : tempArray) {
+            // Find the name of the pokemon
             if (s.contains("/pokedex/")) {
                 s = s.replace("/pokedex/", "");
                 nameJTF.setText(s);
 
+                // Find the type(s) of the pokemon
             } else if (s.contains("/type/")) {
                 s = s.replace("/type/", "");
                 for (int k = 0; k < typeList.size(); k++) {
@@ -282,6 +342,25 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         }
     }
 
+    // private void getPokeInfoFromJSON() {}
+
+    // TODO: createFile()
+    private void createFile() {
+        outputList.remove(outputList.getItemCount() - 1);
+
+        // TODO: Have this do a pop-up box too
+        System.out.println("Creating File: \"" + regionName + ".json\"");
+
+        jsonWriter.newArray(regionName);
+        for (ArrayList<String> s : pokedexEntries) {
+            jsonWriter.newObject(s);
+        }
+        jsonWriter.endArray();
+        jsonWriter.closeFile();
+
+        System.out.println("File Successfully Created!");
+    }
+
     public void actionPerformed(ActionEvent e) {
         String tempString;
 
@@ -292,7 +371,7 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
                 // If the top line or no line is selected
             } else if (outputList.getSelectedIndex() <= 0) {
                 outputList.select(outputList.getItemCount() - 1);
-                warning("MissingNo");
+                warning("MissingNo has Appeared!");
 
                 // Is the name blank
             } else if (nameJTF.getText().replaceAll(" ", "").equals("")) {
@@ -305,55 +384,46 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
                 // Is user creating a new pokemon
             } else if (outputList.getSelectedItem().equals("Add New Pokemon!")) {
                 changeMin();
-                tempString = setPokemon();
+                tempString = setPokemon(pokeNum++);
                 outputList.add(tempString, outputList.getItemCount() - 1);
                 outputList.select(outputList.getItemCount() - 1);
                 pokedexEntries.add(tempPokedexEntry);
 
                 if (urlContentsLine >= 0 & urlContentsLine < urlContents.size())
-                    getPokeNameFromURL();
+                    getPokeInfoFromURL();
 
+                // TODO: Make it more noticable that a file is created
                 if (pokeNum == max + 1) {
-                    outputList.remove(outputList.getItemCount() - 1);
-
-                    if (regionName.endsWith(".json"))
-                        System.out.println("Creating File: \"" + regionName + "\"");
-                    else
-                        System.out.println("Creating File: \"" + regionName + ".json\"");
-
-                    jsonWriter.newArray(regionName);
-                    for (ArrayList<String> s : pokedexEntries) {
-                        jsonWriter.newObject(s);
-                    }
-                    jsonWriter.endArray();
-                    jsonWriter.closeFile();
-
-                    System.out.println("File Successfully Created!");
+                    // String tempString = "Create " + regionName + ".json File";
+                    // outputList.add(tempString, outputList.getItemCount() - 1);
+                    createFile();
                 }
 
-                // If an already existing pokemon is selected
+                // If an already existing pokemon is selected, then modify the pokemon in
+                // 'outputList' and 'pokedexEntries'
             } else {
-                int tempInt = outputList.getSelectedIndex();
-                tempString = setPokemon(tempInt + min - 1);
+                int outputIndex = outputList.getSelectedIndex();
+                tempString = setPokemon(outputIndex + min - 1);
 
-                outputList.remove(tempInt);
-                outputList.add(tempString, tempInt);
+                outputList.remove(outputIndex);
+                outputList.add(tempString, outputIndex);
                 outputList.select(outputList.getItemCount() - 1);
 
-                pokedexEntries.remove(tempInt - 1);
-                pokedexEntries.add(tempInt - 1, tempPokedexEntry);
+                pokedexEntries.remove(outputIndex - 1);
+                pokedexEntries.add(outputIndex - 1, tempPokedexEntry);
 
                 if (urlContentsLine >= 0 & urlContentsLine < urlContents.size()) {
                     urlContentsLine--;
-                    getPokeNameFromURL();
+                    getPokeInfoFromURL();
                 }
             }
+            // When user presses nextEvoNum Button
         } else if (e.getSource() == nextEvoNumJB) {
             evoNumJTF.setText(" " + (evoNum + 1));
 
+            // TODO: Remember what I planned to do here
         } else if (e.getSource() == outputList) {
-            // WOKR IN PROGRESS
-            int tempInt = outputList.getSelectedIndex();
+            // int tempInt = outputList.getSelectedIndex();
         }
     }
 }

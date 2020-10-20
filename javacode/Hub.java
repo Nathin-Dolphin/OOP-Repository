@@ -7,7 +7,7 @@
 
 /**
  * @author Nathin Wascher
- * @version Hub v1.0.1
+ * @version Hub v1.0.2
  * @since March 29, 2020
  */
 public class Hub {

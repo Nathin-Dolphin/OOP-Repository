@@ -24,8 +24,8 @@ import java.util.ArrayList;
 
 /**
  * @author Nathin Wascher
- * @version 1.0.1
- * @since May 1, 2020
+ * @version 1.0.2
+ * @since October 20, 2020
  */
 public class Hub_Panel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 361412748756007463L;
@@ -163,7 +163,7 @@ public class Hub_Panel extends JPanel implements ActionListener {
         buttonArray.add(new JButton("PokedexWriter")); // 2 PokedexWriter
         buttonArray.add(new JButton("Help"));
         buttonArray.add(new JButton("WriteNewpokedex"));
-        buttonArray.add(new JButton("AddToPokedex"));
+        buttonArray.add(new JButton("ModifyPokedex"));
         buttonArray.add(new JButton("WriteNewPokedexAssisted"));
         buttonList.add(buttonArray);
         buttonArray = new ArrayList<JButton>();

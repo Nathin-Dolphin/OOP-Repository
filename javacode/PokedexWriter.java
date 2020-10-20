@@ -7,8 +7,8 @@
 
 /**
  * @author Nathin Wascher
- * @version PokedexWriter v1.1.1
- * @since March 28, 2020
+ * @version PokedexWriter v1.1.3
+ * @since October 20, 2020
  */
 
 public class PokedexWriter {
@@ -34,10 +34,11 @@ public class PokedexWriter {
                 System.out.println("Executing Command -WriteNewPokedexAssisted...");
                 new PokedexWriter_Panel(args[1], true);
 
-            } else if (args[0].equalsIgnoreCase("-AddToPokedex")) {
+            } else if (args[0].equalsIgnoreCase("-ModifyPokedex")) {
                 System.out.println("Executing Command -AddToPokedex...");
-                System.out.println("THIS FEATURE IS CURRENTLY NOT IMPLEMENTED");
+                System.out.println("THIS FEATURE IS CURRENTLY A WORK IN PROGRESS");
                 System.out.println("\n...Terminating Program (PokedexWriter)");
+                new PokedexWriter_Panel(args[1]);
 
             } else {
                 System.out.println("\nERROR: INVALID COMMAND. USE \"-Help\"");

@@ -36,7 +36,7 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.3.2 [!]
+ * @version 1.3.3
  * @since October 17, 2020
  */
 public class PokemonSearch_Panel extends JPanel implements ActionListener {

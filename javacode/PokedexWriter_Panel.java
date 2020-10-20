@@ -30,8 +30,8 @@ import java.util.ArrayList;
 
 /**
  * @author Nathin Wascher
- * @version 1.1
- * @since October 17, 2020
+ * @version 1.1.1
+ * @since October 20, 2020
  */
 public class PokedexWriter_Panel extends PokedexWriter_Writer {
     private static final long serialVersionUID = 2628539169557674903L;
@@ -39,7 +39,7 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
 
     private SimpleFrame frame;
     private GridBagConstraints gbc;
-    private JSONReader jsonReader;
+    private JSONReader pwpJsonReader;
     private URLReader urlReader;
 
     // TODO: Reorganize JPanels
@@ -54,29 +54,30 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
     public PokedexWriter_Panel() {
     }
 
+    public PokedexWriter_Panel(String regionName) {
+        setUp(regionName);
+
+        // Temporarly initialize 'min' and 'max' to a value so the frame is created
+        // properly
+        min = 0;
+        max = 1;
+
+        setLayout(new GridBagLayout());
+        setUpControlPanel();
+
+        setGBC(0, 0);
+        add(outputList, gbc);
+        setGBC(1, 0);
+        add(controlPanel, gbc);
+
+        frame.add(this);
+        frame.setVisible(true);
+
+        modifyFile();
+    }
+
     public PokedexWriter_Panel(String regionName, boolean useURL) {
-        String tempString = regionName;
-        if (!regionName.endsWith(".json"))
-            tempString = regionName + ".json";
-
-        frame = new SimpleFrame("PokedexWriter", "Creating file: \"" + tempString + "\"", 900, 650, true);
-        gbc = new GridBagConstraints();
-        jsonReader = new JSONReader();
-        jsonWriter = new JSONWriter(this, regionName);
-        this.regionName = regionName;
-
-        try {
-            jsonReader.readJSON("pokeInfo");
-            typeList = jsonReader.get("types");
-            regionList = jsonReader.get("regions");
-        } catch (FileNotFoundException e) {
-            try {
-                urlReader = new URLReader();
-                tempArray = urlReader.readURL(pokeInfoURL);
-                downloadPokeInfo();
-            } catch (Exception x) {
-            }
-        }
+        setUp(regionName);
 
         if (!useURL)
             initializeRange();
@@ -95,9 +96,44 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
             openURL();
     }
 
+    private void setUp(String regionName) {
+        // check other classes to remove redundant code that changes the letter casing
+        // for 'regionName'
+        regionName = regionName.toLowerCase();
+        String tempString = regionName;
+        if (regionName.endsWith(".json")) {
+            regionName = regionName.replace(".json", "");
+        }
+        tempString = regionName + ".json";
+
+        frame = new SimpleFrame("PokedexWriter", "Creating file: \"" + tempString + "\"", 900, 650, true);
+        gbc = new GridBagConstraints();
+        pwpJsonReader = new JSONReader();
+        jsonWriter = new JSONWriter(this, tempString);
+        this.regionName = regionName;
+
+        // attempt to read 'pokeInfo.json', or if it doesn't exist, download neccessary
+        // files
+        try {
+            pwpJsonReader.readJSON("pokeInfo");
+            typeList = pwpJsonReader.get("types");
+            regionList = pwpJsonReader.get("regions");
+        } catch (FileNotFoundException e) {
+            try {
+                downloadPokeInfo();
+            } catch (Exception x) {
+                System.out.println("ERROR: UNKNOWN ERROR");
+            }
+        }
+    }
+
     private void downloadPokeInfo() {
         System.out.println("Downloading file: pokeInfo.json");
+        urlReader = new URLReader();
+        tempArray = urlReader.readURL(pokeInfoURL);
+
         try {
+            // if urlReader.readURL returns nothing
             if (tempArray == null)
                 throw new Exception();
 
@@ -113,13 +149,16 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
 
         } catch (Exception e) {
             System.out.println("ERROR: FAILED TO DOWNLOAD " + regionName + ".json");
+            System.exit(0);
         }
     }
 
     private void initializeRange() {
-        //        Object[] minMaxPaneJTF = new Object[] { new JButton("OK"), new JTextField(5), new JButton("CANCEL") };
-        //        JOptionPane optionPane = new JOptionPane("test", JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
-        //                minMaxPaneJTF, null);
+        // Object[] minMaxPaneJTF = new Object[] { new JButton("OK"), new JTextField(5),
+        // new JButton("CANCEL") };
+        // JOptionPane optionPane = new JOptionPane("test", JOptionPane.PLAIN_MESSAGE,
+        // JOptionPane.OK_CANCEL_OPTION, null,
+        // minMaxPaneJTF, null);
 
         min = 0;
         String j = "";
