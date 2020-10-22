@@ -18,25 +18,25 @@ import java.util.ArrayList;
  * <p>
  * <b>Planned Features:</b>
  * <p>
- * Implement threading.
- * <p>
  * Have get(String) take an ArrayList instead of a String
  * <p>
  * Allow option in get(String) to get only values from the JSON
+ * <p>
+ * Optimize run()
  * 
  * <p>
  * <b>WARNING:</b> An extremely messy {@code .json} file may not get parsed
  * correctly.
  * 
  * @author Nathin Wascher
- * @version 1.8.2
- * @since October 20, 2020
+ * @version 1.9
+ * @since October 22, 2020
  * 
  * @see JSONReader
  * @see URLReader
  */
 
-public class JSONParser {
+public class JSONParser extends Thread {
     private ArrayList<String> BracketedContents, BracketlessContents, jsonContents, tempArray;
     private String[] parsedLine;
     private String tempString, tempStr2;
@@ -50,17 +50,29 @@ public class JSONParser {
      */
     public String[] bracketList;
 
+    // TODO: Allow option 'includeBrackets' when doing threads
+    public ArrayList<String> setJSONContents(ArrayList<String> jsonContents) {
+        this.jsonContents = jsonContents;
+        run();
+        return tempArray;
+    }
+
+    public void run() {
+        tempArray = parseJSON(jsonContents);
+    }
+
     public JSONParser() {
         String[] brackets = { "[{", "[", "{", "}{", "}", "]", "}]" };
         bracketList = brackets;
     }
 
-    /**Overloaded Method
+    /**
+     * Overloaded Method
      * <p>
      * Parses data from a {@code .json} file and puts it into a
      * {@code ArrayList<String>}.
      * 
-     * @param jsonContents    The raw data from a single {@code .json} file
+     * @param jsonContents The raw data from a single {@code .json} file
      * @return An {@code ArrayList<String>} consisting of the {@code .json} data
      */
     public ArrayList<String> parseJSON(ArrayList<String> jsonContents) {
@@ -142,7 +154,7 @@ public class JSONParser {
      * @throws NullPointerException If {@code readJSON} is not called before this
      *                              method, {@code jsonContents} equals null or if
      *                              the {@code .json} file is empty
-     * @see #readJSON(String, boolean)
+     * @see #parseJSON(String, boolean)
      */
     public ArrayList<String> get(String objectName) throws NullPointerException {
         if (BracketedContents == null) {

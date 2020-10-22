@@ -23,8 +23,6 @@ import java.util.Scanner;
  * <p>
  * Have 2 {@code ArrayList<String>}, where one includes brackets and the other
  * does not.
- * <p>
- * Implement threading.
  * 
  * <p>
  * <b>Known Issues:</b>
@@ -33,8 +31,8 @@ import java.util.Scanner;
  * it will add the next {@code String} to the {@code ArrayList<String>}.
  * 
  * @author Nathin Wascher
- * @version 1.5.1
- * @since October 20, 2020
+ * @version 1.6
+ * @since October 22, 2020
  * 
  * @see JSONParser
  */
@@ -43,6 +41,11 @@ public class JSONReader extends JSONParser {
     private Scanner fileScan;
     private ArrayList<String> jsonContents, BracketedContents, BracketlessContents;
     private String nextLine;
+
+    public void run(String fileName) throws FileNotFoundException {
+        System.out.println("JSONReader Thread: " + fileName);
+        readJSON(fileName);
+    }
 
     public JSONReader() {
     }
