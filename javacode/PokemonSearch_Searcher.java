@@ -7,7 +7,7 @@
 
 import utility.json.JSONReader;
 
-import javax.swing.JOptionPane;
+// import javax.swing.JOptionPane;
 
 import java.awt.List;
 
@@ -17,13 +17,11 @@ import java.util.ArrayList;
 
 /**
  * @author Nathin Wascher
- * @version 1.5.1
- * @since October 17, 2020
  */
 public class PokemonSearch_Searcher {
     private final int NAME = 0, NUMBER = 2, TYPE = 4, EVOLUTION = 6, OBJECT_LENGTH = 8;
 
-    private JSONReader jsonReader;
+    private JSONReader pssJsonReader;
     private ArrayList<String> pokedex, tempPokedex;
 
     public List outputList;
@@ -33,7 +31,7 @@ public class PokemonSearch_Searcher {
      * @param jsonReader
      */
     public PokemonSearch_Searcher(JSONReader jsonReader) {
-        this.jsonReader = jsonReader;
+        this.pssJsonReader = jsonReader;
         outputList = new List(40);
     }
 
@@ -70,8 +68,8 @@ public class PokemonSearch_Searcher {
             if (input <= tempInt) {
                 tempString = regionList.get(i - 1);
                 try {
-                    jsonReader.readJSON(tempString + ".json");
-                    pokedex.addAll(jsonReader.get(tempString));
+                    pssJsonReader.readJSON(tempString + ".json");
+                    pokedex.addAll(pssJsonReader.get(tempString));
                 } catch (FileNotFoundException e) {
                     System.out.println("ERROR: UNABLE TO FIND \"" + tempString + ".json\".");
                 }
@@ -81,12 +79,14 @@ public class PokemonSearch_Searcher {
         }
 
         // TODO: Implement binary sorting
+        tempPokedex = new ArrayList<String>();
         if (!findEvolutionSetNum) {
             for (int g = NUMBER; g < pokedex.size(); g = g + OBJECT_LENGTH) {
                 tempInt = Integer.parseInt(pokedex.get(g + 1));
 
                 if (input == tempInt) {
-                    printToScreen(g - NUMBER);
+                    tempString = processInfo(g - NUMBER);
+                    tempPokedex.add(tempString);
                     g = pokedex.size();
                 }
             }
@@ -95,10 +95,13 @@ public class PokemonSearch_Searcher {
         } else {
             for (int g = EVOLUTION; g < pokedex.size(); g = g + OBJECT_LENGTH) {
                 tempInt = Integer.parseInt(pokedex.get(g + 1).split("-")[0]);
-                if (input == tempInt)
-                    printToScreen(g - EVOLUTION);
+                if (input == tempInt) {
+                    tempString = processInfo(g - EVOLUTION);
+                    tempPokedex.add(tempString);
+                }
             }
         }
+        printToScreen(tempPokedex);
     }
 
     /**
@@ -127,13 +130,16 @@ public class PokemonSearch_Searcher {
             searchByName(input);
 
         // Prints the pokemon to the screen
+        tempPokedex = new ArrayList<String>();
         for (int f = NAME; f < pokedex.size(); f = f + OBJECT_LENGTH) {
             tempString = pokedex.get(f);
 
             if (tempString.equals("name")) {
-                printToScreen(f + NAME);
+                tempString = processInfo(f + NAME);
+                tempPokedex.add(tempString);
             }
         }
+        printToScreen(tempPokedex);
         System.out
                 .println("\nElapsed Time: " + (double) ((System.nanoTime() - startTime) / 1000000) / 1000 + " Seconds");
     }
@@ -145,11 +151,10 @@ public class PokemonSearch_Searcher {
     private void searchByRegion(ArrayList<String> regionInput) {
         pokedex = new ArrayList<String>();
 
-        // TODO: Implement threading
         for (String s : regionInput)
             try {
-                jsonReader.readJSON(s + ".json");
-                pokedex.addAll(jsonReader.get(s));
+                pssJsonReader.readJSON(s + ".json");
+                pokedex.addAll(pssJsonReader.get(s));
             } catch (Exception e) {
                 System.out.println("ERROR: FILE \"" + s + ".json\" WAS NOT FOUND OR IS EMPTY");
             }
@@ -225,7 +230,7 @@ public class PokemonSearch_Searcher {
      * @param pokedexPos The position of the {@code JSON} name "<i>name</i>" in the
      *                   {@code pokedex ArrayList}.
      */
-    private void printToScreen(int pokedexPos) {
+    private String processInfo(int pokedexPos) {
         pokedexPos++;
         String[] tempArray;
         String region = foundInRegion(pokedex.get(pokedexPos + NUMBER));
@@ -257,7 +262,13 @@ public class PokemonSearch_Searcher {
         if (tempArray.length == 2)
             tempString = tempString + ", " + tempArray[1];
 
-        outputList.add(tempString);
+        return tempString;
+    }
+
+    private void printToScreen(ArrayList<String> pokemonList) {
+        for (String s : pokemonList) {
+            outputList.add(s);
+        }
     }
 
     /**
@@ -289,7 +300,5 @@ public class PokemonSearch_Searcher {
             return "NONE???";
     }
 
-    private void pokemonInformationPane() {
-        
-    }
+    // private void pokemonInformationPane() {}
 }

@@ -25,7 +25,6 @@ import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.List;
 
-import java.io.FileNotFoundException;
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.io.FileWriter;
@@ -36,8 +35,6 @@ import java.util.Scanner;
 
 /**
  * @author Nathin Wascher
- * @version 1.3.3
- * @since October 17, 2020
  */
 public class PokemonSearch_Panel extends JPanel implements ActionListener {
     private static final long serialVersionUID = 6168657140878114472L;
@@ -45,8 +42,8 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
 
     private SimpleFrame frame;
     private PokemonSearch_Searcher pokeSearch;
-    private URLReader urlReader;
-    private JSONReader jsonReader;
+    private URLReader pspUrlReader;
+    private JSONReader pspJsonReader;
     private GridBagConstraints gbc;
 
     private JPanel searchBarPanel;
@@ -56,17 +53,19 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
     private JButton enterB;
 
     private ArrayList<String> typeInput, regionInput, evolutionInput, typeList, regionList;
+    private String pokeInfoJSONVersion = null, pokeInfoURLVersion = null;;
     private String input;
-    private int failSafeNum = 0;
+    private int failSafe = -1;
 
+    // Initializes the frame and some other classes
     public PokemonSearch_Panel() {
         frame = new SimpleFrame("PokemonSearch", "Guess That Pokemon!", 800, 600, false);
         frame.setLayout(new GridLayout(1, 2));
 
         gbc = new GridBagConstraints();
-        jsonReader = new JSONReader();
-        urlReader = new URLReader();
-        pokeSearch = new PokemonSearch_Searcher(jsonReader);
+        pspJsonReader = new JSONReader();
+        pspUrlReader = new URLReader();
+        pokeSearch = new PokemonSearch_Searcher(pspJsonReader);
 
         setLayout(new GridBagLayout());
         setBackground(Color.GREEN);
@@ -79,39 +78,127 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         frame.setVisible(true);
     }
 
+    // Reads from the locally stored file 'pokeInfo'
     private void readPokeInfo() {
-        String pokeInfoJSONVersion = null;
 
+        // To prevent an infinite loop
+        failSafe++;
+        if (failSafe >= 5) {
+            System.out.println("ERROR: FAILED TO DOWNLOAD \'POKEINFO\' AFTER MULTIPLE ATTEMPTS");
+            System.out.println("...Terminating Program (PokemonSearch)");
+            System.exit(0);
+        }
+
+        // Read from 'pokeInfo' and get version, types, and regions
         try {
-            jsonReader.readJSON("pokeInfo");
-            pokeInfoJSONVersion = jsonReader.get("version").get(0);
+            pspJsonReader.readJSON("pokeInfo");
+            pokeInfoJSONVersion = pspJsonReader.get("version").get(0);
 
-            typeList = jsonReader.get("types");
+            typeList = pspJsonReader.get("types");
             typeCL = new List(9, true);
             for (int i = 0; i < typeList.size(); i++)
                 typeCL.add(typeList.get(i));
 
-            regionList = jsonReader.get("regions");
+            regionList = pspJsonReader.get("regions");
             regionCL = new List(9, true);
             for (int i = 0; i < regionList.size(); i = i + 2)
                 regionCL.add(regionList.get(i));
 
-        } catch (FileNotFoundException e) {
+            // Download 'pokeInfo' if the file is not found
+            // or if the version number is unobtainable
+        } catch (Exception e) {
+            downloadPokeInfo(true);
+            readPokeInfo();
         }
 
-        if (pokeInfoJSONVersion == null) {
-            downloadRegionFiles(null);
+        // Initially just read 'pokeInfo' from the url
+        if (failSafe <= 0)
+            downloadPokeInfo(false);
 
-        } else if (pokeInfoJSONVersion.equals("debug")) {
+        // Get the version number from 'pokeInfo' through the url
+        try {
+            pokeInfoURLVersion = pspUrlReader.get("version").get(0);
+        } catch (NullPointerException n) {
+            System.out.println("ERROR: UNABLE TO GET VERSION NUMBER FROM \'POKEINFO\' THROUGH URL");
+            downloadPokeInfo(true);
+            readPokeInfo();
+        }
+
+        checkVersions();
+    }
+
+    // Get the contents from 'pokeInfo' through the url
+    private void downloadPokeInfo(boolean writeContentsToFile) {
+        ArrayList<String> jsonContents = null;
+
+        jsonContents = pspUrlReader.readURL(pokeInfoURL);
+        pspUrlReader.parseJSON(jsonContents);
+
+        if (jsonContents == null)
+            System.out.println("ERROR: URL NOT FOUND. MAKE SURE YOU HAVE AN INTERNET CONNECTION.");
+        else if (writeContentsToFile)
+            writeToFile("pokeInfo", jsonContents);
+    }
+
+    // Compares the two 'pokeInfo' versions
+    private void checkVersions() {
+        if (pokeInfoJSONVersion.equals("debug")) {
             frame.setTitle("PokemonSearch: DEBUG MODE");
             JOptionPane.showMessageDialog(this, "PokemonSearch is in debug mode\nand will NOT download any JSON files!",
                     "WARNING: DEBUG MODE ACTIVE", JOptionPane.INFORMATION_MESSAGE);
-        } else
-            downloadRegionFiles(pokeInfoJSONVersion);
+
+            // If the two version match, check the region Files
+        } else if (pokeInfoJSONVersion.equals(pokeInfoURLVersion)) {
+            ArrayList<String> tempArray, jsonContents;
+            System.out.println("POKEINFO VERSION " + pokeInfoURLVersion + " == " + pokeInfoJSONVersion);
+            tempArray = pspUrlReader.get("regionURLs");
+
+            for (int i = 0; i < tempArray.size(); i = i + 2) {
+                try {
+                    Scanner fileScan = new Scanner(new File(tempArray.get(i) + ".json"));
+                    if (fileScan.nextLine().equals("")) {
+                        fileScan.close();
+                        throw new Exception();
+                    }
+                    fileScan.close();
+
+                    // Download the region files that are not found
+                } catch (Exception e) {
+                    jsonContents = pspUrlReader.readURL(tempArray.get(i + 1));
+                    if (pspUrlReader.isValidURL())
+                        writeToFile(tempArray.get(i), jsonContents);
+                }
+            }
+
+        } else {
+            System.out.println("POKEINFO VERSION " + pokeInfoURLVersion + " DOES NOT EQUAL " + pokeInfoJSONVersion);
+            downloadPokeInfo(true);
+            readPokeInfo();
+        }
+    }
+
+    // Writes the given array list to a JSON
+    private void writeToFile(String fileName, ArrayList<String> jsonContents) {
+        System.out.println("Writing to file: " + fileName + ".json");
+        try {
+            FileWriter fw = new FileWriter(fileName + ".json");
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+
+            for (int i = 0; i < jsonContents.size() - 1; i++) {
+                pw.println(jsonContents.get(i));
+            }
+            pw.print(jsonContents.get(jsonContents.size() - 1));
+            pw.close();
+
+        } catch (Exception e) {
+            System.out.println("ERROR: FAILED TO WRITE " + fileName + ".json.");
+        }
     }
 
     // TODO: Implement size, weight, abilities, and weakness options
     // TODO: Implement 'clear' button to search bar
+    // Sets up the panels, buttons, lists, and text fields
     private void setUpPanels() {
         searchBarPanel = new JPanel(new GridLayout(2, 1));
 
@@ -151,89 +238,10 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         add(enterB, gbc);
     }
 
+    // Does this really need explaining
     private void setGBC(int gridX, int gridY) {
         gbc.gridx = gridX;
         gbc.gridy = gridY;
-    }
-
-    private void downloadRegionFiles(String pokeInfoJSONVersion) {
-        ArrayList<String> tempArray, jsonContents;
-        String pokeInfoURLVersion;
-
-        jsonContents = urlReader.readURL(pokeInfoURL);
-        urlReader.parseJSON(jsonContents);
-        try {
-            pokeInfoURLVersion = urlReader.get("version").get(0);
-        } catch (NullPointerException n) {
-            System.out.println("ERROR: URL NOT FOUND. MAKE SURE YOU HAVE AN INTERNET CONNECTION.");
-            pokeInfoURLVersion = null;
-        }
-
-        if (pokeInfoURLVersion == null) {
-            System.out.println("...Terminating Program (PokemonSearch)");
-            System.exit(0);
-
-        } else if (pokeInfoJSONVersion == null || pokeInfoJSONVersion.equals(pokeInfoURLVersion)) {
-            downloadFile("pokeInfo", jsonContents);
-            tempArray = urlReader.get("regionURLs");
-
-            for (int i = 0; i < tempArray.size(); i = i + 2) {
-                jsonContents = urlReader.readURL(tempArray.get(i + 1));
-                if (urlReader.isValidURL())
-                    downloadFile(tempArray.get(i), jsonContents);
-            }
-
-            if (pokeInfoJSONVersion == null) {
-                if (failSafeNum >= 1) {
-                    System.out.println("ERROR: UNABLE TO FIND \"pokeInfo.json\".");
-                    System.out.println("...Terminating Program (PokemonSearch)");
-                    System.exit(0);
-                } else {
-                    System.out.println("VERSION NOT FOUND  FOR \"pokeInfo.json\"");
-                    failSafeNum++;
-                    readPokeInfo();
-                }
-
-            } else {
-                System.out.println("POKEINFO VERSION " + pokeInfoURLVersion + " != " + pokeInfoJSONVersion);
-            }
-
-        } else {
-            System.out.println("POKEINFO VERSION " + pokeInfoURLVersion + " == " + pokeInfoJSONVersion);
-            tempArray = urlReader.get("regionURLs");
-
-            for (int i = 0; i < tempArray.size(); i = i + 2) {
-                try {
-                    Scanner fileScan = new Scanner(new File(tempArray.get(i) + ".json"));
-                    if (fileScan.nextLine().equals(""))
-                        throw new Exception();
-                    fileScan.close();
-
-                } catch (Exception e) {
-                    jsonContents = urlReader.readURL(tempArray.get(i + 1));
-                    if (urlReader.isValidURL())
-                        downloadFile(tempArray.get(i), jsonContents);
-                }
-            }
-        }
-    }
-
-    private void downloadFile(String fileName, ArrayList<String> jsonContents) {
-        System.out.println("Downloading file: " + fileName + ".json");
-        try {
-            FileWriter fw = new FileWriter(fileName + ".json");
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
-
-            for (int i = 0; i < jsonContents.size() - 1; i++) {
-                pw.println(jsonContents.get(i));
-            }
-            pw.print(jsonContents.get(jsonContents.size() - 1));
-            pw.close();
-
-        } catch (Exception e) {
-            System.out.println("ERROR: FAILED TO DOWNLOAD " + fileName + ".json.");
-        }
     }
 
     public void actionPerformed(ActionEvent a) {
@@ -244,20 +252,25 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         input = input.replaceAll(" ", "");
 
         try {
+            // Attempt to search by number, if unable too, search by other means
             pokeSearch.searchByNumber(Integer.parseInt(input), regionList);
 
         } catch (NumberFormatException n) {
+            // Get the selected items from 'regionCL'
             for (String r : regionCL.getSelectedItems())
                 regionInput.add(r);
             if (regionInput.size() == 0)
                 for (int i = 0; i < regionList.size(); i = i + 2)
                     regionInput.add(regionList.get(i));
 
+            // Get the selected items from 'typeCL'
             for (String t : typeCL.getSelectedItems())
                 typeInput.add(t);
             if (typeList.equals(typeInput))
                 typeInput = new ArrayList<String>();
 
+            // Get the selected item from 'evolutionCL'
+            // and translate it into 'evolutionInput'
             for (String e : evolutionCL.getSelectedItems()) {
                 if (e.contains("Only")) {
                     evolutionInput.add("0");
