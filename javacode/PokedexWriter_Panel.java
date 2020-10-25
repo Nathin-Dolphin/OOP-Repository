@@ -211,7 +211,7 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
     private void setUpTopPanel() {
         topPanel = new JPanel(new GridBagLayout());
 
-        regionLowJL = new JLabel("Min Region range: ");
+        regionLowJL = new JLabel("Min Region Range: ");
         minJTF = new JTextField(String.valueOf(min), 3);
 
         setGBC(0, 0);
@@ -219,7 +219,7 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
         setGBC(1, 0);
         topPanel.add(minJTF, gbc);
 
-        regionHighJL = new JLabel("Max Region range: ");
+        regionHighJL = new JLabel("Max Region Range: ");
         maxJTF = new JTextField(String.valueOf(max), 3);
 
         setGBC(0, 1);
@@ -285,7 +285,7 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
         setGBC(0, 2);
         evoNumPanel.add(evoNumJTF, gbc);
 
-        evolutionJL = new JLabel("Evolution");
+        evolutionJL = new JLabel("Evolution State");
         evolutionCL = new List(5);
         for (String s : evolutionStates)
             evolutionCL.add(s);

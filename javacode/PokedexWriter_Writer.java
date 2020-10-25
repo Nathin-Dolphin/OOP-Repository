@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 import java.util.ArrayList;
 
 // TODO: Implement save button
-// TODO: Optimize 'evoNum' and 'nextEvoNumJB'
 // TODO: Properly add a method to change min and max smoothly
 // TODO: Find a solution to the 'freezing button' problem
 
@@ -39,13 +38,13 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
     private final String pokedexSourceURL = "https://pokemondb.net/pokedex/national";
 
     // Have these get automatically updated by 'pokeInfo'
-    private final int NAME = 0, TYPE = 4, OBJECT_LENGTH = 8;
-    // private final int NUMBER = 2, EVOLUTION = 6;
+    private final int NAME = 0, TYPE = 4, EVOLUTION = 6, OBJECT_LENGTH = 8;
+    // private final int NUMBER = 2;
 
     private ArrayList<ArrayList<String>> pokedexEntries;
     private ArrayList<String> tempPokedexEntry, urlContents, urlRegionList, jsonContents;
     private int currentEvoNum, urlContentsIndex, evolutionPos, jsonIndex;
-    private boolean modifyPokedex = false, bool = false;
+    private boolean modifyPokedex = false, customEvoNum = false;
 
     private JSONReader pwwJsonReader;
     public JSONWriter pwwJsonWriter;
@@ -172,34 +171,37 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         return h;
     }
 
-    private void setEvolutionState() {
+    private void getEvolutionSet() {
+        int tempInt;
+
         for (int i = 0; i < evolutionStates.size(); i++) {
             if (evolutionCL.getSelectedItem().equals(evolutionStates.get(i))) {
                 evolutionPos = i;
                 i = evolutionStates.size();
             }
         }
+        try {
+            tempInt = Integer.parseInt(evoNumJTF.getText());
 
+            if (tempInt != currentEvoNum & !customEvoNum)
+                --currentEvoNum;
+            customEvoNum = true;
+
+        } catch (NumberFormatException n) {
+            evoNumJTF.setText(addZeros(currentEvoNum));
+            warning("THE EVOLUTION NUMBER TEXT FIELD MUST CONTAIN AN INTEGER");
+        }
+    }
+
+    private void setEvolutionState() {
         if (evolutionPos == 1)
             evolutionCL.select(2);
         else if (evolutionPos == 2)
             evolutionCL.select(3);
         else {
-            evoNumJTF.setText(addZeros(currentEvoNum + 1));
+            evoNumJTF.setText(addZeros(++currentEvoNum));
             evolutionCL.select(1);
-            bool = true;
-        }
-    }
-
-    private void setEvolutionNum() {
-        try {
-            currentEvoNum = Integer.parseInt(evoNumJTF.getText());
-        } catch (NumberFormatException n) {
-            if (bool) {
-                bool = false;
-                currentEvoNum++;
-            }
-            evoNumJTF.setText(addZeros(currentEvoNum));
+            customEvoNum = false;
         }
     }
 
@@ -234,11 +236,12 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
 
         // Set the evolution string for the pokemon
         tempPokedexEntry.add("evolution");
+        getEvolutionSet();
+        tempString = evoNumJTF.getText();
+        tempPokedexEntry.add(addZeros(tempString) + "-" + evolutionPos);
         setEvolutionState();
-        tempPokedexEntry.add(addZeros(currentEvoNum) + "-" + evolutionPos);
-        setEvolutionNum();
 
-        tempString = "Evo:" + tempPokedexEntry.get(7); // Adds the evolutionPos number
+        tempString = "Evo:" + tempPokedexEntry.get(7); // Adds the evolution set
         tempString = tempString + "   #" + tempPokedexEntry.get(3); // Adds the pokemon number
         tempString = tempString + "   " + tempPokedexEntry.get(1); // Adds the name
         tempString = tempString + "     " + tempPokedexEntry.get(5); // Adds the type(s)
@@ -282,6 +285,7 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         // TODO: Add pokemon's number to the screen???
 
         // Set the pokemon's type(s) to the screen
+        type2CL.select(0);
         tempArray = jsonContents.get(TYPE + tempInt).split("-");
         for (int g = 0; g < tempArray.length; g++)
             for (int type = 0; type < typeList.size(); type++)
@@ -294,8 +298,8 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         // Set the Pokemon's evolution set to the screen
         // TODO: Set the evolution set entirely from 'jsonContents'
         // tempArray = jsonContents.get(EVOLUTION + tempInt).split("-");
+        // evoNumJTF.setText(addZeros(Integer.parseInt(tempArray[0])));
         // evolutionCL.select(Integer.parseInt(tempArray[1]));
-        // evoNumJTF.setText(addZeros(tempArray[0]));
     }
 
     // Add the newly created pokemon to 'outputList' and 'pokedexEntries'
@@ -320,6 +324,7 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         }
     }
 
+    // TODO: changePokemon needs fixing
     // Change the pokemon to the new stats
     private void changePokemon() {
         int outputIndex = outputList.getSelectedIndex();
@@ -359,6 +364,10 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
     private void warning(String s) {
         JOptionPane.showConfirmDialog(this, "WARNING: " + s, "WARNING MESSAGE! (WIP)", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.WARNING_MESSAGE);
+    }
+
+    private String addZeros(String n) {
+        return addZeros(Integer.parseInt(n));
     }
 
     // Add zeros to 'evoNum'
@@ -416,7 +425,7 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
             }
             // When user presses nextEvoNum Button
         } else if (e.getSource() == nextEvoNumJB) {
-            evoNumJTF.setText(addZeros(currentEvoNum + 1));
+            evoNumJTF.setText(addZeros(++currentEvoNum));
         }
     }
 }
