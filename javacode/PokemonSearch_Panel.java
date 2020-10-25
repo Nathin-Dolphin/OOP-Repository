@@ -142,6 +142,8 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
 
     // Compares the two 'pokeInfo' versions
     private void checkVersions() {
+        ArrayList<String> jsonContents, tempArray;
+
         if (pokeInfoJSONVersion.equals("debug")) {
             frame.setTitle("PokemonSearch: DEBUG MODE");
             JOptionPane.showMessageDialog(this, "PokemonSearch is in debug mode\nand will NOT download any JSON files!",
@@ -149,7 +151,6 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
 
             // If the two version match, check the region Files
         } else if (pokeInfoJSONVersion.equals(pokeInfoURLVersion)) {
-            ArrayList<String> tempArray, jsonContents;
             System.out.println("POKEINFO VERSION " + pokeInfoURLVersion + " == " + pokeInfoJSONVersion);
             tempArray = pspUrlReader.get("regionURLs");
 
@@ -173,6 +174,13 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         } else {
             System.out.println("POKEINFO VERSION " + pokeInfoURLVersion + " DOES NOT EQUAL " + pokeInfoJSONVersion);
             downloadPokeInfo(true);
+            tempArray = pspUrlReader.get("regionURLs");
+            
+            for (int i = 0; i < tempArray.size(); i = i + 2) {
+                jsonContents = pspUrlReader.readURL(tempArray.get(i + 1));
+                if (pspUrlReader.isValidURL())
+                    writeToFile(tempArray.get(i), jsonContents);
+            }
             readPokeInfo();
         }
     }
