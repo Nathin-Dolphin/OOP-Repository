@@ -148,7 +148,7 @@ public class JSONParser extends Thread {
     /**
      * Finds the value(s) associated with {@code ObjectName}.
      * 
-     * @param objectName The name of an object or array in th {@code .json} file
+     * @param objectName The name of an object or array in the {@code .json} file
      * @return An {@code ArrayList<String>} of values with the specified
      *         {@code objectName}
      * @throws NullPointerException If {@code readJSON} is not called before this
