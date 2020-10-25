@@ -5,10 +5,12 @@
  * This file is under the MIT License.
  */
 
+// TODO: Add continue option after saving and exiting
+
 /**
  * @author Nathin Wascher
- * @version PokedexWriter v1.1.3
- * @since October 20, 2020
+ * @version PokedexWriter v1.1.4
+ * @since October 24, 2020
  */
 
 public class PokedexWriter {
@@ -35,7 +37,7 @@ public class PokedexWriter {
                 new PokedexWriter_Panel(args[1], true);
 
             } else if (args[0].equalsIgnoreCase("-ModifyPokedex")) {
-                System.out.println("Executing Command -AddToPokedex...");
+                System.out.println("Executing Command -ModifyPokedex...");
                 System.out.println("THIS FEATURE IS CURRENTLY A WORK IN PROGRESS");
                 System.out.println("\n...Terminating Program (PokedexWriter)");
                 new PokedexWriter_Panel(args[1]);

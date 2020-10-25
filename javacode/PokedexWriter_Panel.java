@@ -30,8 +30,6 @@ import java.util.ArrayList;
 
 /**
  * @author Nathin Wascher
- * @version 1.1.1
- * @since October 20, 2020
  */
 public class PokedexWriter_Panel extends PokedexWriter_Writer {
     private static final long serialVersionUID = 2628539169557674903L;
@@ -109,11 +107,11 @@ public class PokedexWriter_Panel extends PokedexWriter_Writer {
         frame = new SimpleFrame("PokedexWriter", "Creating file: \"" + tempString + "\"", 900, 650, true);
         gbc = new GridBagConstraints();
         pwpJsonReader = new JSONReader();
-        jsonWriter = new JSONWriter(this, tempString);
+        pwwJsonWriter = new JSONWriter(this, tempString);
         this.regionName = regionName;
 
-        // attempt to read 'pokeInfo.json', or if it doesn't exist, download neccessary
-        // files
+        // Attempt to read 'pokeInfo.json', or if
+        // it doesn't exist, download neccessary files
         try {
             pwpJsonReader.readJSON("pokeInfo");
             typeList = pwpJsonReader.get("types");
