@@ -67,6 +67,7 @@ public class PokemonSearch_Searcher {
 
             if (input <= tempInt) {
                 tempString = regionList.get(i - 1);
+
                 try {
                     pssJsonReader.readJSON(tempString + ".json");
                     pokedex.addAll(pssJsonReader.get(tempString));
@@ -90,18 +91,20 @@ public class PokemonSearch_Searcher {
                     g = pokedex.size();
                 }
             }
+            printToScreen(tempPokedex);
             searchByNumber(input, regionList, true);
 
         } else {
             for (int g = EVOLUTION; g < pokedex.size(); g = g + OBJECT_LENGTH) {
                 tempInt = Integer.parseInt(pokedex.get(g + 1).split("-")[0]);
+
                 if (input == tempInt) {
                     tempString = processInfo(g - EVOLUTION);
                     tempPokedex.add(tempString);
                 }
             }
+            printToScreen(tempPokedex);
         }
-        printToScreen(tempPokedex);
     }
 
     /**
