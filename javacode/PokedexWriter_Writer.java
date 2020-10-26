@@ -64,6 +64,7 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         pokedexEntries = new ArrayList<ArrayList<String>>();
         evolutionStates = new ArrayList<String>();
         urlContents = new ArrayList<String>();
+        jsonContents = new ArrayList<String>();
         outputList = new List(40);
 
         outputList.add("!<<<<<>>>>>!!<<<<<>>>>>!!<<<<<>>>>>!!<<<<<>>>>>!");
@@ -84,7 +85,6 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
 
     // Read the JSON that the user wants to modify
     public void modifyFile() {
-        jsonContents = new ArrayList<String>();
         jsonIndex = 0;
 
         modifyPokedex = true;
