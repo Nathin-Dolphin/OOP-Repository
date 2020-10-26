@@ -43,7 +43,8 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
 
     private ArrayList<ArrayList<String>> pokedexEntries;
     private ArrayList<String> tempPokedexEntry, urlContents, urlRegionList, jsonContents;
-    private int currentEvoNum, urlContentsIndex, evolutionPos, jsonIndex;
+    private String previousEvoSet;
+    private int currentEvoNum, urlContentsIndex, evolutionPos, jsonIndex, outputListIndex;
     private boolean modifyPokedex = false, customEvoNum = false;
 
     private JSONReader pwwJsonReader;
@@ -75,6 +76,7 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         evolutionStates.add("Middle");
         evolutionStates.add("Final");
 
+        outputListIndex = -1;
         urlContentsIndex = -1;
         evolutionPos = 1;
         currentEvoNum = 0;
@@ -174,12 +176,10 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
     private void getEvolutionSet() {
         int tempInt;
 
-        for (int i = 0; i < evolutionStates.size(); i++) {
-            if (evolutionCL.getSelectedItem().equals(evolutionStates.get(i))) {
+        for (int i = 0; i < evolutionStates.size(); i++)
+            if (evolutionCL.isIndexSelected(i))
                 evolutionPos = i;
-                i = evolutionStates.size();
-            }
-        }
+
         try {
             tempInt = Integer.parseInt(evoNumJTF.getText());
 
@@ -302,7 +302,7 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         // evolutionCL.select(Integer.parseInt(tempArray[1]));
     }
 
-    // Add the newly created pokemon to 'outputList' and 'pokedexEntries'
+    // Add the newly created pokemon to the screen and the pokedex array
     private void addNewPokemon() {
         String tempString = setPokemon(pokeNum++);
         outputList.add(tempString, outputList.getItemCount() - 1);
@@ -324,26 +324,68 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
         }
     }
 
-    // TODO: changePokemon needs fixing
     // Change the pokemon to the new stats
     private void changePokemon() {
-        int outputIndex = outputList.getSelectedIndex();
-        String tempString = setPokemon(outputIndex + min - 1);
+        if (outputList.getSelectedIndex() == outputListIndex) {
+            String tempString = setPokemon(outputListIndex + min - 1);
 
-        outputList.remove(outputIndex);
-        outputList.add(tempString, outputIndex);
-        outputList.select(outputList.getItemCount() - 1);
+            outputList.remove(outputListIndex);
+            outputList.add(tempString, outputListIndex);
+            outputList.select(outputList.getItemCount() - 1);
 
-        pokedexEntries.remove(outputIndex - 1);
-        pokedexEntries.add(outputIndex - 1, tempPokedexEntry);
+            pokedexEntries.remove(outputListIndex - 1);
+            pokedexEntries.add(outputListIndex - 1, tempPokedexEntry);
 
-        if (urlContentsIndex >= 0 & urlContentsIndex < urlContents.size()) {
-            urlContentsIndex--;
-            getPokemonInfoFromURL();
+            tempString = previousEvoSet.split("-")[0];
+            evoNumJTF.setText(addZeros(tempString));
+            tempString = previousEvoSet.split("-")[1];
+            evolutionCL.select(Integer.parseInt(tempString));
+
+            if (modifyPokedex & (jsonIndex * OBJECT_LENGTH + 1) < jsonContents.size()) {
+                jsonIndex--;
+                modifyPokemonInfo();
+            }
+
+            if (urlContentsIndex >= 0 & urlContentsIndex < urlContents.size()) {
+                urlContentsIndex--;
+                getPokemonInfoFromURL();
+            }
+
+            outputListIndex = -1;
+
+        } else {
+            for (int i = 0; i < evolutionStates.size(); i++)
+                if (evolutionCL.isIndexSelected(i))
+                    previousEvoSet = evoNumJTF.getText() + "-" + i;
+
+            outputListIndex = outputList.getSelectedIndex();
+            tempPokedexEntry = pokedexEntries.get(outputListIndex - 1);
+            getPokemonInfo();
         }
     }
 
-    // Create a JSON and write the contents of 'pokedexEntries' to it
+    private void getPokemonInfo() {
+        String[] tempArray;
+
+        nameJTF.setText(tempPokedexEntry.get(1));
+
+        tempArray = tempPokedexEntry.get(5).split("-");
+        for (int t = 0; t < typeList.size(); t++)
+            if (tempArray[0].equalsIgnoreCase(typeList.get(t)))
+                type1CL.select(t);
+
+        type2CL.select(0);
+        if (tempArray.length > 1)
+            for (int t = 0; t < typeList.size(); t++)
+                if (tempArray[1].equalsIgnoreCase(typeList.get(t)))
+                    type2CL.select(t + 1);
+
+        tempArray = tempPokedexEntry.get(7).split("-");
+        evoNumJTF.setText(addZeros(tempArray[0]));
+        evolutionCL.select(Integer.parseInt(tempArray[1]));
+    }
+
+    // Create a JSON and write the contents of the pokedex array to it
     private void createFile() {
         outputList.remove(outputList.getItemCount() - 1);
 
@@ -418,8 +460,8 @@ public class PokedexWriter_Writer extends JPanel implements ActionListener {
             } else if (outputList.getSelectedItem().equals("Add New Pokemon!")) {
                 addNewPokemon();
 
-                // If an already existing pokemon is selected, then
-                // modify the pokemon in'outputList' and 'pokedexEntries'
+                // If an already existing pokemon is selected, then modify
+                // the pokemon on the screen and in the pokedex array
             } else {
                 changePokemon();
             }
