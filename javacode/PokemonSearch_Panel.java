@@ -53,7 +53,7 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
     private JButton enterB;
 
     private ArrayList<String> typeInput, regionInput, evolutionInput, typeList, regionList;
-    private String pokeInfoJSONVersion = null, pokeInfoURLVersion = null;;
+    private String pokeInfoJSONVersion = null, pokeInfoURLVersion = null;
     private String input;
     private int failSafe = -1;
 
@@ -68,14 +68,22 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
         pokeSearch = new PokemonSearch_Searcher(pspJsonReader);
 
         setLayout(new GridBagLayout());
-        setBackground(Color.GREEN);
+        setBackground(new Color(240, 0, 0));
 
         readPokeInfo();
         setUpPanels();
+        showInfoBox();
 
         frame.add(pokeSearch.outputList);
         frame.add(this);
         frame.setVisible(true);
+    }
+
+    private void showInfoBox() {
+        String message = "PokemonSearch and PokedexWriter in the OOP-Repository will no longer be updated.";
+        message = message + "\nTo access the up-to-date version, download the Pokemon-Search Repository from";
+        message = message + "\n\'https://github.com/Nathin-Dolphin/Pokemon-Search.git\''";
+        JOptionPane.showMessageDialog(this, message, "Pokemon Search v1.4.3", JOptionPane.INFORMATION_MESSAGE);
     }
 
     // Reads from the locally stored file 'pokeInfo'
@@ -175,7 +183,7 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
             System.out.println("POKEINFO VERSION " + pokeInfoURLVersion + " DOES NOT EQUAL " + pokeInfoJSONVersion);
             downloadPokeInfo(true);
             tempArray = pspUrlReader.get("regionURLs");
-            
+
             for (int i = 0; i < tempArray.size(); i = i + 2) {
                 jsonContents = pspUrlReader.readURL(tempArray.get(i + 1));
                 if (pspUrlReader.isValidURL())
@@ -228,7 +236,7 @@ public class PokemonSearch_Panel extends JPanel implements ActionListener {
 
         searchBarPanel.add(searchBarLabel);
         searchBarPanel.add(searchTF);
-        searchBarPanel.setBackground(Color.GREEN);
+        searchBarPanel.setBackground(new Color(240, 0, 0));
 
         setGBC(0, 0);
         add(searchBarPanel, gbc);

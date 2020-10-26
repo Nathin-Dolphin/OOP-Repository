@@ -7,8 +7,8 @@
 
 /**
  * @author Nathin Wascher
- * @version PokemonSearch v1.4.3
- * @since October 24, 2020
+ * @version PokemonSearch v1.4.4
+ * @since October 26, 2020
  */
 
 public class PokemonSearch {
