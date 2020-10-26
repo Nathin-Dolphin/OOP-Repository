@@ -1,8 +1,9 @@
+# THIS REPOSITORY WILL NO LONGER BE UPDATED
 # OOP-Repository
 
 Programs for Object-Oriented Programming.
 
-[!] IMPORTANT PLEASE READ [!] NOTES: 
+[!] IMPORTANT PLEASE READ [!] NOTES:
 
 	'...' is the path from your storage device to the location of the repository (for Windows terminal at least).
 	The program 'Hub' allows quick and easier access to the other programs in the repository.
